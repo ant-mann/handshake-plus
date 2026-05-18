@@ -147,7 +147,7 @@ class HandshakePlusPanel {
             
           </div>
           <div class="hsp-note">Submits your most recently uploaded transcript and/or resume on Handshake</div>
-          <div class="hsp-note">Tip: keep a <a href="https://claude.ai" target="_blank">claude.ai</a> tab open so Handshake Plus can generate cover letters through your own Claude session.</div>
+
         </div>
         <div class="hsp-tab-content" id="profile-content">
           <div class="hsp-well">
