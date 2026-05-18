@@ -14,7 +14,7 @@ Flat files, no package.json, no npm/lint/test commands. Loading the extension:
 - `manifest.json` — content script injection order on Handshake: `pdf.min.js`, `dom-utils.js`, `application-count-utils.js`, `local-job-matcher.js`, `screening-utils.js`, `required-document-utils.js`, `panel.js`, `content.js`. On claude.ai: `claude-response-utils.js`, `claude.js`. On gemini.google.com: `gemini.js`. **Order matters** — each depends on the previous.
 - `background.js` — service worker, imports `screening-utils.js`, `required-document-utils.js`, `ai-tab-utils.js`, `ai-prompt-utils.js` via `importScripts`. Manages state and routes all AI prompts through Claude/Gemini browser tabs.
 - `content.js` — main job processing logic, runs on `https://*.joinhandshake.com/*`
-- `panel.js` — `HandshakePlusPanel` class, injected floating panel UI, exported via `window.HandshakePlusPanel`
+- `panel.js` — `HandshakePlusPanel` class, injected floating panel UI with 3 tabs (Apply / Profile / Settings), exported via `window.HandshakePlusPanel`. All UI uses DESIGN.md tokens (Noi Grotesk, hairline borders, white surfaces, 8px controls).
 - `local-job-matcher.js` — `LocalJobMatcher` class, local job title matching without external network calls
 - `screening-utils.js` — builds prompts for screening questions, parses AI responses, rule-based fallback
 - `required-document-utils.js` — builds prompts for required application documents (cover letters, statements, etc.)
@@ -22,9 +22,9 @@ Flat files, no package.json, no npm/lint/test commands. Loading the extension:
 - `ai-tab-utils.js` — normalizes AI provider tab URLs
 - `dom-utils.js` — DOM helpers (element detection, modal extraction)
 - `application-count-utils.js` — job application counting and tracking
-- `claude.js` / `gemini.js` — content scripts injected into AI provider tabs, receive prompts and return responses
+- `claude.js` / `gemini.js` — content scripts injected into AI provider tabs, receive prompts and return responses. All `chrome.runtime.sendMessage` calls are wrapped in try-catch to handle "Extension context invalidated" errors after extension reloads
 - `claude-response-utils.js` — Claude response extraction helpers, injected on claude.ai alongside `claude.js`
-- `popup.html` / `popup.js` — extension popup, university picker, opens Handshake window
+- `popup.html` / `popup.js` — extension popup, university picker, opens Handshake window. Redesigned with DESIGN.md tokens (white card, hairline borders, Noi Grotesk, cyan callout when on Handshake).
 - `universities.js` — maps ~650 university names to their Handshake subdomains
 - `pdf.min.js` / `pdf.worker.min.js` — PDF.js for resume text extraction
 - `DESIGN.md` — Handshake Plus design reference. Use before any panel, popup, or other UI work.
@@ -34,6 +34,10 @@ Flat files, no package.json, no npm/lint/test commands. Loading the extension:
 Read `DESIGN.md` before changing UI. It is based primarily on the logged-in Handshake app surface, with small public Handshake brand accents. Keep future extension UI aligned with that system: `"Noi Grotesk", system-ui, sans-serif`, white surfaces, near-black text, 8px controls, hairline borders, compact operational spacing, minimal shadows, and restrained lime/cyan/deep-teal brand moments.
 
 For `panel.js` and `popup.html`, prefer the tokens and component guidance in `DESIGN.md` over inventing new colors, radii, shadows, or marketing-style layouts.
+
+### Visual distinctiveness
+
+The panel uses a 2px **deep-teal (`#052326`) top border** and a **lime (`#D3FB52`) brand dot** next to the title to signal it's a premium Handshake Plus feature while staying native to the app shell. The status well has a **pulsing green dot** when actively applying (`opacity` + `scale` animation, 2s loop).
 
 ## Communication pattern
 
@@ -79,6 +83,8 @@ All prompt changes are in `required-document-utils.js:18-19` and `screening-util
 | `GLOBAL_HANDSHAKE_ROLES` set | ~160 predefined roles | `content.js:1164` |
 | Max selected job roles | 5 | `panel.js:11` |
 | Custom instructions max length | 5000 chars | `ai-prompt-utils.js:2` |
+| Panel default height | 400px | `panel.js` |
+| Hide promoted default | ON (`true`) | `localStorage` |
 | Playwright Chromium | 1217 (system) | `~/.cache/ms-playwright/chromium-1217/` |
 
 ## State persistence
@@ -87,7 +93,7 @@ All prompt changes are in `required-document-utils.js:18-19` and `screening-util
 |---------|------|---------|
 | `sessionStorage` | `handshake-plus-should-stop`, `handshake-plus-checking-count` | Cross-navigation state within a tab session |
 | `chrome.storage.local` | `resumeSummary`, `contact*`, `handshakePlusScreeningFacts`, `handshakePlusCustomAiInstructions`, `handshakePlusClaudeUrl`, `handshakePlusGeminiUrl`, `handshake-plus-default-font` | Long-lived user data shared across all tabs |
-| `localStorage` | `handshake-plus-cover-letter-enabled`, `handshake-plus-manual-review-enabled`, `handshake-plus-ai-provider`, `handshake-plus-aggressive-mode` | UI toggle states per origin |
+| `localStorage` | `handshake-plus-cover-letter-enabled`, `handshake-plus-manual-review-enabled`, `handshake-plus-ai-provider`, `handshake-plus-aggressive-mode`, `handshake-plus-hide-promoted` | UI toggle states per origin |
 
 Count check between background and content uses both `chrome.storage.local` polling (2s interval) and message passing — do not remove either mechanism.
 
@@ -99,6 +105,10 @@ The code handles React SPA timing with:
 - Polling for DOM elements (up to 5 retries for job cards, 10s for job details render)
 
 These are intentional — do not remove delays without testing against Handshake's actual SPA.
+
+## Hide promoted listings
+
+Toggle in panel Apply tab → Job Filters, persisted to `localStorage.handshake-plus-hide-promoted` (default `true`). When ON, the auto-apply loop skips job cards containing "Promoted" / "Sponsored" indicators before processing them. The extension also auto-clicks Handshake's native Hide button for promoted cards on page load.
 
 ## Job title matching
 
@@ -112,7 +122,10 @@ Two-phase local matching:
 2. Background sends text to the selected AI tab provider for summary + contact extraction
 3. When applying, if a cover letter input is detected in the modal, content.js requests a cover letter from the background
 4. Background calls the selected AI tab provider, returns RTF-formatted text
-5. Content script injects via DataTransfer + file input manipulation (with 45s upload timeout polling)
+5. If manual review is enabled, content script shows a DESIGN.md-styled review modal where the user can edit the text, select a font, and preview formatting before approving
+6. Content script injects via DataTransfer + file input manipulation (with 45s upload timeout polling)
+
+**AI tab auto-opening:** If no ready Claude/Gemini tab exists, `background.js` automatically opens one (either a user-configured project URL or `https://claude.ai/new` / `https://gemini.google.com/app`). No manual tab management needed.
 
 ## Testing with Playwright CLI
 
