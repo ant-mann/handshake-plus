@@ -233,6 +233,8 @@ if (window.location.href.match(/^https:\/\/[a-z0-9-]+\.joinhandshake\.com\//) &&
 
 function autoHidePromotedJobs() {
   function tryHide() {
+    const hidePromoted = localStorage.getItem('handshake-plus-hide-promoted');
+    if (hidePromoted === 'false') return;
     var cards = findAllJobCards();
     if (cards.length > 0) hidePromotedJobCards(cards);
   }
@@ -590,21 +592,24 @@ async function processPage(pageNum, startJobIndex) {
   }
 
   // Remove promoted jobs from the queue and hide them visually
-  hidePromotedJobCards(jobCards);
-  const newJobCards = [];
-  for (const card of jobCards) {
-    if (!isPromotedJob(card)) {
-      newJobCards.push(card);
+  const hidePromoted = localStorage.getItem('handshake-plus-hide-promoted');
+  if (hidePromoted !== 'false') {
+    hidePromotedJobCards(jobCards);
+    const newJobCards = [];
+    for (const card of jobCards) {
+      if (!isPromotedJob(card)) {
+        newJobCards.push(card);
+      }
     }
-  }
-  const promotedCount = jobCards.length - newJobCards.length;
-  jobCards = newJobCards;
-  if (promotedCount > 0) {
-    // console.log(`Content: Filtered out ${promotedCount} promoted job(s)`);
+    const promotedCount = jobCards.length - newJobCards.length;
+    jobCards = newJobCards;
+    if (promotedCount > 0) {
+      // console.log(`Content: Filtered out ${promotedCount} promoted job(s)`);
+    }
   }
 
   if (jobCards.length === 0) {
-    // All jobs on this page were promoted, move to next page
+    // All jobs on this page were promoted (or filtered), move to next page
     try {
       chrome.runtime.sendMessage({ action: 'pageComplete' });
     } catch (e) {}
