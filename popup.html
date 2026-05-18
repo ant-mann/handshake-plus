@@ -4,123 +4,124 @@
 <head>
   <meta charset="UTF-8">
   <style>
+    * { box-sizing: border-box; }
     body {
-      width: 300px;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-    }
-
-    h2 {
-      margin: 0 0 15px 0;
-      font-size: 18px;
-      color: #333;
-    }
-
-    .info {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
-      padding: 15px;
-      background: #f8f9fa;
-      border-radius: 6px;
-      border-left: 4px solid #007bff;
-    }
-
-    .info strong {
-      color: #333;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .info ol {
+      width: 320px;
       margin: 0;
-      padding-left: 20px;
+      padding: 16px;
+      font-family: "Noi Grotesk", system-ui, sans-serif;
+      background: #FFFFFF;
+      color: #121212;
     }
-
-    .info li {
-      margin-bottom: 10px;
+    .hsp-popup-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: -0.15px;
+      margin: 0 0 16px 0;
+      color: #121212;
     }
-
-    .info a {
-      color: #007bff;
-      text-decoration: none;
+    .hsp-popup-well {
+      padding: 12px;
+      border: 1px solid rgba(31, 32, 44, 0.2);
+      border-radius: 8px;
+      margin-bottom: 12px;
     }
-
-    .info a:hover {
-      text-decoration: underline;
+    .hsp-popup-well:last-child {
+      margin-bottom: 0;
     }
-
-    .footer-link {
-      margin-top: 15px;
-      padding: 10px;
-      font-size: 12px;
-      text-align: center;
-      color: #666;
+    .hsp-popup-label {
+      display: block;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 18px;
+      margin-bottom: 8px;
+      color: #121212;
     }
-
-    .footer-link a {
-      color: #007bff;
-      text-decoration: none;
+    .hsp-popup-input {
+      width: 100%;
+      padding: 0 12px;
+      height: 40px;
+      font-family: "Noi Grotesk", system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 18px;
+      color: #121212;
+      background: transparent;
+      border: 1px solid rgba(31, 32, 44, 0.2);
+      border-radius: 8px;
+      transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
     }
-
-    .footer-link a:hover {
-      text-decoration: underline;
+    .hsp-popup-input:focus {
+      outline: none;
+      border-color: #1569E0;
+      box-shadow: 0 0 0 2px rgba(21, 105, 224, 0.1);
     }
-
-    .status {
-      padding: 10px;
-      margin-top: 15px;
-      border-radius: 4px;
-      font-size: 13px;
-      text-align: center;
+    .hsp-popup-input::placeholder {
+      color: rgba(18, 18, 18, 0.4);
     }
-
-    .status.active {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .status.inactive {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .go-btn {
+    .hsp-popup-btn {
       display: block;
       width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: bold;
+      padding: 0 8px;
+      height: 36px;
+      background: #FFFFFF;
+      color: #121212;
+      border: 1px solid rgba(31, 32, 44, 0.2);
+      border-radius: 8px;
+      font-family: "Noi Grotesk", system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 18px;
       cursor: pointer;
       text-align: center;
-      transition: background-color 0.2s;
+      transition: background-color 150ms ease-out;
     }
-
-    .go-btn:hover {
-      background-color: #0056b3;
+    .hsp-popup-btn:hover {
+      background: #F6F6F6;
+    }
+    .hsp-popup-callout {
+      padding: 12px;
+      background: #B1F8FF;
+      color: #000000;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 18px;
+      text-align: center;
+    }
+    .hsp-popup-divider {
+      border: none;
+      border-top: 1px solid rgba(31, 32, 44, 0.2);
+      margin: 12px 0;
+    }
+    .hsp-popup-footer {
+      font-size: 12px;
+      line-height: 1.4;
+      color: rgba(18, 18, 18, 0.7);
+      text-align: center;
     }
   </style>
 </head>
-
 <body>
-  <h2>🤝 Handshake Plus</h2>
+  <div class="hsp-popup-title">🤝 Handshake Plus</div>
 
-  <div id="university-selector" style="display: none; margin-top: 15px;">
-    <label for="university-input" style="font-size: 13px; font-weight: bold; display: block; margin-bottom: 5px;">Your
-      University:</label>
-    <input type="text" id="university-input" list="university-list" placeholder="e.g. Cornell University"
-      style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
-    <datalist id="university-list"></datalist>
+  <div id="university-selector" style="display: none;">
+    <div class="hsp-popup-well">
+      <label for="university-input" class="hsp-popup-label">Select your school to open Handshake:</label>
+      <input type="text" id="university-input" list="university-list" placeholder="e.g. Cornell University" class="hsp-popup-input">
+      <datalist id="university-list"></datalist>
+      <button id="go-to-handshake-btn" class="hsp-popup-btn" style="margin-top: 12px;">Take me to Handshake Jobs</button>
+    </div>
   </div>
 
-  <button id="go-to-handshake-btn" class="go-btn" style="display: none;">Take me to Handshake Jobs</button>
+  <div id="on-handshake-callout" class="hsp-popup-callout" style="display: none;">
+    ✓ You're on Handshake. The extension panel is active on this page.
+  </div>
+
+  <hr class="hsp-popup-divider">
+  <div class="hsp-popup-footer">v5.7.5</div>
+
   <script src="universities.js"></script>
   <script src="popup.js"></script>
 </body>
