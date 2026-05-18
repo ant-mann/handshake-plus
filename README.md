@@ -33,6 +33,21 @@ Handshake Plus is a **Chrome Extension (Manifest V3)** that automates job applic
 
 ---
 
+## Quick Start
+
+Zero build system. Flat files only.
+
+1. Clone or download this repository.
+2. Open `chrome://extensions`.
+3. Enable **Developer mode**.
+4. Click **Load unpacked**.
+5. Select this repository folder.
+6. Open Handshake job search and use the Handshake Plus panel.
+
+After changing files locally, reload the extension from `chrome://extensions`.
+
+---
+
 ## Architecture Overview
 
 The extension coordinates **four runtime contexts** that communicate through Chrome's message passing APIs:
@@ -156,21 +171,6 @@ These are production-hardened against Handshake's actual rendering behavior.
 
 ---
 
-## Install Locally
-
-Zero build system. Flat files only.
-
-1. Clone or download this repository.
-2. Open `chrome://extensions`.
-3. Enable **Developer mode**.
-4. Click **Load unpacked**.
-5. Select this repository folder.
-6. Open Handshake job search and use the Handshake Plus panel.
-
-After changing files locally, reload the extension from `chrome://extensions`.
-
----
-
 ## File Structure
 
 | File | Role |
@@ -194,33 +194,6 @@ After changing files locally, reload the extension from `chrome://extensions`.
 | `universities.js` | ~650 university names mapped to Handshake subdomains |
 | `DESIGN.md` | Design token reference for all UI work |
 | `AGENTS.md` | Architecture reference for contributors |
-
----
-
-## Testing
-
-Syntax checks and small utility tests:
-
-```bash
-for f in test-*.js; do node "$f"; done
-node --check background.js
-node --check content.js
-node --check panel.js
-node --check popup.js
-node --check claude.js
-node --check gemini.js
-node --check screening-utils.js
-node --check required-document-utils.js
-node -e "JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('manifest ok')"
-```
-
-Browser testing with Playwright:
-
-```bash
-playwright-cli open https://app.joinhandshake.com/job-search?query=%20 --headed
-```
-
-`test.js` is browser/auth-state dependent and may stop at login pages if Claude or Handshake are not already authenticated.
 
 ---
 
