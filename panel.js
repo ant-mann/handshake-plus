@@ -91,167 +91,165 @@ class HandshakePlusPanel {
     this.panel = document.createElement('div');
     this.panel.id = 'handshake-plus-panel';
     this.panel.innerHTML = `
-      <div class="handshake-plus-header">
-        <span class="handshake-plus-title">🤝 Handshake Plus</span>
-        <div class="handshake-plus-controls">
-          <button id="handshake-plus-minimize" class="handshake-plus-btn-icon" title="Minimize">−</button>
+      <div class="hsp-header">
+        <span class="hsp-header-title">🤝 Handshake Plus</span>
+        <div class="hsp-header-controls">
+          <button id="handshake-plus-minimize" class="hsp-btn-ghost" title="Minimize">−</button>
         </div>
       </div>
-      <div class="handshake-plus-tabs">
-        <button class="handshake-plus-tab active" data-tab="apply">Apply</button>
-        <button class="handshake-plus-tab" data-tab="filters">Profile</button>
+      <div class="hsp-tabs">
+        <button class="hsp-tab active" data-tab="apply">Apply</button>
+        <button class="hsp-tab" data-tab="profile">Profile</button>
+        <button class="hsp-tab" data-tab="settings">Settings</button>
       </div>
-      <div class="handshake-plus-body">
-        <div class="handshake-plus-tab-content active" id="apply-content">
-          <div class="handshake-plus-status" id="handshake-plus-status">Ready to apply</div>
-          <div class="handshake-plus-progress" id="handshake-plus-progress" style="display: none;">
-            <span class="progress-label">Number of jobs you applied today:</span>
-            <span class="progress-count" id="handshake-plus-count">0</span>
+      <div class="hsp-body">
+        <div class="hsp-tab-content active" id="apply-content">
+          <div class="hsp-well">
+            <div class="hsp-status" id="handshake-plus-status">Ready to apply</div>
           </div>
-          <div class="handshake-plus-buttons">
-            <button id="handshake-plus-start" class="handshake-plus-btn handshake-plus-btn-primary">Start Applying</button>
-            <button id="handshake-plus-stop" class="handshake-plus-btn handshake-plus-btn-danger" style="display: none;">Stop</button>
+          <div class="hsp-well">
+            <div class="hsp-buttons">
+              <button id="handshake-plus-start" class="hsp-btn">Start Applying</button>
+              <button id="handshake-plus-stop" class="hsp-btn hsp-btn-danger" style="display: none;">Stop</button>
+            </div>
           </div>
-          <div class="filter-option" style="margin-top: 8px;">
-            <label class="filter-label">
+          <div class="hsp-well">
+            <div class="hsp-well-title">Job Filters</div>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-hide-promoted" checked>
+              <span>Hide promoted listings</span>
+            </label>
+            <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Skip employer-paid placements during auto-apply</div>
+            <div class="hsp-field" style="margin-bottom: 0;">
+              <span class="hsp-field-label">What job role are you looking for?</span>
+              <div class="hsp-dropdown-wrap">
+                <input type="text" id="job-role-search" class="hsp-input" placeholder="Type role and press Enter (max 5)" maxlength="75" autocomplete="off">
+                <div id="job-role-dropdown" class="hsp-dropdown"></div>
+              </div>
+            </div>
+            <div id="selected-job-role" class="hsp-chips"></div>
+          </div>
+          <div class="hsp-well" id="handshake-plus-progress" style="display: none;">
+            <div class="hsp-progress-label">Jobs applied today</div>
+            <div class="hsp-progress-count" id="handshake-plus-count">0</div>
+          </div>
+          <div class="hsp-well">
+            <label class="hsp-checkbox-row">
               <input type="checkbox" id="handshake-plus-cover-letter">
               <span>Enable AI generated cover letters</span>
             </label>
-            <div id="handshake-plus-manual-review-wrapper" style="margin-top: -6px; margin-left: 24px; display: none;">
-              <label class="filter-label" style="padding-top: 2px;">
-                <input type="checkbox" id="handshake-plus-manual-review" style="margin: 0; margin-right: 8px;">
-                <span style="font-size: 13px; color: #555; line-height: 1.3;">Manually review cover letters, documents &amp; screening answers before submitting?</span>
+            <div id="handshake-plus-manual-review-wrapper" style="display: none; margin-left: 24px; margin-top: 8px;">
+              <label class="hsp-checkbox-row" style="padding-top: 2px;">
+                <input type="checkbox" id="handshake-plus-manual-review">
+                <span style="font-size: 13px;">Manually review cover letters, documents &amp; screening answers before submitting?</span>
               </label>
             </div>
-            <div id="handshake-plus-ai-provider-wrapper" style="margin-top: 4px; margin-left: 24px; display: none;">
-              <span style="font-size: 12px; color: #555;">AI provider:</span>
-              <label style="font-size: 12px; color: #555; margin-left: 6px; cursor: pointer;">
-                <input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-claude" value="claude" style="margin-right: 3px;">Claude
+            
+          </div>
+          <div class="hsp-note">Submits your most recently uploaded transcript and/or resume on Handshake</div>
+          <div class="hsp-note">Tip: keep a <a href="https://claude.ai" target="_blank">claude.ai</a> tab open so Handshake Plus can generate cover letters through your own Claude session.</div>
+        </div>
+        <div class="hsp-tab-content" id="profile-content">
+          <div class="hsp-well">
+            <div class="hsp-well-title">
+              <span>Upload Your Resume (for cover letter)</span>
+              <span class="hsp-tooltip" data-tooltip="This resume is used to generate personalized cover letters.">ⓘ</span>
+            </div>
+            <div class="hsp-upload-row">
+              <input type="file" id="resume-upload" accept=".pdf,.docx" style="display: none;">
+              <button id="resume-upload-btn" class="hsp-btn">Choose File</button>
+              <button id="resume-remove-btn" class="hsp-btn hsp-btn-danger-outline" style="display: none;">Remove</button>
+              <span id="resume-file-name" class="hsp-file-name">No file chosen</span>
+            </div>
+            <div id="resume-status" class="hsp-status-inline"></div>
+            <label class="hsp-checkbox-row" style="margin-top: 8px;">
+              <input type="checkbox" id="handshake-plus-raw-resume">
+              <span>Use raw resume text (skip AI summary)</span>
+            </label>
+          </div>
+          <div id="filters-form-container" style="display: none;">
+            <div class="hsp-well">
+              <div class="hsp-well-title">Contact Information</div>
+              <label class="hsp-field">
+                <span class="hsp-field-label">Full Name</span>
+                <input type="text" id="contact-full-name" class="hsp-input" placeholder="e.g. Jane Doe">
               </label>
-              <label style="font-size: 12px; color: #555; margin-left: 8px; cursor: pointer;">
-                <input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-gemini" value="gemini" style="margin-right: 3px;">Gemini
+              <label class="hsp-field">
+                <span class="hsp-field-label">Email <span class="hsp-required">(Required)</span></span>
+                <input type="email" id="contact-email" class="hsp-input" placeholder="e.g. jane@example.com">
               </label>
-              <div style="margin-top: 8px;">
-                <input type="url" id="handshake-plus-claude-url" class="job-role-search-input" placeholder="Optional Claude chat/project URL" style="font-size: 12px; padding: 6px; margin-bottom: 6px;" />
-                <input type="url" id="handshake-plus-gemini-url" class="job-role-search-input" placeholder="Optional Gemini chat URL" style="font-size: 12px; padding: 6px;" />
-                <div style="font-size: 11px; color: #666; line-height: 1.3; margin-top: 4px;">Optional: route AI prompts to a specific Claude or Gemini page with your preferred context.</div>
-                <textarea id="handshake-plus-custom-ai-instructions" class="job-role-search-input" placeholder="Custom instructions added to every AI prompt, e.g. tone, cover letter preferences, formatting style" maxlength="5000" style="font-size: 12px; padding: 6px; min-height: 72px; resize: vertical; margin-top: 8px;"></textarea>
-                <div style="font-size: 11px; color: #666; line-height: 1.3; margin-top: 4px;">These are added to cover letters, required documents, screening answers, and resume parsing. Built-in output format and truthfulness rules still apply.</div>
-                <div id="handshake-plus-aggressive-wrapper" style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #eee;">
-                  <label class="filter-label" style="padding-top: 2px;">
-                    <input type="checkbox" id="handshake-plus-aggressive-mode" style="margin: 0; margin-right: 8px;">
-                    <span style="font-weight: 600; font-size: 13px; color: #333;">Aggressive Mode</span>
-                  </label>
-                  <div style="font-size: 11px; color: #777; line-height: 1.4; margin-top: 4px; margin-left: 24px;">
-                    When enabled, AI will always answer screening questions with the most hirable option and produce complete required documents without placeholder brackets. Intended to maximize interview chances.
-                  </div>
-                </div>
-              </div>
+              <label class="hsp-field">
+                <span class="hsp-field-label">Location <span class="hsp-optional">(Optional)</span></span>
+                <input type="text" id="contact-location" class="hsp-input" placeholder="e.g. New York, NY">
+              </label>
+              <label class="hsp-field" style="margin-bottom: 0;">
+                <span class="hsp-field-label">Phone <span class="hsp-optional">(Optional)</span></span>
+                <input type="tel" id="contact-phone" class="hsp-input" placeholder="e.g. (555) 123-4567">
+              </label>
+            </div>
+            <div class="hsp-well">
+              <div class="hsp-well-title">Screening Facts</div>
+              <label class="hsp-field">
+                <span class="hsp-field-label">Languages you speak <span class="hsp-optional">(comma separated)</span></span>
+                <input type="text" id="screening-languages" class="hsp-input" placeholder="e.g. English, Spanish">
+              </label>
+              <label class="hsp-field">
+                <span class="hsp-field-label">Locations you are willing to relocate to</span>
+                <input type="text" id="screening-relocation-locations" class="hsp-input" placeholder="e.g. NYC, Chicago, Anywhere">
+              </label>
+              <label class="hsp-field">
+                <span class="hsp-field-label">US work authorization</span>
+                <select id="screening-work-authorization" class="hsp-input">
+                  <option value="">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+              <label class="hsp-field" style="margin-bottom: 0;">
+                <span class="hsp-field-label">Need visa sponsorship?</span>
+                <select id="screening-sponsorship" class="hsp-input">
+                  <option value="">Unknown</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
             </div>
           </div>
-          <div class="handshake-plus-note" id="handshake-plus-note">Submits your most recently uploaded transcript and/or resume on Handshake</div>
-          <div class="handshake-plus-note" id="handshake-plus-claude-note" style="margin-top: 4px;">Tip: keep a <a href="https://claude.ai" target="_blank" style="color: #d4824a; text-decoration: none;">claude.ai</a> tab open so Handshake Plus can generate cover letters through your own Claude session.</div>
         </div>
-        <div class="handshake-plus-tab-content" id="filters-content">
-          <div class="filter-section">
-            
-            <label class="filter-text-label" style="margin-top: 0px; padding-bottom: 16px; border-bottom: 1px solid #eee; margin-bottom: 12px;">
-              <span style="display: flex; align-items: center; gap: 6px;">
-                Upload Your Resume (for cover letter)
-                <span class="info-tooltip" data-tooltip="This resume is used to generate personalized cover letters.">ⓘ</span>
-              </span>
-              <div class="resume-upload-container">
-                <input
-                  type="file"
-                  id="resume-upload"
-                  accept=".pdf,.docx"
-                  style="display: none;"
-                />
-                <button id="resume-upload-btn" class="resume-upload-btn">
-                  Choose File
-                </button>
-                <button id="resume-remove-btn" class="resume-upload-btn" style="display: none; background-color: #dc3545; border-color: #dc3545; color: white; margin-left: 8px;">
-                  Remove
-                </button>
-                <span id="resume-file-name" class="resume-file-name">No file chosen</span>
-              </div>
-              <div id="resume-status" class="resume-status"></div>
-              <div style="margin-top: 8px; display: flex; align-items: center; gap: 6px;">
-                <input type="checkbox" id="handshake-plus-raw-resume" style="margin: 0;">
-                <label for="handshake-plus-raw-resume" style="font-size: 12px; color: #888; cursor: pointer;">Use raw resume text (skip AI summary)</label>
-              </div>
-            </label>
-
-            <div id="filters-form-container" style="display: none;">
-              <label class="filter-text-label">
-                <span>Full Name <span style="font-size: 12px; color: #6c757d;"></span></span>
-                <input type="text" id="contact-full-name" class="job-role-search-input" placeholder="e.g. Jane Doe" />
-              </label>
-
-              <label class="filter-text-label" style="margin-top: 16px;">
-                <span>Email <span style="font-size: 12px; color: #6c757d;">(Required)</span></span>
-                <input type="email" id="contact-email" class="job-role-search-input" placeholder="e.g. jane@example.com" />
-              </label>
-
-              <label class="filter-text-label" style="margin-top: 16px;">
-                <span>Location <span style="font-size: 12px; color: #6c757d;">(Optional)</span></span>
-                <input type="text" id="contact-location" class="job-role-search-input" placeholder="e.g. New York, NY" />
-              </label>
-
-              <label class="filter-text-label" style="margin-top: 16px;">
-                <span>Phone <span style="font-size: 12px; color: #6c757d;">(Optional)</span></span>
-                <input type="tel" id="contact-phone" class="job-role-search-input" placeholder="e.g. (555) 123-4567" />
-              </label>
-
-              <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid #eee;">
-                <div style="font-weight: 600; font-size: 13px; color: #333; margin-bottom: 8px;">Screening facts</div>
-                <label class="filter-text-label">
-                  <span>Languages you speak <span style="font-size: 12px; color: #6c757d;">(comma separated)</span></span>
-                  <input type="text" id="screening-languages" class="job-role-search-input" placeholder="e.g. English, Spanish" />
-                </label>
-                <label class="filter-text-label" style="margin-top: 12px;">
-                  <span>Locations you are willing to relocate to</span>
-                  <input type="text" id="screening-relocation-locations" class="job-role-search-input" placeholder="e.g. NYC, Chicago, Anywhere" />
-                </label>
-                <label class="filter-text-label" style="margin-top: 12px;">
-                  <span>US work authorization</span>
-                  <select id="screening-work-authorization" class="job-role-search-input">
-                    <option value="">Unknown</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </label>
-                <label class="filter-text-label" style="margin-top: 12px;">
-                  <span>Need visa sponsorship?</span>
-                  <select id="screening-sponsorship" class="job-role-search-input">
-                    <option value="">Unknown</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </label>
-              </div>
-
+        <div class="hsp-tab-content" id="settings-content">
+          <div class="hsp-well">
+            <div class="hsp-well-title">AI Provider</div>
+            <div class="hsp-segmented">
+              <label class="hsp-segment active"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-claude" value="claude" checked> Claude</label>
+              <label class="hsp-segment"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-gemini" value="gemini"> Gemini</label>
             </div>
-
-            <label class="filter-text-label" style="margin-top: 16px;">
-              <span>What job role are you looking for?</span>
-              <div class="job-role-dropdown-container">
-                <input
-                  type="text"
-                  id="job-role-search"
-                  class="job-role-search-input"
-                  placeholder="Type role and press Enter (max 5)"
-                  maxlength="75"
-                  autocomplete="off"
-                />
-                <div id="job-role-dropdown" class="job-role-dropdown"></div>
-              </div>
-              <div id="selected-job-role" class="selected-job-role"></div>
+            <label class="hsp-field" style="margin-top: 12px;">
+              <span class="hsp-field-label">Claude project URL</span>
+              <input type="url" id="handshake-plus-claude-url" class="hsp-input" placeholder="Optional Claude chat/project URL">
             </label>
+            <label class="hsp-field" style="margin-bottom: 0;">
+              <span class="hsp-field-label">Gemini chat URL</span>
+              <input type="url" id="handshake-plus-gemini-url" class="hsp-input" placeholder="Optional Gemini chat URL">
+            </label>
+            <div class="hsp-caption">Optional: route AI prompts to a specific Claude or Gemini page with your preferred context.</div>
+          </div>
+          <div class="hsp-well">
+            <div class="hsp-well-title">Custom AI Instructions</div>
+            <textarea id="handshake-plus-custom-ai-instructions" class="hsp-input hsp-textarea" placeholder="Custom instructions added to every AI prompt, e.g. tone, cover letter preferences, formatting style" maxlength="5000"></textarea>
+            <div class="hsp-caption" id="hsp-instructions-counter">0 / 5000 characters</div>
+            <div class="hsp-caption">These are added to cover letters, required documents, screening answers, and resume parsing. Built-in output format and truthfulness rules still apply.</div>
+          </div>
+          <div class="hsp-well hsp-well-warning">
+            <div class="hsp-well-title">⚠️ Aggressive Mode</div>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-aggressive-mode">
+              <span>Enable Aggressive Mode</span>
+            </label>
+            <div class="hsp-caption">When enabled, AI will always answer screening questions with the most hirable option and produce complete required documents without placeholder brackets. Intended to maximize interview chances.</div>
           </div>
         </div>
       </div>
-      <div class="handshake-plus-resize-handle" id="handshake-plus-resize"></div>
+      <div class="hsp-resize" id="handshake-plus-resize"></div>
     `;
 
     // Add styles
@@ -261,7 +259,7 @@ class HandshakePlusPanel {
     document.body.appendChild(this.panel);
 
     // Set initial height to prevent auto-resizing when switching tabs
-    this.panel.style.height = '325px';
+    this.panel.style.height = '400px';
 
     // Add event listeners
     this.attachEventListeners();
