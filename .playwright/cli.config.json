@@ -1,9 +1,0 @@
-{
-  "browser": "chrome",
-  "launchOptions": {
-    "args": [
-      "--disable-extensions-except=/mnt/c/Users/chimn/Documents/HandShaker",
-      "--load-extension=/mnt/c/Users/chimn/Documents/HandShaker"
-    ]
-  }
-}

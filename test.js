@@ -2,13 +2,20 @@
 // Launches Chromium with the extension loaded, opens claude.ai + Handshake,
 // enables cover letters, starts applying, and streams all output to stdout.
 
-const { chromium } = require('/home/chimn/.local/lib/node_modules/@playwright/cli/node_modules/playwright-core');
+// Requires: npm i -D playwright-core  (then `npx playwright install chromium`)
+// Optional env overrides:
+//   HS_PROFILE_DIR  persistent profile dir (default: <os tmp>/handshake-plus-profile)
+//   PW_CHROMIUM     path to a Chrome/Chromium binary (default: Playwright's bundled build)
+const os = require('os');
+const path = require('path');
+const { chromium } = require('playwright-core');
 const PWD = __dirname;
+const PROFILE_DIR = process.env.HS_PROFILE_DIR || path.join(os.tmpdir(), 'handshake-plus-profile');
 
 (async () => {
-  const context = await chromium.launchPersistentContext('/tmp/handshake-plus-profile-2', {
+  const context = await chromium.launchPersistentContext(PROFILE_DIR, {
     headless: false,
-    executablePath: '/home/chimn/.cache/ms-playwright/chromium-1217/chrome-linux64/chrome',
+    ...(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {}),
     args: [
       '--disable-extensions-except=' + PWD,
       '--load-extension=' + PWD,

@@ -11,7 +11,7 @@
 <p align="center">
   <img alt="Manifest V3" src="https://img.shields.io/badge/Chrome%20Extension-Manifest%20V3-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white">
   <img alt="No build step" src="https://img.shields.io/badge/Build-none-121212?style=for-the-badge">
-  <img alt="Version 5.7.5" src="https://img.shields.io/badge/version-5.7.5-D3FB52?style=for-the-badge">
+  <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-D3FB52?style=for-the-badge">
   <img alt="AI Providers" src="https://img.shields.io/badge/AI-Claude%20%7C%20Gemini-B1F8FF?style=for-the-badge">
 </p>
 
@@ -206,6 +206,12 @@ These are production-hardened against Handshake's actual rendering behavior.
 
 ---
 
+## Third-Party
+
+- **[PDF.js](https://github.com/mozilla/pdf.js)** (Mozilla, Apache-2.0) — bundled as `pdf.min.js` / `pdf.worker.min.js` for client-side resume text extraction.
+
+---
+
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE).

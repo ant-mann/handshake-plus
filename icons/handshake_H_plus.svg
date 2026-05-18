@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 660" width="660" height="660">
+  <!-- Lime green background -->
+  <rect width="660" height="660" fill="#C5F94F"/>
+
+  <g fill="#0F1E2D">
+    <!--
+      H drawn as a single path.
+      Slant: top edge leans RIGHT, bottom edge leans LEFT
+      (so each vertical bar reads like a backslash \).
+      Path traces clockwise from the top-left corner of the left bar.
+    -->
+    <path d="M 230 95
+             L 325 95
+             L 294 290
+             L 344 290
+             L 375 95
+             L 470 95
+             L 395 565
+             L 300 565
+             L 334 350
+             L 284 350
+             L 250 565
+             L 155 565 Z"/>
+
+    <!-- Plus sign, sized to read as a companion mark to the H -->
+    <rect x="485" y="297" width="140" height="55"/>
+    <rect x="527" y="255" width="55" height="140"/>
+  </g>
+</svg>
