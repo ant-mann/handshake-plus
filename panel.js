@@ -92,7 +92,7 @@ class HandshakePlusPanel {
     this.panel.id = 'handshake-plus-panel';
     this.panel.innerHTML = `
       <div class="hsp-header">
-        <span class="hsp-header-title">🤝 Handshake Plus</span>
+        <span class="hsp-header-title"><span class="hsp-brand-dot"></span>🤝 Handshake Plus</span>
         <div class="hsp-header-controls">
           <button id="handshake-plus-minimize" class="hsp-btn-ghost" title="Minimize">−</button>
         </div>
@@ -105,7 +105,7 @@ class HandshakePlusPanel {
       <div class="hsp-body">
         <div class="hsp-tab-content active" id="apply-content">
           <div class="hsp-well">
-            <div class="hsp-status" id="handshake-plus-status">Ready to apply</div>
+            <div class="hsp-status" id="handshake-plus-status"><span class="hsp-status-dot"></span><span class="hsp-status-text">Ready to apply</span></div>
           </div>
           <div class="hsp-well">
             <div class="hsp-buttons">
@@ -286,6 +286,7 @@ class HandshakePlusPanel {
         max-height: 600px;
         background: #FFFFFF;
         border: 1px solid rgba(31, 32, 44, 0.2);
+        border-top: 2px solid #052326;
         border-radius: 8px;
         z-index: 999999;
         font-family: "Noi Grotesk", system-ui, sans-serif;
@@ -341,6 +342,18 @@ class HandshakePlusPanel {
         line-height: 24px;
         letter-spacing: -0.15px;
         color: #121212;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .hsp-brand-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #D3FB52;
+        display: inline-block;
+        flex-shrink: 0;
       }
 
       .hsp-header-controls {
@@ -483,6 +496,36 @@ class HandshakePlusPanel {
         line-height: 18px;
         color: #121212;
         text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .hsp-status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #327D0F;
+        display: inline-block;
+        flex-shrink: 0;
+        opacity: 0;
+        transition: opacity 300ms ease-out;
+      }
+
+      .hsp-status-dot.pulse {
+        opacity: 1;
+        animation: hsp-pulse 2s ease-in-out infinite;
+      }
+
+      .hsp-status.error .hsp-status-dot {
+        background: #BB3643;
+        opacity: 1;
+      }
+
+      @keyframes hsp-pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
       }
 
       .hsp-status.success {
@@ -1430,11 +1473,15 @@ class HandshakePlusPanel {
 
   updateStatus(text, isActive = false) {
     const statusEl = this.panel.querySelector('#handshake-plus-status');
-    statusEl.textContent = text;
+    const textEl = statusEl.querySelector('.hsp-status-text');
+    const dotEl = statusEl.querySelector('.hsp-status-dot');
+    if (textEl) textEl.textContent = text;
     if (isActive) {
       statusEl.classList.add('active');
+      if (dotEl) dotEl.classList.add('pulse');
     } else {
       statusEl.classList.remove('active');
+      if (dotEl) dotEl.classList.remove('pulse');
     }
   }
 
