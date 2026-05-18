@@ -53,12 +53,12 @@ After changing files locally, reload the extension from `chrome://extensions`.
 The extension coordinates **four runtime contexts** that communicate through Chrome's message passing APIs:
 
 ```
-┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Handshake   │◄───►│   Content    │◄───►│  Background  │◄───►│  Claude/Gemini│
-│    SPA       │     │   Script     │     │  Service     │     │     Tab       │
-│              │     │  (content.js)│     │   Worker     │     │(claude.js/   │
-│              │     │              │     │(background.js)│    │  gemini.js)   │
-└──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌───────────────┐
+│  Handshake   │◄───►│   Content    │◄───►│  Background  │◄───►│ Claude/Gemini │
+│    SPA       │     │   Script     │     │  Service     │     │      Tab      │
+│              │     │ (content.js) │     │   Worker     │     │  (claude.js/  │
+│              │     │              │     │(background.js)│    │   gemini.js)  │
+└──────────────┘     └──────────────┘     └──────────────┘     └───────────────┘
        ▲                    ▲
        │                    │
        └──── Injected ──────┘
