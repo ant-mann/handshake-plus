@@ -38,7 +38,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   handlePrompt(message.prompt).catch(err => {
     console.error('[Handshake Plus claude.js] ERROR in handlePrompt:', err);
-    chrome.runtime.sendMessage({ type: 'handshakePlusResponse', error: err.message });
+    try {
+      chrome.runtime.sendMessage({ type: 'handshakePlusResponse', error: err.message });
+    } catch (e) {
+      // Extension context invalidated — ignore
+    }
   });
 
   return true;
@@ -76,7 +80,11 @@ async function handlePrompt(prompt) {
   const textBefore = streamElsBefore.length ? streamElsBefore[streamElsBefore.length - 1].innerText.trim() : '';
 
   await submitPromptToClaude(composer, sendBtn, messagesBefore);
-  chrome.runtime.sendMessage({ type: 'handshakePlusAiProgress', provider: 'claude', phase: 'sent' });
+  try {
+    chrome.runtime.sendMessage({ type: 'handshakePlusAiProgress', provider: 'claude', phase: 'sent' });
+  } catch (e) {
+    // Extension context invalidated — ignore
+  }
 
   await waitForResponse(messagesBefore, textBefore);
 }
@@ -302,7 +310,11 @@ function waitForResponse(messagesBefore, textBefore) {
       }
       cleanup();
       clearTimeout(hardTimeout);
-      chrome.runtime.sendMessage({ type: 'handshakePlusResponse', text });
+      try {
+        chrome.runtime.sendMessage({ type: 'handshakePlusResponse', text });
+      } catch (e) {
+        // Extension context invalidated — ignore
+      }
       resolve();
     }
 
@@ -321,7 +333,11 @@ function waitForResponse(messagesBefore, textBefore) {
       // Only start the settle timer once streaming has actually begun (first DOM mutation).
       // This prevents premature capture if Claude takes a few seconds to start responding.
       if (!streamingStarted) {
-        chrome.runtime.sendMessage({ type: 'handshakePlusAiProgress', provider: 'claude', phase: 'streaming' });
+        try {
+          chrome.runtime.sendMessage({ type: 'handshakePlusAiProgress', provider: 'claude', phase: 'streaming' });
+        } catch (e) {
+          // Extension context invalidated — ignore
+        }
       }
       streamingStarted = true;
       resetStreamTimer();
