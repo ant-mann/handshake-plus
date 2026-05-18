@@ -286,15 +286,16 @@ class HandshakePlusPanel {
         width: 360px;
         min-height: 200px;
         max-height: 600px;
-        background: white;
-        border: 2px solid #007bff;
+        background: #FFFFFF;
+        border: 1px solid rgba(31, 32, 44, 0.2);
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         z-index: 999999;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
         transition: none;
         display: flex;
         flex-direction: column;
+        color: #121212;
+        overflow: hidden;
       }
 
       #handshake-plus-panel.minimized {
@@ -305,42 +306,29 @@ class HandshakePlusPanel {
         max-height: unset !important;
       }
 
-      #handshake-plus-panel.minimized .handshake-plus-header {
+      #handshake-plus-panel.minimized .hsp-header {
         padding: 12px 16px;
-        border-radius: 6px;
+        border-radius: 8px;
         margin-bottom: 0 !important;
+        border-bottom: none;
       }
 
-      #handshake-plus-panel.minimized .handshake-plus-title {
+      #handshake-plus-panel.minimized .hsp-header-title {
         white-space: nowrap;
       }
 
-      #handshake-plus-panel.minimized .handshake-plus-tabs {
-        display: none !important;
-        height: 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        border: none !important;
-        overflow: hidden !important;
-      }
-
-      #handshake-plus-panel.minimized .handshake-plus-body {
-        display: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-      }
-
-      #handshake-plus-panel.minimized .handshake-plus-resize-handle {
+      #handshake-plus-panel.minimized .hsp-tabs,
+      #handshake-plus-panel.minimized .hsp-body,
+      #handshake-plus-panel.minimized .hsp-resize {
         display: none !important;
       }
 
-      .handshake-plus-header {
-        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        color: white;
+      .hsp-header {
+        background: #FFFFFF;
+        color: #121212;
         padding: 12px 16px;
-        border-radius: 6px 6px 0 0;
+        border-radius: 8px 8px 0 0;
+        border-bottom: 1px solid rgba(31, 32, 44, 0.2);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -348,371 +336,509 @@ class HandshakePlusPanel {
         user-select: none;
       }
 
-      .handshake-plus-title {
-        font-weight: 600;
-        font-size: 16px;
+      .hsp-header-title {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: -0.15px;
+        color: #121212;
       }
 
-      .handshake-plus-controls {
+      .hsp-header-controls {
         display: flex;
         gap: 8px;
       }
 
-      .handshake-plus-btn-icon {
-        background: rgba(255, 255, 255, 0.2);
+      .hsp-btn-ghost {
+        background: transparent;
         border: none;
-        color: white;
-        width: 24px;
-        height: 24px;
-        border-radius: 4px;
+        color: #121212;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 18px;
         line-height: 1;
-        transition: background 0.2s;
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: background-color 150ms ease-out;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
       }
 
-      .handshake-plus-btn-icon:hover {
-        background: rgba(255, 255, 255, 0.3);
+      .hsp-btn-ghost:hover {
+        background: #F6F6F6;
       }
 
-      .handshake-plus-tabs {
+      .hsp-tabs {
         display: flex;
-        background: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
+        gap: 4px;
+        padding: 8px 12px;
+        background: transparent;
+        border-bottom: 1px solid rgba(31, 32, 44, 0.2);
       }
 
-      .handshake-plus-tab {
+      .hsp-tab {
         flex: 1;
-        padding: 12px 16px;
+        padding: 2px 8px;
         border: none;
         background: transparent;
-        color: #6c757d;
-        font-size: 14px;
-        font-weight: 600;
+        color: rgba(18, 18, 18, 0.7);
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 17px;
+        font-weight: 500;
+        line-height: 23.8px;
         cursor: pointer;
-        transition: all 0.2s;
-        border-bottom: 3px solid transparent;
+        border-radius: 8px;
+        transition: background-color 150ms ease-out, color 150ms ease-out;
+        text-align: center;
       }
 
-      .handshake-plus-tab:hover {
-        background: #e9ecef;
-        color: #495057;
+      .hsp-tab:hover {
+        background: #F6F6F6;
+        color: #121212;
       }
 
-      .handshake-plus-tab.active {
-        color: #007bff;
-        border-bottom-color: #007bff;
-        background: white;
+      .hsp-tab.active {
+        background: #EAEAEA;
+        color: #121212;
       }
 
-      .handshake-plus-tab.disabled {
-        opacity: 0.5;
+      .hsp-tab.disabled {
+        opacity: 0.4;
         cursor: not-allowed;
         pointer-events: none;
       }
 
-      .handshake-plus-body {
-        padding: 16px;
+      .hsp-body {
+        padding: 0;
         flex: 1;
         overflow-y: auto;
         overflow-x: hidden;
       }
 
-      .handshake-plus-body::-webkit-scrollbar {
-        width: 8px;
+      .hsp-body::-webkit-scrollbar {
+        width: 6px;
       }
 
-      .handshake-plus-body::-webkit-scrollbar-track {
-        background: #f1f1f1;
+      .hsp-body::-webkit-scrollbar-track {
+        background: #F6F6F6;
         border-radius: 4px;
       }
 
-      .handshake-plus-body::-webkit-scrollbar-thumb {
-        background: #007bff;
+      .hsp-body::-webkit-scrollbar-thumb {
+        background: rgba(31, 32, 44, 0.2);
         border-radius: 4px;
       }
 
-      .handshake-plus-body::-webkit-scrollbar-thumb:hover {
-        background: #0056b3;
+      .hsp-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(18, 18, 18, 0.3);
       }
 
-      .handshake-plus-tab-content {
+      .hsp-tab-content {
+        display: none;
+        padding: 12px 16px;
+      }
+
+      .hsp-tab-content.active {
+        display: block;
+      }
+
+      .hsp-well {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        background: #FFFFFF;
+      }
+
+      .hsp-well:last-child {
+        margin-bottom: 0;
+      }
+
+      .hsp-well-title {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 18px;
+        color: #121212;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .hsp-well-warning {
+        border-color: rgba(187, 54, 67, 0.3);
+        background: rgba(187, 54, 67, 0.03);
+      }
+
+      .hsp-status {
+        padding: 10px 12px;
+        background: #F6F6F6;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 8px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 18px;
+        color: #121212;
+        text-align: center;
+      }
+
+      .hsp-status.success {
+        background: rgba(50, 125, 15, 0.08);
+        border-color: rgba(50, 125, 15, 0.3);
+        color: #327D0F;
+      }
+
+      .hsp-status.error {
+        background: rgba(187, 54, 67, 0.08);
+        border-color: rgba(187, 54, 67, 0.3);
+        color: #BB3643;
+      }
+
+      .hsp-status-inline {
+        margin-top: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 12px;
+        line-height: 1.4;
         display: none;
       }
 
-      .handshake-plus-tab-content.active {
+      .hsp-status-inline.success {
         display: block;
+        background: rgba(50, 125, 15, 0.08);
+        border: 1px solid rgba(50, 125, 15, 0.3);
+        color: #327D0F;
       }
 
-      .handshake-plus-status {
-        padding: 10px;
-        background: #e7f3ff;
-        border: 1px solid #b3d9ff;
-        border-radius: 4px;
-        margin-bottom: 12px;
-        font-size: 14px;
-        color: #004085;
-        text-align: center;
-      }
-
-      .handshake-plus-status.active {
-        background: #d4edda;
-        border-color: #c3e6cb;
-        color: #155724;
-      }
-
-      .handshake-plus-progress {
-        font-size: 14px;
-        margin-bottom: 16px;
-        text-align: center;
-        padding: 10px;
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-        border: 1px solid #7dd3fc;
-        border-radius: 6px;
-      }
-
-      .handshake-plus-progress .progress-label {
-        color: #0c4a6e;
-        font-weight: 500;
+      .hsp-status-inline.error {
         display: block;
-        margin-bottom: 4px;
-        font-size: 12px;
+        background: rgba(187, 54, 67, 0.08);
+        border: 1px solid rgba(187, 54, 67, 0.3);
+        color: #BB3643;
       }
 
-      .handshake-plus-progress .progress-count {
-        color: #0369a1;
-        font-weight: 700;
-        font-size: 20px;
+      .hsp-status-inline.loading {
         display: block;
+        background: rgba(177, 248, 255, 0.3);
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        color: #052326;
       }
 
-      .handshake-plus-buttons {
+      .hsp-buttons {
         display: flex;
         flex-direction: column;
         gap: 8px;
       }
 
-      .handshake-plus-btn {
-        padding: 10px 16px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: 600;
+      .hsp-btn {
+        padding: 0 8px;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 8px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 18px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: background-color 150ms ease-out, border-color 150ms ease-out;
         width: 100%;
-      }
-
-      .handshake-plus-btn-primary {
-        background: #007bff;
-        color: white;
-      }
-
-      .handshake-plus-btn-primary:hover:not(:disabled) {
-        background: #0056b3;
-      }
-
-      .handshake-plus-btn-primary:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-      }
-
-      .handshake-plus-btn-danger {
-        background: #dc3545;
-        color: white;
-      }
-
-      .handshake-plus-btn-danger:hover {
-        background: #c82333;
-      }
-
-      .handshake-plus-note {
-        margin-top: 10px;
-        font-size: 12px;
-        color: #000;
-        line-height: 1.4;
+        height: 36px;
+        background: #FFFFFF;
+        color: #121212;
         text-align: center;
       }
 
-      .handshake-plus-resize-handle {
+      .hsp-btn:hover:not(:disabled) {
+        background: #F6F6F6;
+      }
+
+      .hsp-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .hsp-btn-danger {
+        border-color: rgba(187, 54, 67, 0.4);
+        color: #BB3643;
+      }
+
+      .hsp-btn-danger:hover:not(:disabled) {
+        background: rgba(187, 54, 67, 0.06);
+      }
+
+      .hsp-btn-danger-outline {
+        border-color: rgba(187, 54, 67, 0.4);
+        color: #BB3643;
+      }
+
+      .hsp-btn-danger-outline:hover:not(:disabled) {
+        background: rgba(187, 54, 67, 0.06);
+      }
+
+      .hsp-progress-label {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: rgba(18, 18, 18, 0.7);
+        margin-bottom: 4px;
+      }
+
+      .hsp-progress-count {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: -0.15px;
+        color: #121212;
+      }
+
+      .hsp-note {
+        margin-top: 10px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.4;
+        color: rgba(18, 18, 18, 0.7);
+        text-align: center;
+      }
+
+      .hsp-note a {
+        color: #1569E0;
+        text-decoration: none;
+      }
+
+      .hsp-note a:hover {
+        text-decoration: underline;
+      }
+
+      .hsp-resize {
         position: absolute;
         bottom: 0;
         left: 0;
         width: 24px;
         height: 24px;
         cursor: sw-resize;
-        background: #007bff;
+        background: rgba(31, 32, 44, 0.2);
         clip-path: polygon(0 0, 0 100%, 100% 100%);
-        border-bottom-left-radius: 6px;
+        border-bottom-left-radius: 8px;
         opacity: 0.6;
-        transition: opacity 0.2s, background-color 0.2s;
+        transition: opacity 150ms ease-out, background-color 150ms ease-out;
       }
 
-      .handshake-plus-resize-handle:hover {
+      .hsp-resize:hover {
         opacity: 1;
-        background: #0056b3;
+        background: rgba(31, 32, 44, 0.4);
       }
 
-      .filter-section {
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid #e9ecef;
-      }
-
-      .filter-section:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-      }
-
-      .filter-option {
+      .hsp-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
         margin-bottom: 12px;
       }
 
-      .filter-label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        padding: 8px;
-        border-radius: 4px;
-        transition: background 0.2s;
+      .hsp-field:last-child {
+        margin-bottom: 0;
       }
 
-      .filter-label:hover {
-        background: #f8f9fa;
+      .hsp-field-label {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 18px;
+        color: #121212;
       }
 
-      .filter-checkbox {
-        width: 18px;
-        height: 18px;
-        margin-right: 10px;
-        cursor: pointer;
-        accent-color: #007bff;
+      .hsp-required {
+        font-size: 12px;
+        color: rgba(18, 18, 18, 0.7);
+        margin-left: 4px;
       }
 
-      .filter-label span {
-        font-size: 14px;
-        color: #495057;
-        user-select: none;
-        padding: 10px;
+      .hsp-optional {
+        font-size: 12px;
+        color: rgba(18, 18, 18, 0.7);
+        margin-left: 4px;
       }
 
-      .filter-text-label {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+      .hsp-input {
+        width: 100%;
+        padding: 0 12px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 18px;
+        color: #121212;
+        background: transparent;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 8px;
+        box-sizing: border-box;
+        transition: border-color 150ms ease-out, box-shadow 150ms ease-out;
+        height: 40px;
       }
 
-      .filter-text-label > span {
-        font-size: 14px;
-        color: #495057;
-        font-weight: 500;
+      .hsp-input:focus {
+        outline: none;
+        border-color: #1569E0;
+        box-shadow: 0 0 0 2px rgba(21, 105, 224, 0.1);
       }
 
-      .job-role-dropdown-container {
+      .hsp-input::placeholder {
+        color: rgba(18, 18, 18, 0.4);
+      }
+
+      .hsp-textarea {
+        padding: 10px 12px;
+        min-height: 72px;
+        resize: vertical;
+        height: auto;
+      }
+
+      .hsp-dropdown-wrap {
         position: relative;
         width: 100%;
       }
 
-      .job-role-search-input {
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        box-sizing: border-box;
-        transition: border-color 0.2s;
-      }
-
-      .job-role-search-input:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
-      }
-
-      .job-role-search-input::placeholder {
-        color: #adb5bd;
-      }
-
-      .job-role-dropdown {
+      .hsp-dropdown {
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: white;
-        border: 1px solid #ced4da;
+        background: #FFFFFF;
+        border: 1px solid rgba(31, 32, 44, 0.2);
         border-top: none;
-        border-radius: 0 0 4px 4px;
+        border-radius: 0 0 8px 8px;
         max-height: 150px;
         overflow-y: auto;
         z-index: 1000;
         display: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-family: "Noi Grotesk", system-ui, sans-serif;
       }
 
-      .job-role-dropdown.show {
+      .hsp-dropdown.show {
         display: block;
       }
 
-      .job-role-dropdown-item {
-        padding: 10px;
+      .hsp-dropdown-item {
+        padding: 10px 12px;
         cursor: pointer;
-        font-size: 14px;
-        color: #495057;
-        transition: background-color 0.2s;
-        border-bottom: 1px solid #f1f1f1;
+        font-size: 15px;
+        color: #121212;
+        transition: background-color 150ms ease-out;
+        border-bottom: 1px solid rgba(31, 32, 44, 0.08);
       }
 
-      .job-role-dropdown-item:last-child {
+      .hsp-dropdown-item:last-child {
         border-bottom: none;
       }
 
-      .job-role-dropdown-item:hover {
-        background-color: #f8f9fa;
+      .hsp-dropdown-item:hover {
+        background: #F6F6F6;
       }
 
-      .resume-upload-container {
+      .hsp-dropdown-item.selected {
+        background: #EAEAEA;
+        color: #121212;
+      }
+
+      .hsp-chips {
+        margin-top: 10px;
+        padding: 8px;
+        background: #F6F6F6;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 8px;
+        font-size: 14px;
+        color: #121212;
+        display: none;
+        gap: 6px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .hsp-chips.show {
+        display: flex;
+      }
+
+      .hsp-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #FFFFFF;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+      }
+
+      .hsp-chip-remove {
+        color: #121212;
+        cursor: pointer;
+        font-weight: 600;
+        border: none;
+        background: transparent;
+        padding: 0;
+        line-height: 1;
+        font-size: 14px;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: background-color 150ms ease-out;
+      }
+
+      .hsp-chip-remove:hover {
+        background: #EAEAEA;
+      }
+
+      .hsp-clear-all {
+        margin-left: auto;
+        border: none;
+        background: transparent;
+        color: #1569E0;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+      }
+
+      .hsp-clear-all:hover {
+        text-decoration: underline;
+      }
+
+      .hsp-upload-row {
         display: flex;
         align-items: center;
         gap: 10px;
         margin-top: 8px;
+        flex-wrap: wrap;
       }
 
-      .resume-upload-btn {
-        padding: 8px 16px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background 0.2s;
-      }
-
-      .resume-upload-btn:hover {
-        background: #0056b3;
-      }
-
-      .resume-file-name {
-        font-size: 13px;
-        color: #6c757d;
+      .hsp-file-name {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 12px;
+        color: rgba(18, 18, 18, 0.7);
         font-style: italic;
       }
 
-      .info-tooltip {
+      .hsp-tooltip {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background-color: #e7f3ff;
-        color: #007bff;
-        border: 1px solid #007bff;
+        background-color: #F6F6F6;
+        color: rgba(18, 18, 18, 0.7);
+        border: 1px solid rgba(31, 32, 44, 0.2);
         font-size: 11px;
         font-weight: bold;
         font-family: serif;
@@ -720,156 +846,128 @@ class HandshakePlusPanel {
         user-select: none;
         position: relative;
       }
-      
-      .info-tooltip:hover {
-        background-color: #0056b3;
-        color: white;
+
+      .hsp-tooltip:hover {
+        background-color: #1F202C;
+        color: #FFFFFF;
+        border-color: #1F202C;
       }
 
-      .info-tooltip::after {
+      .hsp-tooltip::after {
         content: attr(data-tooltip);
         position: absolute;
         top: 150%;
-        bottom: auto;
         left: 50%;
         transform: translateX(-75%);
         width: 250px;
-        background-color: #007bff;
-        color: white;
+        background-color: #1F202C;
+        color: #FFFFFF;
         text-align: center;
         padding: 8px 12px;
-        border-radius: 6px;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        border-radius: 8px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
         font-size: 12px;
-        font-weight: normal;
+        font-weight: 400;
         line-height: 1.4;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease, transform 0.2s ease;
+        transition: opacity 150ms ease-out, transform 150ms ease-out;
         z-index: 1000;
         pointer-events: none;
       }
 
-      .info-tooltip::before {
+      .hsp-tooltip::before {
         content: '';
         position: absolute;
         top: 100%;
-        bottom: auto;
         left: 50%;
         transform: translateX(-50%);
         border-width: 6px;
         border-style: solid;
-        border-color: transparent transparent #007bff transparent;
+        border-color: transparent transparent #1F202C transparent;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease;
+        transition: opacity 150ms ease-out;
         z-index: 1000;
       }
 
-      .info-tooltip:hover::after {
+      .hsp-tooltip:hover::after {
         opacity: 1;
         visibility: visible;
         transform: translateX(-75%) translateY(2px);
       }
 
-      .info-tooltip:hover::before {
+      .hsp-tooltip:hover::before {
         opacity: 1;
         visibility: visible;
-        transform: translateX(-50%) translateY(2px);
       }
 
-      .resume-status {
-        margin-top: 8px;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 13px;
-        display: none;
-      }
-
-      .resume-status.success {
-        display: block;
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-      }
-
-      .resume-status.error {
-        display: block;
-        background: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-      }
-
-      .resume-status.loading {
-        display: block;
-        background: #d1ecf1;
-        border: 1px solid #bee5eb;
-        color: #0c5460;
-      }
-
-      .job-role-dropdown-item.selected {
-        background-color: #e7f3ff;
-        color: #007bff;
-      }
-
-      .selected-job-role {
-        margin-top: 10px;
-        padding: 8px;
-        background: #e7f3ff;
-        border: 1px solid #b3d9ff;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #004085;
-        display: none;
-        gap: 6px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
-
-      .selected-job-role.show {
+      .hsp-checkbox-row {
         display: flex;
-      }
-
-      .selected-job-role .selected-role-chip {
-        display: inline-flex;
         align-items: center;
+        cursor: pointer;
+        padding: 6px 0;
+        gap: 8px;
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 18px;
+        color: #121212;
+      }
+
+      .hsp-checkbox-row input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        cursor: pointer;
+        accent-color: #121212;
+        flex-shrink: 0;
+      }
+
+      .hsp-segmented {
+        display: flex;
+        gap: 4px;
+      }
+
+      .hsp-segment {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         gap: 6px;
-        background: #d6ebff;
-        border: 1px solid #9dcfff;
-        border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 12px;
-      }
-
-      .selected-job-role .clear-selection {
-        color: #007bff;
+        padding: 0 8px;
+        height: 36px;
+        border: 1px solid rgba(31, 32, 44, 0.2);
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: rgba(18, 18, 18, 0.7);
+        font-family: "Noi Grotesk", system-ui, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 18px;
         cursor: pointer;
-        font-weight: 600;
-        border: none;
-        background: transparent;
-        padding: 0;
-        line-height: 1;
+        transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out;
       }
 
-      .selected-job-role .clear-selection:hover {
-        color: #0056b3;
+      .hsp-segment:has(input:checked) {
+        background: #EAEAEA;
+        color: #121212;
+        border-color: rgba(31, 32, 44, 0.3);
       }
 
-      .selected-job-role .clear-all-roles {
-        margin-left: auto;
-        border: none;
-        background: transparent;
-        color: #0056b3;
-        cursor: pointer;
+      .hsp-segment input[type="radio"] {
+        display: none;
+      }
+
+      .hsp-caption {
+        font-family: "Noi Grotesk", system-ui, sans-serif;
         font-size: 12px;
-        font-weight: 600;
+        font-weight: 400;
+        line-height: 1.4;
+        color: rgba(18, 18, 18, 0.7);
+        margin-top: 6px;
       }
-
-      .selected-job-role .clear-all-roles:hover {
-        text-decoration: underline;
-      }
-    `;
+    `;;
     document.head.appendChild(style);
   }
 
