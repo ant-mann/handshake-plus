@@ -2734,7 +2734,7 @@ function promptUserForReview(originalText, defaultFont = 'Calibri', options = {}
           return `<div style="margin-bottom: 16px; text-align: left;">${formattedP}</div>`;
         }).join('');
 
-        previewDiv.innerHTML = `<div style="background: #FFFFFF; padding: 30px 40px; border: 1px solid rgba(31, 32, 44, 0.2); width: 100%; box-sizing: border-box; color: #121212; font-family: "Noi Grotesk", "'${currentFont}'", sans-serif; font-size: 15px; line-height: 1.5;">${formattedHtml}</div>`;
+        previewDiv.innerHTML = `<div style="background: #FFFFFF; padding: 30px 40px; border: 1px solid rgba(31, 32, 44, 0.2); width: 100%; box-sizing: border-box; color: #121212; font-family: '${currentFont}', 'Noi Grotesk', sans-serif; font-size: 15px; line-height: 1.5;">${formattedHtml}</div>`;
         previewDiv.style.backgroundColor = '#F6F6F6';
         textarea.style.display = 'none';
         previewDiv.style.display = 'block';
