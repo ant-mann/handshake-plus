@@ -2341,13 +2341,13 @@ function applyScreeningAnswers(questions, answers) {
 function promptUserForScreeningReview(answers, questions) {
   return new Promise((resolve) => {
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;';
+    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(31, 32, 44, 0.4); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: "Noi Grotesk", system-ui, sans-serif;';
 
     const modal = document.createElement('div');
     modal.style.cssText = 'background: white; width: 680px; max-width: 92vw; max-height: 86vh; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;';
 
     const header = document.createElement('div');
-    header.style.cssText = 'padding: 16px; background: #007bff; color: white; font-weight: bold; font-size: 16px;';
+    header.style.cssText = 'padding: 12px 16px; background: #FFFFFF; color: #121212; font-weight: 700; font-size: 20px; line-height: 24px; letter-spacing: -0.15px; font-family: "Noi Grotesk", system-ui, sans-serif; border-bottom: 1px solid rgba(31, 32, 44, 0.2);';
     header.textContent = 'Review Screening Answers';
 
     const body = document.createElement('div');
@@ -2637,53 +2637,53 @@ function promptUserForReview(originalText, defaultFont = 'Calibri', options = {}
     const approveText = options.approveText || 'Approve & Submit';
 
     const overlay = document.createElement('div');
-    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;';
+    overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(31, 32, 44, 0.4); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: "Noi Grotesk", system-ui, sans-serif;';
 
     const modal = document.createElement('div');
-    modal.style.cssText = 'background: white; width: 700px; max-width: 90vw; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;';
+    modal.style.cssText = 'background: #FFFFFF; width: 700px; max-width: 90vw; border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; box-shadow: 0 4px 20px rgba(31, 32, 44, 0.15); display: flex; flex-direction: column; overflow: hidden;';
 
     const header = document.createElement('div');
-    header.style.cssText = 'padding: 16px; background: #007bff; color: white; font-weight: bold; font-size: 16px;';
+    header.style.cssText = 'padding: 12px 16px; background: #FFFFFF; color: #121212; font-weight: 700; font-size: 20px; line-height: 24px; letter-spacing: -0.15px; font-family: "Noi Grotesk", system-ui, sans-serif; border-bottom: 1px solid rgba(31, 32, 44, 0.2);';
     header.textContent = titleText;
 
     const body = document.createElement('div');
-    body.style.cssText = 'padding: 16px; flex: 1; display: flex; flex-direction: column; position: relative;';
+    body.style.cssText = 'padding: 16px; flex: 1; display: flex; flex-direction: column; position: relative; background: #FFFFFF;';
 
     const note = document.createElement('div');
-    note.style.cssText = 'font-size: 13px; color: #666; margin-bottom: 12px; line-height: 1.4;';
+    note.style.cssText = 'font-size: 12px; color: rgba(18, 18, 18, 0.7); margin-bottom: 12px; line-height: 1.4; font-family: "Noi Grotesk", system-ui, sans-serif;';
     note.textContent = noteText;
 
     const textarea = document.createElement('textarea');
     textarea.value = originalText;
-    textarea.style.cssText = 'width: 100%; height: 360px; padding: 16px; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; font-size: 14px; resize: vertical; box-sizing: border-box; outline: none; line-height: 1.5; color: #000;';
+    textarea.style.cssText = 'width: 100%; height: 360px; padding: 12px; border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; font-family: inherit; font-size: 15px; resize: vertical; box-sizing: border-box; outline: none; line-height: 1.5; color: #121212; background: transparent;';
 
     const previewDiv = document.createElement('div');
-    previewDiv.style.cssText = 'width: 100%; height: 360px; padding: 16px; border: 1px solid #007bff; border-radius: 4px; font-family: inherit; font-size: 14px; box-sizing: border-box; line-height: 1.5; color: #000; overflow-y: auto; white-space: pre-wrap; background: #f8f9fa; display: none;';
+    previewDiv.style.cssText = 'width: 100%; height: 360px; padding: 12px; border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; font-family: inherit; font-size: 15px; box-sizing: border-box; line-height: 1.5; color: #121212; overflow-y: auto; white-space: pre-wrap; background: #F6F6F6; display: none;';
 
     const footer = document.createElement('div');
-    footer.style.cssText = 'padding: 16px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 12px; background: #f8f9fa; align-items: center; flex-wrap: wrap;';
+    footer.style.cssText = 'padding: 12px 16px; border-top: 1px solid rgba(31, 32, 44, 0.2); display: flex; justify-content: flex-end; gap: 8px; background: #FFFFFF; align-items: center; flex-wrap: wrap;';
 
     // Custom pill-button font picker — no native <select> so no focus-steal on open.
     const fonts = ['Calibri', 'Times New Roman', 'Verdana', 'Georgia', 'Cambria', 'Garamond', 'Trebuchet MS'];
     let currentFont = defaultFont;
 
     const fontPicker = document.createElement('div');
-    fontPicker.style.cssText = 'display: flex; flex-wrap: wrap; gap: 5px; margin-right: auto; align-items: center;';
+    fontPicker.style.cssText = 'display: flex; flex-wrap: wrap; gap: 6px; margin-right: auto; align-items: center;';
 
     const pillBtns = fonts.map(f => {
       const btn = document.createElement('button');
       btn.textContent = f;
       const active = f === defaultFont;
-      btn.style.cssText = `padding: 3px 9px; border-radius: 12px; border: 1px solid ${active ? '#007bff' : '#ccc'}; background: ${active ? '#007bff' : 'white'}; color: ${active ? 'white' : '#555'}; font-size: 11px; cursor: pointer; font-family: '${f}', sans-serif; white-space: nowrap;`;
+      btn.style.cssText = `padding: 4px 10px; border-radius: 999px; border: 1px solid ${active ? 'rgba(31, 32, 44, 0.3)' : 'rgba(31, 32, 44, 0.2)'}; background: ${active ? '#EAEAEA' : '#FFFFFF'}; color: ${active ? '#121212' : 'rgba(18, 18, 18, 0.7)'}; font-size: 12px; cursor: pointer; font-family: "Noi Grotesk", "${f}", sans-serif; white-space: nowrap; transition: background-color 150ms ease-out, border-color 150ms ease-out;`;
       btn.addEventListener('click', () => {
         currentFont = f;
         textarea.style.fontFamily = f;
         if (isPreviewMode && previewDiv.firstChild) previewDiv.firstChild.style.fontFamily = f;
         pillBtns.forEach(b => {
           const sel = b === btn;
-          b.style.background = sel ? '#007bff' : 'white';
-          b.style.color = sel ? 'white' : '#555';
-          b.style.borderColor = sel ? '#007bff' : '#ccc';
+          b.style.background = sel ? '#EAEAEA' : '#FFFFFF';
+          b.style.color = sel ? '#121212' : 'rgba(18, 18, 18, 0.7)';
+          b.style.borderColor = sel ? 'rgba(31, 32, 44, 0.3)' : 'rgba(31, 32, 44, 0.2)';
         });
       });
       fontPicker.appendChild(btn);
@@ -2694,15 +2694,15 @@ function promptUserForReview(originalText, defaultFont = 'Calibri', options = {}
 
     const previewBtn = document.createElement('button');
     previewBtn.textContent = '👁️ Preview Format';
-    previewBtn.style.cssText = 'padding: 8px 16px; border: 1px solid #007bff; background: white; color: #007bff; border-radius: 4px; cursor: pointer; font-weight: 500; transition: all 0.2s; margin-right: 8px;';
+    previewBtn.style.cssText = 'padding: 0 12px; height: 36px; border: 1px solid rgba(31, 32, 44, 0.2); background: #FFFFFF; color: #121212; border-radius: 8px; cursor: pointer; font-weight: 500; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px; transition: background-color 150ms ease-out; margin-right: 8px;';
 
     const cancelBtn = document.createElement('button');
     cancelBtn.textContent = 'Skip Job';
-    cancelBtn.style.cssText = 'padding: 8px 16px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer; color: #333; font-weight: 500; transition: background 0.2s;';
+    cancelBtn.style.cssText = 'padding: 0 12px; height: 36px; border: 1px solid rgba(31, 32, 44, 0.2); background: #FFFFFF; border-radius: 8px; cursor: pointer; color: #121212; font-weight: 500; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px; transition: background-color 150ms ease-out;';
 
     const submitBtn = document.createElement('button');
     submitBtn.textContent = approveText;
-    submitBtn.style.cssText = 'padding: 8px 16px; border: none; background: #28a745; color: white; border-radius: 4px; cursor: pointer; font-weight: 500; transition: background 0.2s;';
+    submitBtn.style.cssText = 'padding: 0 12px; height: 36px; border: none; background: #D3FB52; color: #052326; border-radius: 8px; cursor: pointer; font-weight: 500; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px; transition: background-color 150ms ease-out;';
 
     let isPreviewMode = false;
     function togglePreview() {
@@ -2734,31 +2734,31 @@ function promptUserForReview(originalText, defaultFont = 'Calibri', options = {}
           return `<div style="margin-bottom: 16px; text-align: left;">${formattedP}</div>`;
         }).join('');
 
-        previewDiv.innerHTML = `<div style="background: white; padding: 30px 40px; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; color: black; font-family: '${currentFont}', sans-serif; font-size: 14px; line-height: 1.5;">${formattedHtml}</div>`;
-        previewDiv.style.backgroundColor = '#f0f2f5';
+        previewDiv.innerHTML = `<div style="background: #FFFFFF; padding: 30px 40px; border: 1px solid rgba(31, 32, 44, 0.2); width: 100%; box-sizing: border-box; color: #121212; font-family: "Noi Grotesk", "'${currentFont}'", sans-serif; font-size: 15px; line-height: 1.5;">${formattedHtml}</div>`;
+        previewDiv.style.backgroundColor = '#F6F6F6';
         textarea.style.display = 'none';
         previewDiv.style.display = 'block';
         previewBtn.textContent = '✏️ Edit Text';
-        previewBtn.style.background = '#007bff';
-        previewBtn.style.color = 'white';
+        previewBtn.style.background = '#EAEAEA';
+        previewBtn.style.color = '#121212';
         note.innerHTML = previewNote;
       } else {
         textarea.style.display = 'block';
         previewDiv.style.display = 'none';
         previewBtn.textContent = '👁️ Preview Format';
-        previewBtn.style.background = 'white';
-        previewBtn.style.color = '#007bff';
+        previewBtn.style.background = '#FFFFFF';
+        previewBtn.style.color = '#121212';
         note.textContent = noteText;
       }
     }
     previewBtn.addEventListener('click', togglePreview);
 
-    cancelBtn.onmouseover = () => cancelBtn.style.background = '#f1f1f1';
-    cancelBtn.onmouseout = () => cancelBtn.style.background = 'white';
-    submitBtn.onmouseover = () => submitBtn.style.background = '#218838';
-    submitBtn.onmouseout = () => submitBtn.style.background = '#28a745';
-    previewBtn.onmouseover = () => { if (!isPreviewMode) previewBtn.style.background = '#f0f7ff'; };
-    previewBtn.onmouseout = () => { if (!isPreviewMode) previewBtn.style.background = 'white'; };
+    cancelBtn.onmouseover = () => cancelBtn.style.background = '#F6F6F6';
+    cancelBtn.onmouseout = () => cancelBtn.style.background = '#FFFFFF';
+    submitBtn.onmouseover = () => submitBtn.style.background = '#c8ec3a';
+    submitBtn.onmouseout = () => submitBtn.style.background = '#D3FB52';
+    previewBtn.onmouseover = () => { if (!isPreviewMode) previewBtn.style.background = '#F6F6F6'; };
+    previewBtn.onmouseout = () => { if (!isPreviewMode) previewBtn.style.background = '#FFFFFF'; };
 
     body.appendChild(note);
     body.appendChild(textarea);
@@ -2815,8 +2815,8 @@ function promptUserForReview(originalText, defaultFont = 'Calibri', options = {}
             currentFont = f;
             textarea.style.fontFamily = f;
             fontPicker.querySelectorAll('button').forEach(b => {
-              b.style.background = b === pillBtns[i] ? '#007bff' : 'white';
-              b.style.color = b === pillBtns[i] ? 'white' : '#333';
+              b.style.background = b === pillBtns[i] ? '#EAEAEA' : '#FFFFFF';
+              b.style.color = b === pillBtns[i] ? '#121212' : 'rgba(18, 18, 18, 0.7)';
             });
             break;
           }

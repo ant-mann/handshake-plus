@@ -247,6 +247,24 @@ class HandshakePlusPanel {
             </label>
             <div class="hsp-caption">When enabled, AI will always answer screening questions with the most hirable option and produce complete required documents without placeholder brackets. Intended to maximize interview chances.</div>
           </div>
+          <div class="hsp-well">
+            <div class="hsp-well-title">Document Font</div>
+            <label class="hsp-field" style="margin-bottom: 0;">
+              <span class="hsp-field-label">Default font for cover letters &amp; documents</span>
+              <select id="handshake-plus-default-font" class="hsp-input">
+                <option value="Calibri">Calibri</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Cambria">Cambria</option>
+                <option value="Garamond">Garamond</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Arial">Arial</option>
+                <option value="Helvetica">Helvetica</option>
+              </select>
+            </label>
+            <div class="hsp-caption">Used when generating RTF cover letters and required documents.</div>
+          </div>
         </div>
       </div>
       <div class="hsp-resize" id="handshake-plus-resize"></div>
@@ -1207,6 +1225,14 @@ class HandshakePlusPanel {
         });
       }
 
+      // Default font selector
+      const defaultFontSelect = this.panel.querySelector('#handshake-plus-default-font');
+      if (defaultFontSelect) {
+        defaultFontSelect.addEventListener('change', () => {
+          chrome.storage.local.set({ 'handshake-plus-default-font': defaultFontSelect.value });
+        });
+      }
+
       coverLetterCb.addEventListener('click', (e) => {
         const removeBtn = this.panel.querySelector('#resume-remove-btn');
         const hasResume = removeBtn && removeBtn.style.display !== 'none';
@@ -1874,7 +1900,7 @@ class HandshakePlusPanel {
   }
 
   loadFilterStates() {
-    chrome.storage.local.get(['filterStates', 'selectedJobRole', 'selectedJobRoles', 'resumeFileName', 'resumeText', 'resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation', 'handshakePlusScreeningFacts', 'handshakePlusClaudeUrl', 'handshakePlusGeminiUrl', 'handshakePlusCustomAiInstructions'], (result) => {
+    chrome.storage.local.get(['filterStates', 'selectedJobRole', 'selectedJobRoles', 'resumeFileName', 'resumeText', 'resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation', 'handshakePlusScreeningFacts', 'handshakePlusClaudeUrl', 'handshakePlusGeminiUrl', 'handshakePlusCustomAiInstructions', 'handshake-plus-default-font'], (result) => {
       const degreeCheckbox = this.panel.querySelector('#filter-degree');
       const majorCheckbox = this.panel.querySelector('#filter-major');
       const gradDateCheckbox = this.panel.querySelector('#filter-grad-date');
@@ -1907,6 +1933,12 @@ class HandshakePlusPanel {
       if (claudeUrlInput && result.handshakePlusClaudeUrl) claudeUrlInput.value = result.handshakePlusClaudeUrl;
       if (geminiUrlInput && result.handshakePlusGeminiUrl) geminiUrlInput.value = result.handshakePlusGeminiUrl;
       if (customAiInstructionsInput && result.handshakePlusCustomAiInstructions) customAiInstructionsInput.value = result.handshakePlusCustomAiInstructions;
+
+      const defaultFontSelect = this.panel.querySelector('#handshake-plus-default-font');
+      if (defaultFontSelect && result['handshake-plus-default-font']) {
+        defaultFontSelect.value = result['handshake-plus-default-font'];
+      }
+
       if (result.handshakePlusScreeningFacts) {
         if (screeningLanguages) screeningLanguages.value = result.handshakePlusScreeningFacts.languages || '';
         if (screeningRelocationLocations) screeningRelocationLocations.value = result.handshakePlusScreeningFacts.relocationLocations || '';
