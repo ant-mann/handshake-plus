@@ -971,12 +971,24 @@ class HandshakePlusPanel {
 
   attachEventListeners() {
     // Tab switching
-    const tabs = this.panel.querySelectorAll('.handshake-plus-tab');
+    const tabs = this.panel.querySelectorAll('.hsp-tab');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         this.switchTab(tab.dataset.tab);
       });
     });
+
+    // Hide promoted listings toggle
+    const hidePromotedCb = this.panel.querySelector('#handshake-plus-hide-promoted');
+    if (hidePromotedCb) {
+      const savedHidePromoted = localStorage.getItem('handshake-plus-hide-promoted');
+      if (savedHidePromoted !== null) {
+        hidePromotedCb.checked = savedHidePromoted === 'true';
+      }
+      hidePromotedCb.addEventListener('change', () => {
+        localStorage.setItem('handshake-plus-hide-promoted', hidePromotedCb.checked);
+      });
+    }
 
     // Filter checkboxes - save state on change
     const filterCheckboxes = this.panel.querySelectorAll('.filter-checkbox');
@@ -1088,7 +1100,6 @@ class HandshakePlusPanel {
     const manualReviewWrapper = this.panel.querySelector('#handshake-plus-manual-review-wrapper');
     const manualReviewCb = this.panel.querySelector('#handshake-plus-manual-review');
 
-    const providerWrapper = this.panel.querySelector('#handshake-plus-ai-provider-wrapper');
     const providerClaudeRadio = this.panel.querySelector('#handshake-plus-provider-claude');
     const providerGeminiRadio = this.panel.querySelector('#handshake-plus-provider-gemini');
     const claudeUrlInput = this.panel.querySelector('#handshake-plus-claude-url');
@@ -1110,9 +1121,8 @@ class HandshakePlusPanel {
 
       // Sync display instantly
       manualReviewWrapper.style.display = coverLetterCb.checked ? 'block' : 'none';
-      if (providerWrapper) providerWrapper.style.display = coverLetterCb.checked ? 'block' : 'none';
-      if (coverLetterCb.checked && this.panel.style.height === '325px') {
-        this.panel.style.height = '355px'; // Adjust initial baseline height
+      if (coverLetterCb.checked && this.panel.style.height === '400px') {
+        this.panel.style.height = '440px'; // Adjust initial baseline height
       }
 
       if (providerClaudeRadio) providerClaudeRadio.addEventListener('change', () => { localStorage.setItem('handshake-plus-ai-provider', 'claude'); });
@@ -1131,6 +1141,15 @@ class HandshakePlusPanel {
         customAiInstructionsInput.addEventListener('input', () => {
           chrome.storage.local.set({ handshakePlusCustomAiInstructions: customAiInstructionsInput.value.trim() });
         });
+        // Character counter
+        const counterEl = this.panel.querySelector('#hsp-instructions-counter');
+        if (counterEl) {
+          const updateCounter = () => {
+            counterEl.textContent = `${customAiInstructionsInput.value.length} / 5000 characters`;
+          };
+          customAiInstructionsInput.addEventListener('input', updateCounter);
+          updateCounter();
+        }
       }
 
       // Aggressive mode toggle
@@ -1154,7 +1173,7 @@ class HandshakePlusPanel {
           const statusEl = this.panel.querySelector('#handshake-plus-status');
           if (statusEl) {
             statusEl.textContent = '⚠️ Please upload resume in Profile first';
-            statusEl.className = 'handshake-plus-status error';
+            statusEl.className = 'hsp-status error';
           }
         }
       });
@@ -1162,13 +1181,12 @@ class HandshakePlusPanel {
       coverLetterCb.addEventListener('change', () => {
         localStorage.setItem('handshake-plus-cover-letter-enabled', coverLetterCb.checked);
         manualReviewWrapper.style.display = coverLetterCb.checked ? 'block' : 'none';
-        if (providerWrapper) providerWrapper.style.display = coverLetterCb.checked ? 'block' : 'none';
 
         const currentHeight = parseInt(this.panel.style.height) || this.panel.offsetHeight;
         if (coverLetterCb.checked) {
-          this.panel.style.height = (currentHeight + 50) + 'px';
+          this.panel.style.height = (currentHeight + 40) + 'px';
         } else {
-          this.panel.style.height = Math.max(325, currentHeight - 50) + 'px';
+          this.panel.style.height = Math.max(400, currentHeight - 40) + 'px';
         }
       });
 
@@ -1206,7 +1224,7 @@ class HandshakePlusPanel {
 
         if (statusEl) {
           statusEl.textContent = '';
-          statusEl.className = 'resume-status';
+          statusEl.className = 'hsp-status-inline';
         }
         
         resumeRemoveBtn.style.display = 'none';
@@ -1269,7 +1287,7 @@ class HandshakePlusPanel {
   }
 
   makeDraggable() {
-    const header = this.panel.querySelector('.handshake-plus-header');
+    const header = this.panel.querySelector('.hsp-header');
     let isDragging = false;
     let currentX;
     let currentY;
@@ -1383,14 +1401,14 @@ class HandshakePlusPanel {
 
   switchTab(tabName) {
     // Check if the tab we're trying to switch to is disabled
-    const selectedTab = this.panel.querySelector(`.handshake-plus-tab[data-tab="${tabName}"]`);
+    const selectedTab = this.panel.querySelector(`.hsp-tab[data-tab="${tabName}"]`);
     if (selectedTab && selectedTab.disabled) {
       return; // Don't switch to disabled tabs
     }
 
     // Remove active class from all tabs and contents
-    const tabs = this.panel.querySelectorAll('.handshake-plus-tab');
-    const contents = this.panel.querySelectorAll('.handshake-plus-tab-content');
+    const tabs = this.panel.querySelectorAll('.hsp-tab');
+    const contents = this.panel.querySelectorAll('.hsp-tab-content');
 
     tabs.forEach(tab => tab.classList.remove('active'));
     contents.forEach(content => content.classList.remove('active'));
@@ -1436,7 +1454,7 @@ class HandshakePlusPanel {
     this.isApplying = isApplying;
     const startBtn = this.panel.querySelector('#handshake-plus-start');
     const stopBtn = this.panel.querySelector('#handshake-plus-stop');
-    const filtersTab = this.panel.querySelector('.handshake-plus-tab[data-tab="filters"]');
+    const filtersTab = this.panel.querySelector('.hsp-tab[data-tab="profile"]');
     const applyingMinHeight = 400;
 
     if (isApplying) {
@@ -1726,18 +1744,18 @@ class HandshakePlusPanel {
       .map((role, index) => {
         const displayRole = this.truncateRoleForDisplay(role);
         return `
-        <span class="selected-role-chip">
+        <span class="hsp-chip">
           <span title="${this.escapeHtml(role)}"><strong>${this.escapeHtml(displayRole)}</strong></span>
-          <button class="clear-selection" data-role-index="${index}" title="Remove role">×</button>
+          <button class="hsp-chip-remove" data-role-index="${index}" title="Remove role">×</button>
         </span>
       `;
       })
       .join('');
 
-    selectedDisplay.innerHTML = `${chips}<button class="clear-all-roles" title="Clear all selected roles">Clear all</button>`;
+    selectedDisplay.innerHTML = `${chips}<button class="hsp-clear-all" title="Clear all selected roles">Clear all</button>`;
     selectedDisplay.classList.add('show');
 
-    selectedDisplay.querySelectorAll('.clear-selection').forEach(btn => {
+    selectedDisplay.querySelectorAll('.hsp-chip-remove').forEach(btn => {
       btn.addEventListener('click', () => {
         const index = parseInt(btn.getAttribute('data-role-index'), 10);
         if (!Number.isNaN(index)) {
@@ -1746,7 +1764,7 @@ class HandshakePlusPanel {
       });
     });
 
-    const clearAllBtn = selectedDisplay.querySelector('.clear-all-roles');
+    const clearAllBtn = selectedDisplay.querySelector('.hsp-clear-all');
     if (clearAllBtn) {
       clearAllBtn.addEventListener('click', () => {
         this.clearJobRoleSelection();
@@ -1938,7 +1956,7 @@ class HandshakePlusPanel {
           } else {
             statusEl.textContent = '✓ Resume uploaded';
           }
-          statusEl.className = 'resume-status success';
+          statusEl.className = 'hsp-status-inline success';
         }
       }
     });
@@ -1980,7 +1998,7 @@ class HandshakePlusPanel {
     try {
       // Show loading status
       statusEl.textContent = 'Parsing resume...';
-      statusEl.className = 'resume-status loading';
+      statusEl.className = 'hsp-status-inline loading';
 
       let resumeText = '';
 
@@ -2015,7 +2033,7 @@ class HandshakePlusPanel {
       } else {
         // Show status: generating summary
         statusEl.textContent = 'Generating AI summary and extracting contact info...';
-        statusEl.className = 'resume-status loading';
+        statusEl.className = 'hsp-status-inline loading';
 
         // Generate resume summary via the selected AI tab provider.
         try {
@@ -2073,7 +2091,7 @@ class HandshakePlusPanel {
       } else {
         statusEl.textContent = '✓ Resume uploaded (AI autofill failed)';
       }
-      statusEl.className = 'resume-status success';
+      statusEl.className = 'hsp-status-inline success';
       
       const formContainer = this.panel.querySelector('#filters-form-container');
       const removeBtn = this.panel.querySelector('#resume-remove-btn');
@@ -2096,7 +2114,7 @@ class HandshakePlusPanel {
 
       // Show error status
       statusEl.textContent = `✗ Error: ${error.message}`;
-      statusEl.className = 'resume-status error';
+      statusEl.className = 'hsp-status-inline error';
 
       // Reset file selection
       fileNameEl.textContent = 'No file chosen';
