@@ -563,6 +563,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 async function processPage(pageNum, startJobIndex) {
+  const JOB_NAVIGATION_SETTLE_MS = 2500;
+  const JOB_DETAILS_TIMEOUT_MS = 25000;
+  const APPLY_BUTTON_TIMEOUT_MS = 30000;
 
   // Find all job cards on current page with retries (DOM might not be loaded yet)
   const MAX_LOAD_RETRIES = 5;
@@ -616,7 +619,7 @@ async function processPage(pageNum, startJobIndex) {
     return;
   }
 
-  async function waitForJobDetailsToLoad(timeoutMs) {
+  async function waitForJobDetailsToLoad(timeoutMs, previousSummaryText = '') {
     const startTime = Date.now();
     // console.log("Content: Waiting for job details (summary) to render before proceeding...");
     while (Date.now() - startTime < timeoutMs) {
@@ -624,6 +627,11 @@ async function processPage(pageNum, startJobIndex) {
 
       // We only strictly gate on the Summary block natively. Company Name has a document.title fallback.
       if (summaryEl) {
+        const summaryText = (summaryEl.innerText || summaryEl.textContent || '').trim();
+        if (previousSummaryText && summaryText === previousSummaryText) {
+          await sleep(400);
+          continue;
+        }
         await expandJobDescriptionIfNeeded();
         // console.log("Content: Job details rendered successfully.");
         return true;
@@ -689,12 +697,14 @@ async function processPage(pageNum, startJobIndex) {
     // Navigate to the job
     const currentUrl = window.location.href;
     const jobPath = jobHref.split('?')[0];
+    const willNavigate = !currentUrl.includes(jobPath);
+    const previousSummaryText = willNavigate ? getJobSummaryText() : '';
 
-    if (!currentUrl.includes(jobPath)) {
+    if (willNavigate) {
       const fullUrl = window.location.origin + jobHref;
       window.history.pushState({}, '', fullUrl);
       window.dispatchEvent(new PopStateEvent('popstate'));
-      await sleep(1500);
+      await sleep(JOB_NAVIGATION_SETTLE_MS);
     }
 
     // Check again after navigation
@@ -703,8 +713,11 @@ async function processPage(pageNum, startJobIndex) {
       return;
     }
 
-    // Wait for apply button to appear with retries (handles slow-loading pages)
-    let applyStatus = await waitForApplyButtonWithRetries(10000); // 10 second timeout
+    // Wait for the new right pane and Apply button with generous retries. Handshake's
+    // React detail pane can lag behind URL changes, especially on slow network/hydration.
+    const detailsLoadedPromise = waitForJobDetailsToLoad(JOB_DETAILS_TIMEOUT_MS, previousSummaryText);
+    let applyStatus = await waitForApplyButtonWithRetries(APPLY_BUTTON_TIMEOUT_MS);
+    let detailsLoaded = await detailsLoadedPromise;
 
     // Track whether we actually clicked Apply in THIS iteration
     let didClickApply = false;
@@ -712,7 +725,9 @@ async function processPage(pageNum, startJobIndex) {
     // If can apply, click Apply button and close modal
     if (applyStatus === 'Can apply') {
       // WAIT FOR SPA TO RENDER JOB DETAILS BEFORE SPAWNING MODAL
-      const detailsLoaded = await waitForJobDetailsToLoad(10000);
+      if (!detailsLoaded) {
+        detailsLoaded = await waitForJobDetailsToLoad(JOB_DETAILS_TIMEOUT_MS, previousSummaryText);
+      }
 
       // If the right pane essentially never loads, the AI has nothing to read. Safely drop the job and sweep forward.
       if (!detailsLoaded) {
@@ -766,6 +781,10 @@ async function processPage(pageNum, startJobIndex) {
     if (applyStatus === 'Successfully applied' && !didClickApply) {
       // console.log('Content: ⚠️ SAFETY CHECK: Status was "Successfully applied" but we did not click Apply. Changing to "Already applied".');
       applyStatus = 'Already applied';
+    }
+
+    if (applyStatus === 'Successfully applied' && localStorage.getItem('handshake-plus-hide-after-apply') === 'true') {
+      hideJobCardAfterSuccessfulApply(jobCard);
     }
 
     // Check again before reporting
@@ -1264,6 +1283,14 @@ function hidePromotedJobCards(jobCards) {
   }
 }
 
+function hideJobCardAfterSuccessfulApply(jobCard) {
+  if (!jobCard) return;
+
+  const cardContainer = jobCard.closest('li, article, [role="listitem"], [data-testid*="job"], div') || jobCard;
+  cardContainer.setAttribute('data-handshake-plus-hidden-after-apply', 'true');
+  cardContainer.style.display = 'none';
+}
+
 const GLOBAL_HANDSHAKE_ROLES = new Set([
   // Healthcare & Medicine
   "Registered Nurse", "Physician / Doctor", "Surgeon", "Dentist", "Pharmacist",
@@ -1681,7 +1708,7 @@ async function clickApplyAndCloseModal() {
     if (isCoverLetterAutofillEnabled()) {
       coverLetterStatus = await fillCoverLetterField(modal);
 
-      if (coverLetterStatus === "FAILED") {
+      if (coverLetterStatus === "FAILED" || coverLetterStatus === "CANCELLED") {
         const closeBtn = modal.querySelector('button[aria-label="Close"]') || modal.querySelector('[data-hook="modal-close-button"]') || Array.from(modal.querySelectorAll('button')).find(b => b.textContent.includes('Cancel'));
         if (closeBtn) simulateRealClick(closeBtn);
         await sleep(1000);
@@ -1860,8 +1887,9 @@ async function fillRequiredDocumentFields(modal) {
       return "FAILED";
     }
 
-    const storage = await chrome.storage.local.get(['resumeSummary', 'handshake-plus-default-font']);
-    if (!storage.resumeSummary) {
+    const storage = await chrome.storage.local.get(['resumeText', 'resumeSummary', 'handshake-plus-default-font']);
+    const resumePromptText = getResumePromptText(storage);
+    if (!resumePromptText) {
       return "FAILED";
     }
 
@@ -1874,8 +1902,8 @@ async function fillRequiredDocumentFields(modal) {
         jobTitle: context.jobTitle,
         companyName: context.companyName,
         jobSummary: context.jobSummary,
-        resumeSummary: storage.resumeSummary,
-        provider: localStorage.getItem('handshake-plus-ai-provider') || 'claude',
+        resumeSummary: resumePromptText,
+        provider: localStorage.getItem('handshake-plus-ai-provider') || 'gemini',
         aggressive: localStorage.getItem('handshake-plus-aggressive-mode') === 'true'
       });
 
@@ -2026,14 +2054,14 @@ async function fillCoverLetterField(modal) {
     }
 
     // Get Resume Summary and Contact Info
-    const result = await chrome.storage.local.get(['resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation']);
-    const resumeSummary = result.resumeSummary;
+    const result = await chrome.storage.local.get(['resumeText', 'resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation']);
+    const resumePromptText = getResumePromptText(result);
     const fullName = result.contactFullName || '';
     const email = result.contactEmail || '';
     const phone = result.contactPhone || '';
     const location = result.contactLocation || '';
 
-    if (!resumeSummary) {
+    if (!resumePromptText) {
       // console.warn('Content: No summarized resume found in storage! Skipping job.');
       return false;
     }
@@ -2045,12 +2073,12 @@ async function fillCoverLetterField(modal) {
       jobTitle: jobTitle,
       companyName: companyName,
       jobSummary: jobSummary,
-      resumeSummary: resumeSummary,
+      resumeSummary: resumePromptText,
       fullName: fullName,
       email: email,
       phone: phone,
       location: location,
-      provider: localStorage.getItem('handshake-plus-ai-provider') || 'claude'
+      provider: localStorage.getItem('handshake-plus-ai-provider') || 'gemini'
     });
 
     // Guard: AI generation took ~30s — modal may have closed in the meantime
@@ -2074,7 +2102,7 @@ async function fillCoverLetterField(modal) {
     if (isManualReviewEnabled()) {
       const reviewResult = await promptUserForReview(coverLetterText, selectedFont);
       if (!reviewResult) {
-        return false;
+        return "CANCELLED";
       }
       coverLetterText = reviewResult.text;
       selectedFont = reviewResult.font;
@@ -2177,19 +2205,21 @@ async function handleScreeningQuestions(modal) {
   }
 
   const storage = await chrome.storage.local.get([
+    'resumeText',
     'resumeSummary',
     'contactLocation',
     'handshakePlusScreeningFacts'
   ]);
+  const resumePromptText = getResumePromptText(storage);
 
   const response = await chrome.runtime.sendMessage({
     action: 'answerScreeningQuestions',
     questions: questions.map(stripScreeningQuestionElements),
-    resumeSummary: storage.resumeSummary || '',
+    resumeSummary: resumePromptText,
     contactLocation: storage.contactLocation || '',
     screeningFacts: storage.handshakePlusScreeningFacts || {},
     jobContext: await getCurrentJobContext(),
-    provider: localStorage.getItem('handshake-plus-ai-provider') || 'claude',
+    provider: localStorage.getItem('handshake-plus-ai-provider') || 'gemini',
     aggressive: localStorage.getItem('handshake-plus-aggressive-mode') === 'true'
   });
 
@@ -2880,6 +2910,14 @@ function isCoverLetterAutofillEnabled() {
 function isManualReviewEnabled() {
   const savedState = localStorage.getItem('handshake-plus-manual-review-enabled');
   return savedState === 'true';
+}
+
+function getResumePromptText(storage) {
+  const useRawResume = localStorage.getItem('handshake-plus-raw-resume') === 'true';
+  if (useRawResume && storage?.resumeText) {
+    return storage.resumeText;
+  }
+  return storage?.resumeSummary || storage?.resumeText || '';
 }
 
 function findSubmitButton(modal) {

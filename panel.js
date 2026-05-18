@@ -113,22 +113,6 @@ class HandshakePlusPanel {
               <button id="handshake-plus-stop" class="hsp-btn hsp-btn-danger" style="display: none;">Stop</button>
             </div>
           </div>
-          <div class="hsp-well">
-            <div class="hsp-well-title">Job Filters</div>
-            <label class="hsp-checkbox-row">
-              <input type="checkbox" id="handshake-plus-hide-promoted" checked>
-              <span>Hide promoted listings</span>
-            </label>
-            <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Skip employer-paid placements during auto-apply</div>
-            <div class="hsp-field" style="margin-bottom: 0;">
-              <span class="hsp-field-label">What job role are you looking for?</span>
-              <div class="hsp-dropdown-wrap">
-                <input type="text" id="job-role-search" class="hsp-input" placeholder="Type role and press Enter (max 5)" maxlength="75" autocomplete="off">
-                <div id="job-role-dropdown" class="hsp-dropdown"></div>
-              </div>
-            </div>
-            <div id="selected-job-role" class="hsp-chips"></div>
-          </div>
           <div class="hsp-well" id="handshake-plus-progress" style="display: none;">
             <div class="hsp-progress-label">Jobs applied today</div>
             <div class="hsp-progress-count" id="handshake-plus-count">0</div>
@@ -145,6 +129,27 @@ class HandshakePlusPanel {
               </label>
             </div>
             
+          </div>
+          <div class="hsp-well">
+            <div class="hsp-well-title">Job Filters</div>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-hide-promoted" checked>
+              <span>Hide promoted listings</span>
+            </label>
+            <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Skip employer-paid placements during auto-apply</div>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-hide-after-apply">
+              <span>Hide jobs after applying</span>
+            </label>
+            <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Remove successfully applied jobs from the visible list</div>
+            <div class="hsp-field" style="margin-bottom: 0;">
+              <span class="hsp-field-label">What job role are you looking for?</span>
+              <div class="hsp-dropdown-wrap">
+                <input type="text" id="job-role-search" class="hsp-input" placeholder="Type role and press Enter (max 5)" maxlength="75" autocomplete="off">
+                <div id="job-role-dropdown" class="hsp-dropdown"></div>
+              </div>
+            </div>
+            <div id="selected-job-role" class="hsp-chips"></div>
           </div>
           <div class="hsp-note">Submits your most recently uploaded transcript and/or resume on Handshake</div>
 
@@ -220,8 +225,8 @@ class HandshakePlusPanel {
           <div class="hsp-well">
             <div class="hsp-well-title">AI Provider</div>
             <div class="hsp-segmented">
-              <label class="hsp-segment active"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-claude" value="claude" checked> Claude</label>
-              <label class="hsp-segment"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-gemini" value="gemini"> Gemini</label>
+              <label class="hsp-segment"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-claude" value="claude"> Claude</label>
+              <label class="hsp-segment active"><input type="radio" name="handshake-plus-ai-provider" id="handshake-plus-provider-gemini" value="gemini" checked> Gemini</label>
             </div>
             <label class="hsp-field" style="margin-top: 12px;">
               <span class="hsp-field-label">Claude project URL</span>
@@ -1051,6 +1056,15 @@ class HandshakePlusPanel {
       });
     }
 
+    const hideAfterApplyCb = this.panel.querySelector('#handshake-plus-hide-after-apply');
+    if (hideAfterApplyCb) {
+      const savedHideAfterApply = localStorage.getItem('handshake-plus-hide-after-apply');
+      hideAfterApplyCb.checked = savedHideAfterApply === 'true';
+      hideAfterApplyCb.addEventListener('change', () => {
+        localStorage.setItem('handshake-plus-hide-after-apply', hideAfterApplyCb.checked);
+      });
+    }
+
     // Filter checkboxes - save state on change
     const filterCheckboxes = this.panel.querySelectorAll('.filter-checkbox');
     filterCheckboxes.forEach(checkbox => {
@@ -1176,9 +1190,9 @@ class HandshakePlusPanel {
       }
 
       // Restore provider preference
-      const savedProvider = localStorage.getItem('handshake-plus-ai-provider') || 'claude';
+      const savedProvider = localStorage.getItem('handshake-plus-ai-provider') || 'gemini';
       if (providerGeminiRadio) providerGeminiRadio.checked = savedProvider === 'gemini';
-      if (providerClaudeRadio) providerClaudeRadio.checked = savedProvider !== 'gemini';
+      if (providerClaudeRadio) providerClaudeRadio.checked = savedProvider === 'claude';
 
       // Sync display instantly
       manualReviewWrapper.style.display = coverLetterCb.checked ? 'block' : 'none';
@@ -2119,7 +2133,8 @@ class HandshakePlusPanel {
           const response = await new Promise((resolve) => {
             chrome.runtime.sendMessage({
               action: 'summarizeResume',
-              resumeText: resumeText
+              resumeText: resumeText,
+              provider: localStorage.getItem('handshake-plus-ai-provider') || 'gemini'
             }, resolve);
           });
 
@@ -2142,6 +2157,21 @@ class HandshakePlusPanel {
               
               // Save state immediately so it persists globally
               this.saveFilterStates();
+            }
+
+            if (response.screeningFacts) {
+              const { languages, relocationLocations, workAuthorization, sponsorship } = response.screeningFacts;
+              const languagesEl = this.panel.querySelector('#screening-languages');
+              const relocationEl = this.panel.querySelector('#screening-relocation-locations');
+              const workAuthorizationEl = this.panel.querySelector('#screening-work-authorization');
+              const sponsorshipEl = this.panel.querySelector('#screening-sponsorship');
+
+              if (languagesEl && languages) languagesEl.value = languages;
+              if (relocationEl && relocationLocations) relocationEl.value = relocationLocations;
+              if (workAuthorizationEl && workAuthorization) workAuthorizationEl.value = workAuthorization;
+              if (sponsorshipEl && sponsorship) sponsorshipEl.value = sponsorship;
+
+              this.saveScreeningFacts();
             }
           } else {
             throw new Error(response?.error || 'Failed to generate summary');

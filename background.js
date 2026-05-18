@@ -195,10 +195,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'summarizeResume') {
     (async () => {
       try {
-        sendAiStatus('🤖 Summarizing resume with Claude...');
-        const parsedData = await generateResumeSummary(message.resumeText);
+        sendAiStatus('🤖 Summarizing resume with AI...');
+        const parsedData = await generateResumeSummary(message.resumeText, message.provider || 'gemini');
         sendAiStatus('Applying to jobs...');
-        sendResponse({ success: true, summary: parsedData.summary, contact: parsedData.contact });
+        sendResponse({ success: true, summary: parsedData.summary, contact: parsedData.contact, screeningFacts: parsedData.screeningFacts });
       } catch (error) {
         sendAiStatus('Applying to jobs...');
         sendResponse({ success: false, error: error.message });
@@ -211,7 +211,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (async () => {
       try {
         sendAiStatus(`🤖 Writing cover letter for ${message.jobTitle}...`);
-        const coverLetter = await generateCoverLetter(message.jobTitle, message.companyName, message.jobSummary, message.resumeSummary, message.fullName, message.email, message.phone, message.location, message.provider || 'claude');
+        const coverLetter = await generateCoverLetter(message.jobTitle, message.companyName, message.jobSummary, message.resumeSummary, message.fullName, message.email, message.phone, message.location, message.provider || 'gemini');
         sendAiStatus('Applying to jobs...');
         sendResponse({ success: true, coverLetter: coverLetter });
       } catch (error) {
@@ -226,7 +226,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (async () => {
       try {
         sendAiStatus(`🤖 Writing required document for ${message.companyName || 'application'}...`);
-        const documentText = await generateRequiredDocument(message.instruction, message.jobTitle, message.companyName, message.jobSummary, message.resumeSummary, message.provider || 'claude', message.aggressive);
+        const documentText = await generateRequiredDocument(message.instruction, message.jobTitle, message.companyName, message.jobSummary, message.resumeSummary, message.provider || 'gemini', message.aggressive);
         sendAiStatus('Applying to jobs...');
         sendResponse({ success: true, documentText: documentText });
       } catch (error) {
@@ -247,7 +247,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           contactLocation: message.contactLocation || '',
           resumeSummary: message.resumeSummary || '',
           jobContext: message.jobContext || {},
-          provider: message.provider || 'claude',
+          provider: message.provider || 'gemini',
           aggressive: message.aggressive
         });
         sendAiStatus('Applying to jobs...');
@@ -783,12 +783,12 @@ async function fetchViaClaudeTab(promptBundle, aggressive = false) {
           if (restore && !restoreAiTabFocus) restoreAiTabFocus = restore;
         });
       }
-    }, 12000);
+    }, 5000);
     const wakeLongTimer = setTimeout(() => {
       wakeAiTab(tabId, 'Claude is taking a while. Waking tab to keep generation moving.').then(restore => {
         if (restore && !restoreAiTabFocus) restoreAiTabFocus = restore;
       });
-    }, 45000);
+    }, 25000);
 
     function cleanup() {
       clearTimeout(timeout);
@@ -993,12 +993,12 @@ async function fetchViaGeminiTab(promptBundle, aggressive = false) {
           if (restore && !restoreAiTabFocus) restoreAiTabFocus = restore;
         });
       }
-    }, 12000);
+    }, 5000);
     const wakeLongTimer = setTimeout(() => {
       wakeAiTab(tabId, 'Gemini is taking a while. Waking tab to keep generation moving.').then(restore => {
         if (restore && !restoreAiTabFocus) restoreAiTabFocus = restore;
       });
-    }, 45000);
+    }, 25000);
 
     function cleanup() {
       clearTimeout(timeout);
@@ -1034,19 +1034,26 @@ async function fetchViaGeminiTab(promptBundle, aggressive = false) {
   });
 }
 
-// Generate a resume summary and extract contact info using the Claude tab.
-async function generateResumeSummary(resumeText) {
+// Generate a resume summary and extract contact info using the selected AI tab.
+async function generateResumeSummary(resumeText, provider = 'gemini') {
   try {
-    // console.log('Background: Parsing resume using Claude tab...');
+    // console.log('Background: Parsing resume using selected AI tab...');
 
     const instructionPrompt = `You are a professional career advisor and data extractor. 
-Analyze the provided resume and return a STRICT JSON object with exactly two keys:
+Analyze the provided resume and return a STRICT JSON object with exactly three keys:
 1. "summary": A 4-5 paragraph professional summary highlighting key qualifications, experience, skills, and achievements.
-2. "contact": An object containing "fullName", "email", "phone", and "location" extracted from the resume. If a field is missing, set it to an empty string.
+2. "contact": An object containing exactly "fullName", "email", "phone", and "location" extracted from the resume. If a field is missing, set it to an empty string.
+3. "screeningFacts": An object containing exactly "languages", "relocationLocations", "workAuthorization", and "sponsorship".
 
-IMPORTANT: Output ONLY valid JSON. Do NOT wrap it in markdown blockquotes like \`\`\`json.`;
+For "screeningFacts":
+- "languages" must be a comma-separated list of spoken languages explicitly shown in the resume, or "".
+- "relocationLocations" must be a comma-separated list of locations the candidate explicitly says they are willing to relocate to, or "".
+- "workAuthorization" must be "yes", "no", or "" only. Use "yes" only when the resume explicitly states US work authorization, citizenship, permanent residency, or no work restrictions. Use "no" only when it explicitly says the candidate is not authorized.
+- "sponsorship" must be "yes", "no", or "" only. Use "yes" only when the resume explicitly states sponsorship is needed. Use "no" only when it explicitly states sponsorship is not needed.
 
-    const result = await fetchViaClaudeAsMessageResponse({
+IMPORTANT: Output ONLY one fenced JSON code block and no other text. Start with \`\`\`json and end with \`\`\`.`;
+
+    const promptBundle = {
       instructions: instructionPrompt,
       messages: [
         {
@@ -1054,13 +1061,16 @@ IMPORTANT: Output ONLY valid JSON. Do NOT wrap it in markdown blockquotes like \
           content: `Here is the resume text:\n\n${resumeText}`
         }
       ]
-    });
+    };
 
-    if (result.content && result.content[0] && result.content[0].text) {
-      let jsonText = result.content[0].text.trim();
+    const rawText = provider === 'gemini'
+      ? await fetchViaGeminiTab(promptBundle)
+      : (await fetchViaClaudeAsMessageResponse(promptBundle))?.content?.[0]?.text;
+
+    if (rawText) {
+      let jsonText = rawText.trim();
       
-      // AI models habitually inject markdown codeblocks (\`\`\`json) despite strict instructions.
-      // Strip out EVERYTHING outside the actual core JSON bracket structure to guarantee a clean parse.
+      // Prefer the requested fenced JSON block, but tolerate raw JSON or extra provider text.
       const match = jsonText.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
       if (match && match[1]) {
         jsonText = match[1].trim();
@@ -1076,9 +1086,9 @@ IMPORTANT: Output ONLY valid JSON. Do NOT wrap it in markdown blockquotes like \
       try {
         const parsed = JSON.parse(jsonText);
         // console.log(`Background: Resume parsed successfully.`);
-        return parsed;
+        return normalizeResumeParseResult(parsed);
       } catch (e) {
-        console.error("Failed to parse Claude JSON response:", jsonText);
+        console.error("Failed to parse AI JSON response:", jsonText);
         throw new Error("AI returned invalid JSON formatting.");
       }
     }
@@ -1090,8 +1100,50 @@ IMPORTANT: Output ONLY valid JSON. Do NOT wrap it in markdown blockquotes like \
   }
 }
 
+function normalizeResumeParseResult(parsed) {
+  const contact = parsed && typeof parsed.contact === 'object' && parsed.contact ? parsed.contact : {};
+  const screeningFacts = parsed && typeof parsed.screeningFacts === 'object' && parsed.screeningFacts ? parsed.screeningFacts : {};
+
+  return {
+    summary: toCleanString(parsed?.summary),
+    contact: {
+      fullName: toCleanString(contact.fullName || contact.name || contact.full_name),
+      email: toCleanString(contact.email || contact.emailAddress || contact.email_address),
+      phone: toCleanString(contact.phone || contact.phoneNumber || contact.phone_number),
+      location: toCleanString(contact.location || contact.currentLocation || contact.current_location),
+    },
+    screeningFacts: {
+      languages: toCleanString(screeningFacts.languages),
+      relocationLocations: toCleanString(screeningFacts.relocationLocations || screeningFacts.relocation_locations),
+      workAuthorization: normalizeYesNoFact(screeningFacts.workAuthorization || screeningFacts.work_authorization),
+      sponsorship: normalizeSponsorshipFact(screeningFacts.sponsorship || screeningFacts.visaSponsorship || screeningFacts.visa_sponsorship),
+    },
+  };
+}
+
+function toCleanString(value) {
+  if (Array.isArray(value)) return value.map(toCleanString).filter(Boolean).join(', ');
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function normalizeYesNoFact(value) {
+  const text = toCleanString(value).toLowerCase();
+  if (!text || text === 'unknown' || text === 'n/a' || text === 'not specified') return '';
+  if (text === 'no' || text === 'false' || text.includes('not authorized')) return 'no';
+  if (text === 'yes' || text === 'true' || text.includes('authorized') || text.includes('citizen') || text.includes('permanent resident') || text.includes('no sponsorship')) return 'yes';
+  return '';
+}
+
+function normalizeSponsorshipFact(value) {
+  const text = toCleanString(value).toLowerCase();
+  if (!text || text === 'unknown' || text === 'n/a' || text === 'not specified') return '';
+  if (text === 'no' || text === 'false' || text.includes('no sponsorship') || text.includes('not need sponsorship') || text.includes('do not need sponsorship') || text.includes('does not require sponsorship') || text.includes('will not require sponsorship')) return 'no';
+  if (text === 'yes' || text === 'true' || text.includes('requires sponsorship') || text.includes('require sponsorship') || text.includes('need sponsorship')) return 'yes';
+  return '';
+}
+
 // Generate a cover letter using Claude (via claude.ai tab) or Gemini (via gemini.google.com tab).
-async function generateCoverLetter(jobTitle, companyName, jobSummary, resumeSummary, fullName, email, phone, location, provider = 'claude') {
+async function generateCoverLetter(jobTitle, companyName, jobSummary, resumeSummary, fullName, email, phone, location, provider = 'gemini') {
   try {
     const instructionPrompt = `You are an expert career advisor. Write a highly tailored, concise cover letter strictly for the exact job listed: "${jobTitle}". Do NOT hallucinate alternative job titles or broad roles. Do NOT include any physical addresses, email addresses, phone numbers, or dates at the top. Start the letter directly with "Hello," followed by a natural sentence introducing the applicant. Make it highly human-like, include natural transitions, use clear language, and emphasize clarity. CRITICAL INSTRUCTION: You are strictly forbidden from using any hyphens, dashes, or em-dashes (e.g. no "-", "--", or "—") anywhere in the text under any circumstance. Avoid saying "Inc" or "LLC" in the company name to sound more natural.`;
     const userPrompt = `Please write a cover letter for the "${jobTitle}" position at "${companyName}" based on this job summary:\n"${jobSummary}"\n\nAnd here is my resume summary:\n"${resumeSummary}"\n\nStructure it exactly like this:\n\n1. Start directly with "Hello," followed by exactly TWO newlines, and then a first sentence that signals fit through concrete content, not by introducing me or stating that I am applying.\n\n2. In one or two short paragraphs, connect my experience directly to the company's most pressing needs. Do not list their requirements and my qualifications separately — weave them together. Frame my experience as outcomes and results, not duties or responsibilities. Use the company's own language and keywords from the job summary. Write as if I am a busy colleague sending a quick, confident email — not a candidate performing for a committee. Include one specific, concrete detail that shows I understand what this role actually demands.\n\n3. Close with one brief farewell sentence that is warm but not sycophantic.\n\nFinally, sign off with "Sincerely," followed by a newline, and then my name${fullName ? ` (${fullName})` : ''}.\n\nStrict constraints:\n- Total length: 150 to 180 words maximum\n- ZERO hyphens or dashes\n- Write the body in first person. Use "I", "my", "me". Never refer to me by name or in third person inside the letter.\n- No robotic or corporate jargon\n- No flattery phrases like "I am excited to apply" or "I believe my skills align"\n- No headers\n- Do not repeat the resume — add context the resume cannot provide\n- Every sentence must pass this test: does it tell them what changed or what I produced, not just what I was responsible for`;
@@ -1148,7 +1200,7 @@ async function generateCoverLetter(jobTitle, companyName, jobSummary, resumeSumm
   }
 }
 
-async function generateRequiredDocument(instruction, jobTitle, companyName, jobSummary, resumeSummary, provider = 'claude', aggressive = false) {
+async function generateRequiredDocument(instruction, jobTitle, companyName, jobSummary, resumeSummary, provider = 'gemini', aggressive = false) {
   try {
     const helper = globalThis.HandshakePlusRequiredDocuments;
     if (!helper) throw new Error('Required document helper is not loaded');

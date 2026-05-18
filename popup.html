@@ -14,12 +14,22 @@
       color: #121212;
     }
     .hsp-popup-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 20px;
       font-weight: 700;
       line-height: 24px;
       letter-spacing: -0.15px;
       margin: 0 0 16px 0;
       color: #121212;
+    }
+    .hsp-popup-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      flex: 0 0 auto;
+      display: block;
     }
     .hsp-popup-well {
       padding: 12px;
@@ -104,7 +114,10 @@
   </style>
 </head>
 <body>
-  <div class="hsp-popup-title">🤝 Handshake Plus</div>
+  <div class="hsp-popup-title">
+    <img src="icons/icon-32.png" alt="" class="hsp-popup-logo">
+    <span>Handshake Plus</span>
+  </div>
 
   <div id="university-selector" style="display: none;">
     <div class="hsp-popup-well">
@@ -120,7 +133,7 @@
   </div>
 
   <hr class="hsp-popup-divider">
-  <div class="hsp-popup-footer">v5.7.5</div>
+  <div class="hsp-popup-footer">v1</div>
 
   <script src="universities.js"></script>
   <script src="popup.js"></script>

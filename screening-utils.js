@@ -136,14 +136,14 @@
 - Tie your selection back to the resume summary and job context for plausibility wherever possible. If the resume does not directly support any option, still pick the most advantageous answer and draw reasonable inferences that highlight strengths already present in the resume.
 - Only use selectedValue values that appear in that question's options.
 - Always set confidence to "high" and status to "answered" for every single question. Never use "needs_review".
-- Do not include markdown, prose, or keys outside the JSON object.`
+- Do not include prose or keys outside the JSON code block.`
       : `Rules:
 - Use only facts in the resume summary, saved screening facts, contact location, and job context.
 - Do not infer sensitive eligibility, work authorization, relocation willingness, language ability, degree status, sponsorship needs, dates, or locations unless explicitly supported.
 - Only use selectedValue values that appear in that question's options.
 - Use status "answered" only when confidence is "high" and the evidence directly supports the selected option.
 - If confidence is "medium" or "low", if evidence is missing, or if the truthful answer is unclear, set selectedValue to "" and status to "needs_review".
-- Do not include markdown, prose, or keys outside the JSON object.`;
+- Do not include prose or keys outside the JSON code block.`;
 
     const userPrompt = `Input JSON:
 ${JSON.stringify({
