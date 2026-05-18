@@ -15,6 +15,10 @@ docs/superpowers/
 # Internal architecture docs (agent-only)
 AGENTS.md
 
+# AI provider tab scripts (sensitive / user-specific)
+claude.js
+gemini.js
+
 # Generated browser/debug captures
 *.png
 !icons/*.png
