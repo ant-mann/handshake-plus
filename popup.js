@@ -50,12 +50,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.savedHandshakePath = result.savedHandshakePath || '/stu/postings';
   });
 
+  const callout = document.getElementById('on-handshake-callout');
+
   if (isJobSearchPage) {
     goBtn.style.display = 'none';
     if (uniSelector) uniSelector.style.display = 'none';
+    if (callout) callout.style.display = 'block';
   } else {
     goBtn.style.display = 'block';
     if (uniSelector) uniSelector.style.display = 'block';
+    if (callout) callout.style.display = 'none';
 
     goBtn.addEventListener('click', () => {
       let savedPath = window.savedHandshakePath || '/stu/postings';
