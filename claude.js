@@ -52,8 +52,14 @@ async function handlePrompt(prompt) {
   }
 
   fillComposer(composer, prompt);
-  await sleep(300);
-  const filledText = composer.textContent || composer.innerText || '';
+
+  // ProseMirror needs time to process paste/insert events
+  let filledText = '';
+  for (let i = 0; i < 10; i++) {
+    await sleep(150);
+    filledText = composer.textContent || composer.innerText || '';
+    if (filledText.trim().length > 0) break;
+  }
 
   if (filledText.trim().length === 0) {
     console.warn('[Handshake Plus claude.js] Composer appears empty after fill attempt; send may fail.');
@@ -167,20 +173,60 @@ function fillComposer(el, text) {
     sel.addRange(range);
   }
 
+  // Method 1: execCommand (works on some ProseMirror configs)
+  let execWorked = false;
   try {
     document.execCommand('selectAll', false, null);
-    document.execCommand('insertText', false, text);
+    execWorked = document.execCommand('insertText', false, text);
   } catch (e) {
     console.warn('[Handshake Plus claude.js] execCommand failed:', e.message);
   }
 
-  // Fallback if execCommand didn't populate the field
-  if (!el.textContent || el.textContent.trim().length === 0) {
-    el.textContent = text;
+  // Method 2: Clipboard paste simulation — most reliable for ProseMirror
+  if (!execWorked || !el.textContent || el.textContent.trim().length === 0) {
+    try {
+      const dataTransfer = new DataTransfer();
+      dataTransfer.setData('text/plain', text);
+      const pasteEvent = new ClipboardEvent('paste', {
+        bubbles: true,
+        cancelable: true,
+        clipboardData: dataTransfer,
+      });
+      el.dispatchEvent(pasteEvent);
+    } catch (e) {
+      console.warn('[Handshake Plus claude.js] paste simulation failed:', e.message);
+    }
   }
 
-  el.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: text }));
+  // Method 3: Set innerHTML with proper paragraph structure for ProseMirror
+  if (!el.textContent || el.textContent.trim().length === 0) {
+    const lines = text.split('\n');
+    const html = lines.map(line => {
+      const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `<p>${escaped || '<br>'}</p>`;
+    }).join('');
+    el.innerHTML = html;
+  }
+
+  // Dispatch the full event sequence ProseMirror expects
+  el.dispatchEvent(new InputEvent('beforeinput', {
+    bubbles: true,
+    inputType: 'insertText',
+    data: text,
+  }));
+  el.dispatchEvent(new InputEvent('input', {
+    bubbles: true,
+    inputType: 'insertText',
+    data: text,
+  }));
   el.dispatchEvent(new Event('change', { bubbles: true }));
+
+  // Trigger a keyup so any React/ProseMirror keyboard listeners fire
+  el.dispatchEvent(new KeyboardEvent('keyup', {
+    bubbles: true,
+    key: 'v',
+    ctrlKey: true,
+  }));
 }
 
 function countAssistantMessages() {
