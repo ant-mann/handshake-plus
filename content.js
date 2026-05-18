@@ -2344,17 +2344,17 @@ function promptUserForScreeningReview(answers, questions) {
     overlay.style.cssText = 'position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(31, 32, 44, 0.4); z-index: 9999999; display: flex; align-items: center; justify-content: center; font-family: "Noi Grotesk", system-ui, sans-serif;';
 
     const modal = document.createElement('div');
-    modal.style.cssText = 'background: white; width: 680px; max-width: 92vw; max-height: 86vh; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden;';
+    modal.style.cssText = 'background: #FFFFFF; width: 680px; max-width: 92vw; max-height: 86vh; border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; box-shadow: 0 4px 20px rgba(31, 32, 44, 0.15); display: flex; flex-direction: column; overflow: hidden;';
 
     const header = document.createElement('div');
     header.style.cssText = 'padding: 12px 16px; background: #FFFFFF; color: #121212; font-weight: 700; font-size: 20px; line-height: 24px; letter-spacing: -0.15px; font-family: "Noi Grotesk", system-ui, sans-serif; border-bottom: 1px solid rgba(31, 32, 44, 0.2);';
     header.textContent = 'Review Screening Answers';
 
     const body = document.createElement('div');
-    body.style.cssText = 'padding: 16px; overflow-y: auto;';
+    body.style.cssText = 'padding: 16px; overflow-y: auto; background: #FFFFFF;';
 
     const note = document.createElement('div');
-    note.style.cssText = 'font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.4;';
+    note.style.cssText = 'font-size: 12px; color: rgba(18, 18, 18, 0.7); margin-bottom: 14px; line-height: 1.4; font-family: "Noi Grotesk", system-ui, sans-serif;';
     note.textContent = 'Answers are filled only when supported by saved screening facts. Review each answer before the application is submitted.';
     body.appendChild(note);
 
@@ -2364,14 +2364,14 @@ function promptUserForScreeningReview(answers, questions) {
       if (!question) continue;
 
       const row = document.createElement('div');
-      row.style.cssText = 'border: 1px solid #dee2e6; border-radius: 6px; padding: 12px; margin-bottom: 10px; background: #f8f9fa;';
+      row.style.cssText = 'border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #F6F6F6;';
 
       const questionEl = document.createElement('div');
-      questionEl.style.cssText = 'font-weight: 600; color: #222; margin-bottom: 8px; line-height: 1.3;';
+      questionEl.style.cssText = 'font-weight: 600; color: #121212; margin-bottom: 8px; line-height: 1.3; font-family: "Noi Grotesk", system-ui, sans-serif;';
       questionEl.textContent = answer.questionText;
 
       const select = document.createElement('select');
-      select.style.cssText = 'width: 100%; padding: 8px; border: 1px solid #bbb; border-radius: 4px; background: white; margin-bottom: 8px;';
+      select.style.cssText = 'width: 100%; padding: 8px 12px; height: 40px; border: 1px solid rgba(31, 32, 44, 0.2); border-radius: 8px; background: #FFFFFF; margin-bottom: 8px; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px; color: #121212;';
       select.dataset.questionId = answer.id;
 
       const blankOption = document.createElement('option');
@@ -2389,7 +2389,7 @@ function promptUserForScreeningReview(answers, questions) {
       selects.push(select);
 
       const evidence = document.createElement('div');
-      evidence.style.cssText = `font-size: 12px; line-height: 1.4; color: ${answer.status === 'answered' ? '#155724' : '#856404'};`;
+      evidence.style.cssText = `font-size: 12px; line-height: 1.4; color: ${answer.status === 'answered' ? '#327D0F' : 'rgba(18, 18, 18, 0.7)'};`;
       evidence.textContent = `${answer.status === 'answered' ? 'Autofilled' : 'Needs review'}: ${answer.evidence || 'No evidence provided.'}`;
 
       row.appendChild(questionEl);
@@ -2399,15 +2399,15 @@ function promptUserForScreeningReview(answers, questions) {
     }
 
     const footer = document.createElement('div');
-    footer.style.cssText = 'padding: 16px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 12px; background: #f8f9fa;';
+    footer.style.cssText = 'padding: 12px 16px; border-top: 1px solid rgba(31, 32, 44, 0.2); display: flex; justify-content: flex-end; gap: 8px; background: #FFFFFF;';
 
     const cancelBtn = document.createElement('button');
     cancelBtn.textContent = 'Skip Job';
-    cancelBtn.style.cssText = 'padding: 8px 16px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer; color: #333; font-weight: 500;';
+    cancelBtn.style.cssText = 'padding: 0 12px; height: 36px; border: 1px solid rgba(31, 32, 44, 0.2); background: #FFFFFF; border-radius: 8px; cursor: pointer; color: #121212; font-weight: 500; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px;';
 
     const approveBtn = document.createElement('button');
     approveBtn.textContent = 'Approve & Continue';
-    approveBtn.style.cssText = 'padding: 8px 16px; border: none; background: #28a745; color: white; border-radius: 4px; cursor: pointer; font-weight: 500;';
+    approveBtn.style.cssText = 'padding: 0 12px; height: 36px; border: none; background: #D3FB52; color: #052326; border-radius: 8px; cursor: pointer; font-weight: 500; font-family: "Noi Grotesk", system-ui, sans-serif; font-size: 15px;';
 
     footer.appendChild(cancelBtn);
     footer.appendChild(approveBtn);
