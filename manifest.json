@@ -1,0 +1,30 @@
+{
+   "action": {
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "background.js"
+   },
+   "content_scripts": [ {
+      "js": [ "pdf.min.js", "dom-utils.js", "application-count-utils.js", "job-description-utils.js", "local-job-matcher.js", "screening-utils.js", "required-document-utils.js", "panel.js", "content.js" ],
+      "matches": [ "https://*.joinhandshake.com/*" ]
+   }, {
+      "js": [ "claude-response-utils.js", "claude.js" ],
+      "matches": [ "https://claude.ai/*" ]
+   }, {
+      "js": [ "gemini.js" ],
+      "matches": [ "https://gemini.google.com/*" ]
+   } ],
+   "description": "Automatically apply to jobs on Handshake (even while you work on another window)",
+   "host_permissions": [ "https://*.joinhandshake.com/*", "https://claude.ai/*", "https://gemini.google.com/*" ],
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6GR4dpSyFn6LRVpc5rbQRHTW/VzvQTwFc2/Guvwg4gc5N5xrGH+WpXoteuBzDeu1xC3bPVb6aUIBgvddTVeSB50aRa7RDE/E7Qrgg5GQMAJ0ZNI3l3oBEvPcCuViiMmtW9UEAmgnMx1vzxcTZ/ZD7vMxEoTUxlnvG2811hgBYx/MRhPn/ouWrsD7J5v8mqwpUCAOv6J2lPZmLGfBVl6yY8WSC3I5vvR7Ygm0YDzRMz1LVYBm1Ul/jJg42iKO325PVben8EcKkiBxnqlsXustbIHGe4LVFZ/nYBBuonm/lkMtD3eb+jer21C7Dw8zBoCBaBrfIiBcAhn1PIgl8pcAGwIDAQAB",
+   "manifest_version": 3,
+   "name": "Handshake Plus - Handshake auto apply, autofill job apps, AI cover letters",
+   "permissions": [ "activeTab", "tabs", "storage", "scripting" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "5.7.5",
+   "web_accessible_resources": [ {
+      "matches": [ "https://*.joinhandshake.com/*" ],
+      "resources": [ "pdf.worker.min.js" ]
+   } ]
+}

@@ -1,0 +1,1339 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#skip-to-content"
+    - generic [ref=e4]:
+      - navigation "Primary navigation" [ref=e5]:
+        - link "Handshake Homepage" [ref=e8] [cursor=pointer]:
+          - /url: /explore
+          - img [ref=e11]
+        - list [ref=e15]:
+          - listitem [ref=e16]:
+            - link "Explore" [ref=e18] [cursor=pointer]:
+              - /url: /explore
+              - img [ref=e21]
+              - generic [ref=e23]: Explore
+          - listitem [ref=e24]:
+            - link "Jobs" [ref=e26] [cursor=pointer]:
+              - /url: /job-search
+              - img [ref=e29]
+              - generic [ref=e31]: Jobs
+          - listitem [ref=e32]:
+            - link "Inbox - 1 unread message." [ref=e34] [cursor=pointer]:
+              - /url: /inbox?ref=sidebar
+              - img [ref=e37]
+              - generic [ref=e40]: Inbox
+              - generic [ref=e42]: "1"
+          - listitem [ref=e43]:
+            - separator [ref=e44]
+          - listitem [ref=e45]:
+            - link "Feed" [ref=e47] [cursor=pointer]:
+              - /url: /feed
+              - img [ref=e50]
+              - generic [ref=e52]: Feed
+          - listitem [ref=e53]:
+            - link "AI showcase" [ref=e55] [cursor=pointer]:
+              - /url: /ai-showcase
+              - img [ref=e58]
+              - generic [ref=e60]: AI showcase
+          - listitem [ref=e63]:
+            - link "Events" [ref=e65] [cursor=pointer]:
+              - /url: /stu/events
+              - img [ref=e68]
+              - generic [ref=e70]: Events
+          - listitem [ref=e71]:
+            - link "People" [ref=e73] [cursor=pointer]:
+              - /url: /people
+              - img [ref=e76]
+              - generic [ref=e78]: People
+          - listitem [ref=e79]:
+            - link "Employers" [ref=e81] [cursor=pointer]:
+              - /url: /employer-search
+              - img [ref=e84]
+              - generic [ref=e86]: Employers
+          - listitem [ref=e87]:
+            - link "Career center" [ref=e89] [cursor=pointer]:
+              - /url: /stu/schools/648
+              - img [ref=e92]
+              - generic [ref=e94]: Career center
+          - listitem [ref=e95]:
+            - separator [ref=e96]
+          - listitem [ref=e97]:
+            - link "AI work" [ref=e99] [cursor=pointer]:
+              - /url: https://ai.joinhandshake.com/fellow-home
+              - img [ref=e102]
+              - generic [ref=e104]: AI work
+        - generic [ref=e107]:
+          - button "21 profile views, in the past 90 days" [ref=e108] [cursor=pointer]:
+            - generic [ref=e109]:
+              - generic [ref=e110]: AS
+              - paragraph [ref=e111]: 21 profile views
+              - paragraph [ref=e112]: in the past 90 days
+          - button "Get the app" [ref=e113] [cursor=pointer]:
+            - generic [ref=e114]:
+              - img [ref=e116]
+              - text: Get the app
+      - generic [ref=e118]:
+        - navigation "Top navigation" [ref=e120]:
+          - generic [ref=e122]:
+            - generic "Jobs" [ref=e124]
+            - navigation [ref=e125]:
+              - tablist "Top bar navigation tabs" [ref=e126]:
+                - tab "Search" [selected] [ref=e127] [cursor=pointer]:
+                  - generic [ref=e128]: Search
+                - tab "Saved" [ref=e129] [cursor=pointer]:
+                  - generic [ref=e130]: Saved
+          - generic [ref=e131]:
+            - list [ref=e132]:
+              - listitem [ref=e133]:
+                - link "Notifications - 3 unseen notifications." [ref=e134] [cursor=pointer]:
+                  - /url: /notifications?ref=navbar
+                  - img [ref=e135]
+                  - generic [ref=e137]: "3"
+            - button "Open profile options" [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]: AS
+        - main [ref=e142]:
+          - generic [ref=e143]:
+            - form "Job search filters" [ref=e147]:
+              - generic [ref=e149]:
+                - generic [ref=e151]:
+                  - img [ref=e154]
+                  - combobox "Describe a job you want" [ref=e156]
+                  - button "Clear search" [ref=e159] [cursor=pointer]:
+                    - img [ref=e160]
+                - generic: 1/300
+              - button "UW-Madison collections" [ref=e163] [cursor=pointer]:
+                - generic [ref=e164]: UW-Madison collections
+                - img [ref=e165]
+              - button "Location" [ref=e168] [cursor=pointer]:
+                - generic [ref=e169]: Location
+                - img [ref=e170]
+              - generic [ref=e174]:
+                - generic [ref=e176]:
+                  - img [ref=e178]
+                  - generic [ref=e180]: Full-time job
+                - checkbox "Full-time job" [ref=e181]
+              - status [ref=e182]
+              - generic [ref=e185]:
+                - generic [ref=e187]:
+                  - img [ref=e189]
+                  - generic [ref=e191]: Internship
+                - generic:
+                  - checkbox "Internship" [checked] [ref=e192]
+                  - generic:
+                    - img
+              - status [ref=e193]
+              - generic [ref=e196]:
+                - generic [ref=e198]:
+                  - img [ref=e200]
+                  - generic [ref=e202]: Part time
+                - checkbox "Part time" [ref=e203]
+              - status [ref=e204]
+              - button "Filters 1" [ref=e206] [cursor=pointer]:
+                - img [ref=e208]
+                - generic [ref=e210]: Filters
+                - generic [ref=e211]: "1"
+            - generic [ref=e212]:
+              - region "Jobs List" [ref=e214]:
+                - generic [ref=e215]:
+                  - generic [ref=e221]: 4911 jobs found
+                  - generic [ref=e224]:
+                    - combobox "relevance" [ref=e225] [cursor=pointer]:
+                      - status: Most relevant
+                      - img [ref=e226]
+                    - combobox "Most relevant":
+                      - option "relevance" [selected]
+                      - option "application_deadline_asc"
+                      - option "application_deadline_desc"
+                      - option "posted_date_desc"
+                      - option "posted_date_asc"
+                - generic [ref=e229]:
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: Get alerts for jobs like this
+                    - button "Update preferences" [ref=e233] [cursor=pointer]
+                  - generic [ref=e235] [cursor=pointer]:
+                    - img [ref=e240]
+                    - switch "Toggle job alert for this search" [ref=e243]
+                - generic [ref=e244]:
+                  - generic [ref=e245]:
+                    - button "View Growth Engineer Intern" [ref=e246] [cursor=pointer]
+                    - img "Cosyra" [ref=e248]
+                    - region "View Growth Engineer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Cosyra
+                        - generic:
+                          - generic:
+                            - generic "View Growth Engineer Intern": Growth Engineer Intern
+                            - generic:
+                              - generic: $40-50/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e249] [cursor=pointer]:
+                            - img [ref=e251]
+                          - button "Hide" [ref=e253] [cursor=pointer]:
+                            - img [ref=e255]
+                  - status [ref=e257]
+                  - generic [ref=e258]:
+                    - button "View Buy-Side Mergers & Acquisitions Analyst" [ref=e259] [cursor=pointer]
+                    - img "Calder Capital, LLC" [ref=e261]
+                    - region "View Buy-Side Mergers & Acquisitions Analyst":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Calder Capital, LLC
+                        - generic:
+                          - generic:
+                            - generic "View Buy-Side Mergers & Acquisitions Analyst": Buy-Side Mergers & Acquisitions Analyst
+                            - generic:
+                              - generic: $20/hr · Internship · May 16—Aug 26
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote or Grand Rapids, MI
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e262] [cursor=pointer]:
+                            - img [ref=e264]
+                          - button "Hide" [ref=e266] [cursor=pointer]:
+                            - img [ref=e268]
+                  - status [ref=e270]
+                  - generic [ref=e271]:
+                    - button "View Finance Intern- Small Business Services" [ref=e272] [cursor=pointer]
+                    - img "LCG Advisors" [ref=e274]
+                    - region "View Finance Intern- Small Business Services":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: LCG Advisors
+                        - generic:
+                          - generic:
+                            - generic "View Finance Intern- Small Business Services": Finance Intern- Small Business Services
+                            - generic:
+                              - generic: $20/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e275] [cursor=pointer]:
+                            - img [ref=e277]
+                          - button "Hide" [ref=e279] [cursor=pointer]:
+                            - img [ref=e281]
+                  - status [ref=e283]
+                  - generic [ref=e284]:
+                    - button "View Product Engineer/Developer" [ref=e285] [cursor=pointer]
+                    - img "Kamel Ride" [ref=e287]
+                    - region "View Product Engineer/Developer":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Kamel Ride
+                        - generic:
+                          - generic:
+                            - generic "View Product Engineer/Developer": Product Engineer/Developer
+                            - generic:
+                              - generic: Unpaid · Internship · May 16—Aug 21
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e288] [cursor=pointer]:
+                            - img [ref=e290]
+                          - button "Hide" [ref=e292] [cursor=pointer]:
+                            - img [ref=e294]
+                  - status [ref=e296]
+                  - generic [ref=e297]:
+                    - button "View AI-Native Developer Intern" [ref=e298] [cursor=pointer]
+                    - img "Armada Recovery" [ref=e300]
+                    - region "View AI-Native Developer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Armada Recovery
+                        - generic:
+                          - generic:
+                            - generic "View AI-Native Developer Intern": AI-Native Developer Intern
+                            - generic:
+                              - generic: $25-40/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 5d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e301] [cursor=pointer]:
+                            - img [ref=e303]
+                          - button "Hide" [ref=e305] [cursor=pointer]:
+                            - img [ref=e307]
+                  - status [ref=e309]
+                  - generic [ref=e310]:
+                    - button "View Software Engineering Intern (Fall 2026)" [ref=e311] [cursor=pointer]
+                    - img "Aven" [ref=e313]
+                    - region "View Software Engineering Intern (Fall 2026)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Aven
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineering Intern (Fall 2026)": Software Engineering Intern (Fall 2026)
+                            - generic:
+                              - generic: $80-90/hr · Internship · Aug 2—Dec 17
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Campbell, CA
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e314] [cursor=pointer]:
+                            - img [ref=e316]
+                          - button "Hide" [ref=e318] [cursor=pointer]:
+                            - img [ref=e320]
+                  - status [ref=e322]
+                  - generic [ref=e323]:
+                    - button "View Forward Deployed Engineer" [ref=e324] [cursor=pointer]
+                    - img "Bland Labs" [ref=e326]
+                    - region "View Forward Deployed Engineer":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Bland Labs
+                        - generic:
+                          - generic:
+                            - generic "View Forward Deployed Engineer": Forward Deployed Engineer
+                            - generic:
+                              - generic: $20-30/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote or New York, NY
+                              - generic: ∙
+                              - generic: 3wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e327] [cursor=pointer]:
+                            - img [ref=e329]
+                          - button "Hide" [ref=e331] [cursor=pointer]:
+                            - img [ref=e333]
+                  - status [ref=e335]
+                  - generic [ref=e336]:
+                    - button "View Data Scientist Intern" [ref=e337] [cursor=pointer]
+                    - img "Eye Spy Foundation" [ref=e339]
+                    - region "View Data Scientist Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Eye Spy Foundation
+                        - generic:
+                          - generic:
+                            - generic "View Data Scientist Intern": Data Scientist Intern
+                            - generic:
+                              - generic: Unpaid · Internship · Apr 1—Dec 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e340] [cursor=pointer]:
+                            - img [ref=e342]
+                          - button "Hide" [ref=e344] [cursor=pointer]:
+                            - img [ref=e346]
+                  - status [ref=e348]
+                  - generic [ref=e349]:
+                    - button "View Web Intern" [ref=e350] [cursor=pointer]
+                    - img "Talos Health Corp" [ref=e352]
+                    - region "View Web Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Talos Health Corp
+                        - generic:
+                          - generic:
+                            - generic "View Web Intern": Web Intern
+                            - generic:
+                              - generic: Internship · May 24—Jul 12
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e353] [cursor=pointer]:
+                            - img [ref=e355]
+                          - button "Hide" [ref=e357] [cursor=pointer]:
+                            - img [ref=e359]
+                  - status [ref=e361]
+                  - generic [ref=e362]:
+                    - button "View Software Engineering Intern" [ref=e363] [cursor=pointer]
+                    - img "Knot" [ref=e365]
+                    - region "View Software Engineering Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Knot
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineering Intern": Software Engineering Intern
+                            - generic:
+                              - generic: $30-40/hr · Internship · May 24—Aug 20
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: New York, NY
+                              - generic: ∙
+                              - generic: 3wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e366] [cursor=pointer]:
+                            - img [ref=e368]
+                          - button "Hide" [ref=e370] [cursor=pointer]:
+                            - img [ref=e372]
+                  - status [ref=e374]
+                  - generic [ref=e375]:
+                    - button "View AI Product Marketing Intern" [ref=e376] [cursor=pointer]
+                    - img "Liba Space" [ref=e378]
+                    - region "View AI Product Marketing Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Liba Space
+                        - generic:
+                          - generic:
+                            - generic "View AI Product Marketing Intern": AI Product Marketing Intern
+                            - generic:
+                              - generic: Unpaid · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e379] [cursor=pointer]:
+                            - img [ref=e381]
+                          - button "Hide" [ref=e383] [cursor=pointer]:
+                            - img [ref=e385]
+                  - status [ref=e387]
+                  - generic [ref=e388]:
+                    - button "View Marketing Assistant - AI Startup" [ref=e389] [cursor=pointer]
+                    - img "WiscAI" [ref=e391]
+                    - region "View Marketing Assistant - AI Startup":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: WiscAI
+                        - generic:
+                          - generic:
+                            - generic "View Marketing Assistant - AI Startup": Marketing Assistant - AI Startup
+                            - generic:
+                              - generic: $20-30/hr · Internship · Mar 31—Dec 29
+                          - generic:
+                            - generic:
+                              - generic: UW-Madison collection
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Madison, WI
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e392] [cursor=pointer]:
+                            - img [ref=e394]
+                          - button "Hide" [ref=e396] [cursor=pointer]:
+                            - img [ref=e398]
+                  - status [ref=e400]
+                  - generic [ref=e401]:
+                    - button "View Agentic AI Engineering Intern at Deion" [ref=e402] [cursor=pointer]
+                    - img "MyDataProduct" [ref=e404]
+                    - region "View Agentic AI Engineering Intern at Deion":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: MyDataProduct
+                        - generic:
+                          - generic:
+                            - generic "View Agentic AI Engineering Intern at Deion": Agentic AI Engineering Intern at Deion
+                            - generic:
+                              - generic: $1-3K/mo · Internship · Aug 31—May 3
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e405] [cursor=pointer]:
+                            - img [ref=e407]
+                          - button "Hide" [ref=e409] [cursor=pointer]:
+                            - img [ref=e411]
+                  - status [ref=e413]
+                  - generic [ref=e414]:
+                    - button "View Doma Summer Intern" [ref=e415] [cursor=pointer]
+                    - img [ref=e419]
+                    - region "View Doma Summer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Artful Concern, LLC
+                        - generic:
+                          - generic:
+                            - generic "View Doma Summer Intern": Doma Summer Intern
+                            - generic:
+                              - generic: $10-15K/yr · Internship · May 31—Aug 31
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e421] [cursor=pointer]:
+                            - img [ref=e423]
+                          - button "Hide" [ref=e425] [cursor=pointer]:
+                            - img [ref=e427]
+                  - status [ref=e429]
+                  - generic [ref=e430]:
+                    - button "View Software Engineer Intern" [ref=e431] [cursor=pointer]
+                    - img "NextLabs, Inc." [ref=e433]
+                    - region "View Software Engineer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: NextLabs, Inc.
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineer Intern": Software Engineer Intern
+                            - generic:
+                              - generic: $20-30/hr · Internship · Mar 1—Mar 1
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 2mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e434] [cursor=pointer]:
+                            - img [ref=e436]
+                          - button "Hide" [ref=e438] [cursor=pointer]:
+                            - img [ref=e440]
+                  - status [ref=e442]
+                  - generic [ref=e443]:
+                    - button "View AI Operations Specialist Intern" [ref=e444] [cursor=pointer]
+                    - img "DCS2 Asset Recovery" [ref=e446]
+                    - region "View AI Operations Specialist Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: DCS2 Asset Recovery
+                        - generic:
+                          - generic:
+                            - generic "View AI Operations Specialist Intern": AI Operations Specialist Intern
+                            - generic:
+                              - generic: Internship · May 17—Aug 20
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Austin, TX
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e447] [cursor=pointer]:
+                            - img [ref=e449]
+                          - button "Hide" [ref=e451] [cursor=pointer]:
+                            - img [ref=e453]
+                  - status [ref=e455]
+                  - generic [ref=e456]:
+                    - button "View B2B Sales/Marketing Intern" [ref=e457] [cursor=pointer]
+                    - img [ref=e461]
+                    - region "View B2B Sales/Marketing Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Leads to Green
+                        - generic:
+                          - generic:
+                            - generic "View B2B Sales/Marketing Intern": B2B Sales/Marketing Intern
+                            - generic:
+                              - generic: $1-3K/mo · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e463] [cursor=pointer]:
+                            - img [ref=e465]
+                          - button "Hide" [ref=e467] [cursor=pointer]:
+                            - img [ref=e469]
+                  - status [ref=e471]
+                  - generic [ref=e472]:
+                    - button "View Operations & Strategy Analyst" [ref=e473] [cursor=pointer]
+                    - img "Lawly" [ref=e475]
+                    - region "View Operations & Strategy Analyst":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Lawly
+                        - generic:
+                          - generic:
+                            - generic "View Operations & Strategy Analyst": Operations & Strategy Analyst
+                            - generic:
+                              - generic: Unpaid · Internship · May 17—Aug 16
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e476] [cursor=pointer]:
+                            - img [ref=e478]
+                          - button "Hide" [ref=e480] [cursor=pointer]:
+                            - img [ref=e482]
+                  - status [ref=e484]
+                  - generic [ref=e485]:
+                    - button "View BlueVerse AI Intern" [ref=e486] [cursor=pointer]
+                    - img "LTIMindtree" [ref=e488]
+                    - region "View BlueVerse AI Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: LTIMindtree
+                        - generic:
+                          - generic:
+                            - generic "View BlueVerse AI Intern": BlueVerse AI Intern
+                            - generic:
+                              - generic: $20-25/hr · Internship · May 31—Aug 13
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Edison, NJ + 1
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e489] [cursor=pointer]:
+                            - img [ref=e491]
+                          - button "Hide" [ref=e493] [cursor=pointer]:
+                            - img [ref=e495]
+                  - status [ref=e497]
+                  - generic [ref=e498]:
+                    - button "View Private Credit Summer Analyst" [ref=e499] [cursor=pointer]
+                    - img [ref=e503]
+                    - region "View Private Credit Summer Analyst":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Tannenbaum Capital Group (TCG)
+                        - generic:
+                          - generic:
+                            - generic "View Private Credit Summer Analyst": Private Credit Summer Analyst
+                            - generic:
+                              - generic: $4-5K/mo · Internship · Jun 14—Aug 6
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: West Palm Beach, FL
+                              - generic: ∙
+                              - generic: 5d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e505] [cursor=pointer]:
+                            - img [ref=e507]
+                          - button "Hide" [ref=e509] [cursor=pointer]:
+                            - img [ref=e511]
+                  - status [ref=e513]
+                  - generic [ref=e514]:
+                    - button "View Business Operations Intern" [ref=e515] [cursor=pointer]
+                    - img "Ivy Brothers" [ref=e517]
+                    - region "View Business Operations Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Ivy Brothers
+                        - generic:
+                          - generic:
+                            - generic "View Business Operations Intern": Business Operations Intern
+                            - generic:
+                              - generic: $20-30/hr · Internship · May 18—Aug 9
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e518] [cursor=pointer]:
+                            - img [ref=e520]
+                          - button "Hide" [ref=e522] [cursor=pointer]:
+                            - img [ref=e524]
+                  - status [ref=e526]
+                  - generic [ref=e527]:
+                    - button "View Data Extractor" [ref=e528] [cursor=pointer]
+                    - img "Teleqo Technical Solutions" [ref=e530]
+                    - region "View Data Extractor":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Teleqo Technical Solutions
+                        - generic:
+                          - generic:
+                            - generic "View Data Extractor": Data Extractor
+                            - generic:
+                              - generic: Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e531] [cursor=pointer]:
+                            - img [ref=e533]
+                          - button "Hide" [ref=e535] [cursor=pointer]:
+                            - img [ref=e537]
+                  - status [ref=e539]
+                  - generic [ref=e540]:
+                    - button "View AI Intern" [ref=e541] [cursor=pointer]
+                    - img "Interlock Systems" [ref=e543]
+                    - region "View AI Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Interlock Systems
+                        - generic:
+                          - generic:
+                            - generic "View AI Intern": AI Intern
+                            - generic:
+                              - generic: $25-35/hr · Internship · May 31—Aug 13
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Boston, MA
+                              - generic: ∙
+                              - generic: 2wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e544] [cursor=pointer]:
+                            - img [ref=e546]
+                          - button "Hide" [ref=e548] [cursor=pointer]:
+                            - img [ref=e550]
+                  - status [ref=e552]
+                  - generic [ref=e553]:
+                    - button "View Software Engineering Internship/Co-op (AI / Data Focus)" [ref=e554] [cursor=pointer]
+                    - img "Crescent Peak" [ref=e556]
+                    - region "View Software Engineering Internship/Co-op (AI / Data Focus)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Crescent Peak
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineering Internship/Co-op (AI / Data Focus)": Software Engineering Internship/Co-op (AI / Data Focus)
+                            - generic:
+                              - generic: $10.19-29.99/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 3wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e557] [cursor=pointer]:
+                            - img [ref=e559]
+                          - button "Hide" [ref=e561] [cursor=pointer]:
+                            - img [ref=e563]
+                  - status [ref=e565]
+                  - generic [ref=e566]:
+                    - button "View AI Agent Builder Intern (AWS QuickSuite)" [ref=e567] [cursor=pointer]
+                    - img "AspireHR" [ref=e569]
+                    - region "View AI Agent Builder Intern (AWS QuickSuite)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: AspireHR
+                        - generic:
+                          - generic:
+                            - generic "View AI Agent Builder Intern (AWS QuickSuite)": AI Agent Builder Intern (AWS QuickSuite)
+                            - generic:
+                              - generic: $18/hr · Internship · May 31—Jul 23
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Addison, TX
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e570] [cursor=pointer]:
+                            - img [ref=e572]
+                          - button "Hide" [ref=e574] [cursor=pointer]:
+                            - img [ref=e576]
+                  - status [ref=e578]
+                  - navigation "pagination" [ref=e580]:
+                    - button "first page" [disabled] [ref=e582]:
+                      - img
+                    - button "previous page" [disabled] [ref=e584]:
+                      - img
+                    - list [ref=e585]:
+                      - listitem [ref=e586]:
+                        - button "1" [ref=e587] [cursor=pointer]
+                      - listitem [ref=e588]:
+                        - button "2" [ref=e589] [cursor=pointer]
+                      - listitem [ref=e590]:
+                        - button "3" [ref=e591] [cursor=pointer]
+                      - listitem [ref=e592]:
+                        - generic:
+                          - img
+                      - listitem [ref=e593]:
+                        - button "197" [ref=e594] [cursor=pointer]
+                    - button "next page" [ref=e596] [cursor=pointer]:
+                      - img
+                    - button "last page" [ref=e598] [cursor=pointer]:
+                      - img
+              - generic [ref=e603]:
+                - generic [ref=e606]:
+                  - generic [ref=e607]:
+                    - link "NextLabs, Inc." [ref=e608] [cursor=pointer]:
+                      - /url: /e/76340
+                      - img "NextLabs, Inc. logo" [ref=e609]
+                    - generic [ref=e610]:
+                      - link "NextLabs, Inc." [ref=e611] [cursor=pointer]:
+                        - /url: /e/76340
+                        - generic [ref=e612]: NextLabs, Inc.
+                      - link "Internet & Software" [ref=e613] [cursor=pointer]:
+                        - /url: /e/76340
+                        - generic [ref=e614]: Internet & Software
+                  - link "Software Engineer Intern" [ref=e615] [cursor=pointer]:
+                    - /url: /jobs/10778711?searchId=7a90991e-7412-40f3-89d8-f284dbca9fd4
+                    - heading "Software Engineer Intern" [level=1] [ref=e616]
+                  - generic [ref=e617]:
+                    - text: Posted 2 months ago
+                    - generic [ref=e618]: ∙
+                    - text: Apply by February 22, 2027 at 1:59 AM
+                - generic [ref=e619]:
+                  - button "Save" [ref=e620] [cursor=pointer]:
+                    - img [ref=e622]
+                    - generic [ref=e624]: Save
+                  - button "Share" [ref=e625] [cursor=pointer]:
+                    - text: Share
+                    - img [ref=e627]
+                  - button "Apply" [ref=e629] [cursor=pointer]:
+                    - generic [ref=e630]: Apply
+                  - status [ref=e631]
+                  - button "Menu button" [ref=e632] [cursor=pointer]:
+                    - img [ref=e634]
+                - generic [ref=e637]:
+                  - generic [ref=e638]:
+                    - img [ref=e639]
+                    - heading "Summary" [level=6] [ref=e641]
+                    - generic [ref=e643]: Beta
+                  - paragraph [ref=e644]: This Software Engineer Intern role offers hands-on experience developing cutting-edge policy-driven information risk management software, aligning perfectly with your interest in transforming the enterprise compliance and security market. With opportunities to collaborate with top-tier teams, participate in industry-standardization efforts, and enhance performance and scalability, this internship presents a fantastic chance to grow professionally within a rapidly evolving technology landscape.
+                - generic [ref=e645]:
+                  - heading "At a glance" [level=3] [ref=e647]
+                  - generic [ref=e648]:
+                    - img [ref=e649]
+                    - generic [ref=e652]: $20–30/hr
+                  - generic [ref=e653]:
+                    - img [ref=e654]
+                    - generic [ref=e656]:
+                      - generic [ref=e657]: Remote, based in United States
+                      - generic [ref=e658]: Work from home
+                  - generic [ref=e659]:
+                    - img [ref=e660]
+                    - generic [ref=e662]:
+                      - generic [ref=e663]: Internship
+                      - generic [ref=e664]:
+                        - text: Part-time
+                        - generic [ref=e666]: ∙
+                        - text: From March 2, 2026 to March 2, 2027
+                  - generic [ref=e667]:
+                    - img [ref=e668]
+                    - generic [ref=e671]: US work authorization required
+                - generic [ref=e673]:
+                  - heading "Job description" [level=3] [ref=e675]
+                  - generic [ref=e677]:
+                    - paragraph [ref=e678]: Transforming the view of enterprise compliance and security market today is the mission for NextLabs Control Center product. NextLabs is an exciting information risk management software company in the expanding XACML Policy Management, Data Protection, and Entitlements Management space. Our customers include many prominent enterprises in Aerospace & Defense, Financial Services, High-Tech Manufacturing and Engineering industries. We are committed to making a significant impact on the computing world, we own over 30+ appr
+                    - text: ...
+                    - button "Show more (What does a Software Engineer Intern do at NextLabs, Inc.?)" [ref=e679] [cursor=pointer]:
+                      - text: More
+                      - img [ref=e680]
+                - generic:
+                  - generic:
+                    - button "Save" [ref=e682] [cursor=pointer]:
+                      - img [ref=e684]
+                      - generic [ref=e686]: Save
+                    - button "Apply" [ref=e687] [cursor=pointer]:
+                      - generic [ref=e688]: Apply
+                - generic [ref=e689]:
+                  - heading "What they're looking for" [level=3] [ref=e691]
+                  - generic [ref=e692]:
+                    - generic [ref=e693]: You match some qualifications.
+                    - generic [ref=e694]:
+                      - generic [ref=e696]:
+                        - img "Matched preference" [ref=e697]
+                        - text: 3.0 GPA
+                      - generic [ref=e700]:
+                        - img "Matched preference" [ref=e701]
+                        - text: Junior
+                      - generic [ref=e704]:
+                        - img "Matched preference" [ref=e705]
+                        - text: Bachelors
+                      - generic [ref=e708]:
+                        - img "Matched preference" [ref=e709]
+                        - text: Data Science major
+                      - generic [ref=e712]:
+                        - img "Matched preference" [ref=e713]
+                        - text: Computer Sciences major
+                      - generic [ref=e716]:
+                        - img "Unmatched preference" [ref=e717]
+                        - text: Graduates by December 2027
+                  - generic [ref=e719]:
+                    - text: Matching is based on your profile.
+                    - link "Update profile." [ref=e721] [cursor=pointer]:
+                      - /url: /users/56861504?ref=job-details-update-profile-click
+                - generic [ref=e722]:
+                  - heading "What this job offers" [level=3] [ref=e724]
+                  - list [ref=e725]:
+                    - listitem [ref=e726]: •$20–30/hr
+                    - listitem [ref=e727]: •Paid sick leave
+                - generic [ref=e728]:
+                  - heading "About the employer" [level=3] [ref=e730]
+                  - generic [ref=e731]:
+                    - link "NextLabs, Inc. Internet & Software" [ref=e733] [cursor=pointer]:
+                      - /url: /e/76340
+                      - generic [ref=e736]:
+                        - heading "NextLabs, Inc." [level=4] [ref=e737]
+                        - paragraph [ref=e738]: Internet & Software
+                    - button "Follow NextLabs, Inc. employer" [ref=e741] [cursor=pointer]:
+                      - generic [ref=e742]: Follow
+                  - generic [ref=e743]:
+                    - generic [ref=e744]:
+                      - img [ref=e745]
+                      - text: 100-250 employees
+                    - generic [ref=e747]:
+                      - img [ref=e748]
+                      - paragraph [ref=e750]: San Mateo, CA
+                  - paragraph [ref=e751]: "Nextlabs, Inc. is the leading provider of policy-driven information risk management (IRM) software for large enterprises. Nextlabs is privately held and headquartered in San Mateo, California, with offices in London, Paris, Hangzhou, PRC, Singapore, and Malaysia. The Company's flagship data protection and entitlement management products, combine with the Control Center XACML-based policy management platform with integrated content-aware and identity-driven enforcement technology, to offer the most comprehensive information risk management (IRM) solution. Nextlabs products preserve confidentiality, prevent data loss, and ensure compliance across more channels and more points, within a single unified solution with the unmatched user acceptance and Total Cost of Ownership (TCO). Both Nextlabs Entitlement Management and Nextlabs Data Protection are built on top of Nextlabs' industry-leading Control Center policy server platform based on patented technology and the XACML standard. The Nextlabs policy server platform allows customers to easily configure and centrally manage policy that can be applied to applications and data throughout the enterprise. Nextlabs' policy server platform breaks new ground in ease of use, by providing industries first point-and-click rapid application development (RAD) tool for policy and the fourth generation polcy language- ACPL. The unique distributed architecture allows the platform to scale in order to meet enterprise requirements by addressing applications and data on servers, endpoints and mobile devices across platforms with full offline support and zero impact on application performance. The unmatched ease of use and scalability of the Nextlabs policy server platform allows users to configure company policy that can be applied to applications and data on 100,000's of hosts in hours instead of months. Nextlabs' partnerships with industry leaders, such as IBM, SAP, Microsoft, HCL Axon, Adobe, HP, PTC, and Siemens, bring to market industry-focused information risk management (IRM) solutions that combine industry best practices with turnkey applications, to meet customers' governance, risk, and compliance requirements. Nextlabs maintains a growing portfolio of over seventy - five approved and pending patents covering four core areas: fine-grainted and contextual access control, user and workflow remediation, real-time policy enforcement, and the implementation and deployment of extensible and universal authorization services. Nextlabs was founded by Keng Lim, a proven entrepreneur who has played a pivotal role over the last 20 years in the creation of such well-known Internet and software companies as Approach Software, Kiva Software, Netscape, Escalate, and Sygate Technologies."
+                  - link "Learn more about NextLabs, Inc." [ref=e752] [cursor=pointer]:
+                    - /url: /e/76340
+                - generic [ref=e753]:
+                  - heading "Similar Jobs" [level=3] [ref=e755]
+                  - generic [ref=e756]:
+                    - link "Software QA Engineer, Whova, Inc., $60–70K/yr, Full-time job" [ref=e759] [cursor=pointer]:
+                      - /url: /jobs/10608599
+                      - generic [ref=e760]:
+                        - generic:
+                          - generic:
+                            - img "Whova, Inc."
+                            - generic:
+                              - generic: Whova, Inc.
+                              - generic: Internet & Software
+                            - 'button "Save this job: Software QA Engineer" [ref=e761]':
+                              - img [ref=e763]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software QA Engineer" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $60–70K/yr
+                                - generic: ∙
+                                - text: Full-time job
+                          - generic:
+                            - generic:
+                              - generic: UW-Madison collections
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: San Diego, California, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 4mo ago
+                    - link "Software Engineer I, College Board, $106–125K/yr, Full-time job" [ref=e768] [cursor=pointer]:
+                      - /url: /jobs/10678118
+                      - generic [ref=e769]:
+                        - generic:
+                          - generic:
+                            - img "College Board"
+                            - generic:
+                              - generic: College Board
+                              - generic: Other Education
+                            - 'button "Save this job: Software Engineer I" [ref=e770]':
+                              - img [ref=e772]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineer I" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $106–125K/yr
+                                - generic: ∙
+                                - text: Full-time job
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 3mo ago
+                    - link "Software Engineer Intern, Tata Consultancy Services, $20–30/hr, Internship" [ref=e777] [cursor=pointer]:
+                      - /url: /jobs/10830382
+                      - generic [ref=e778]:
+                        - generic:
+                          - generic:
+                            - img "Tata Consultancy Services"
+                            - generic:
+                              - generic: Tata Consultancy Services
+                              - generic: Internet & Software
+                            - 'button "Save this job: Software Engineer Intern" [ref=e779]':
+                              - img [ref=e781]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineer Intern" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $20–30/hr
+                                - generic: ∙
+                                - text: Internship
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Plano, Texas, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 2mo ago
+                    - link "Software Engineering Intern, LSEV USA Corp - Careers, $15–20/hr, Internship, Mar 31–Aug 30" [ref=e786] [cursor=pointer]:
+                      - /url: /jobs/10869339
+                      - generic [ref=e787]:
+                        - generic:
+                          - generic:
+                            - img "LSEV USA Corp - Careers"
+                            - generic:
+                              - generic: LSEV USA Corp - Careers
+                              - generic: Information Technology
+                            - 'button "Save this job: Software Engineering Intern" [ref=e788]':
+                              - img [ref=e790]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineering Intern" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $15–20/hr
+                                - generic: ∙
+                                - text: Internship
+                                - generic: ∙
+                                - text: Mar 31–Aug 30
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Irvine, California, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 1mo ago
+                    - link "Software Engineer, IXL Learning, $116–150K/yr, Full-time job" [ref=e795] [cursor=pointer]:
+                      - /url: /jobs/11042403
+                      - generic [ref=e796]:
+                        - generic:
+                          - generic:
+                            - img "IXL Learning"
+                            - generic:
+                              - generic: IXL Learning
+                              - generic: Internet & Software
+                            - 'button "Save this job: Software Engineer" [ref=e797]':
+                              - img [ref=e799]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineer" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $116–150K/yr
+                                - generic: ∙
+                                - text: Full-time job
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: San Mateo, California, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 4d ago
+                    - link "Software Engineer Intern, Hadrian, $46–50/hr, Internship, Jun 14–Aug 20" [ref=e804] [cursor=pointer]:
+                      - /url: /jobs/11054552
+                      - generic [ref=e805]:
+                        - generic:
+                          - generic:
+                            - img "Hadrian"
+                            - generic:
+                              - generic: Hadrian
+                              - generic: Aerospace
+                            - 'button "Save this job: Software Engineer Intern" [ref=e806]':
+                              - img [ref=e808]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineer Intern" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $46–50/hr
+                                - generic: ∙
+                                - text: Internship
+                                - generic: ∙
+                                - text: Jun 14–Aug 20
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Torrance, California, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: New
+                - generic [ref=e811]:
+                  - heading "Alumni in similar roles" [level=2] [ref=e812]
+                  - generic [ref=e813]:
+                    - generic [ref=e814]:
+                      - link "Tenzin Chokyi Technology Instructor" [ref=e817] [cursor=pointer]:
+                        - /url: /profiles/10611284?hscid=e2cc234e-fac2-40f6-bc08-b2e9ca19c6c0
+                        - generic [ref=e820]:
+                          - paragraph [ref=e821]: Tenzin Chokyi
+                          - paragraph [ref=e822]: Technology Instructor
+                      - button "Follow (Tenzin Chokyi Technology Instructor ), not pressed" [ref=e824] [cursor=pointer]: Follow
+                    - generic [ref=e825]:
+                      - link "AM ANNA MELNYK" [ref=e828] [cursor=pointer]:
+                        - /url: /profiles/25333588?hscid=e2cc234e-fac2-40f6-bc08-b2e9ca19c6c0
+                        - generic [ref=e829]:
+                          - generic [ref=e831]: AM
+                          - generic [ref=e832]:
+                            - paragraph [ref=e833]: ANNA MELNYK
+                            - paragraph
+                      - button "Follow (ANNA MELNYK), not pressed" [ref=e835] [cursor=pointer]: Follow
+                    - generic [ref=e836]:
+                      - link "HEEWON(Jonah) KIM Co-Founder & Front-end Developer" [ref=e839] [cursor=pointer]:
+                        - /url: /profiles/30082774?hscid=e2cc234e-fac2-40f6-bc08-b2e9ca19c6c0
+                        - generic [ref=e842]:
+                          - paragraph [ref=e843]: HEEWON(Jonah) KIM
+                          - paragraph [ref=e844]: Co-Founder & Front-end Developer
+                      - button "Follow (HEEWON(Jonah) KIM Co-Founder & Front-end Developer), not pressed" [ref=e846] [cursor=pointer]: Follow
+                    - generic [ref=e847]:
+                      - link "MICHAEL BERKEY Software Developer" [ref=e850] [cursor=pointer]:
+                        - /url: /profiles/18731077?hscid=e2cc234e-fac2-40f6-bc08-b2e9ca19c6c0
+                        - generic [ref=e853]:
+                          - paragraph [ref=e854]: MICHAEL BERKEY
+                          - paragraph [ref=e855]: Software Developer
+                      - button "Follow (MICHAEL BERKEY Software Developer), not pressed" [ref=e857] [cursor=pointer]: Follow
+  - generic:
+    - generic:
+      - list
+  - dialog "Apply to NextLabs, Inc." [ref=e859]:
+    - generic [ref=e861]:
+      - generic [ref=e862]:
+        - heading "Apply to NextLabs, Inc." [level=2] [ref=e863]
+        - button "Cancel application" [ref=e865] [cursor=pointer]:
+          - img [ref=e867]
+      - generic [ref=e870]:
+        - generic [ref=e871]:
+          - generic [ref=e873]:
+            - generic [ref=e874]: Your school year does not match what is requested for this job.
+            - text: If this information is incorrect, please update it
+            - link "here" [active] [ref=e875] [cursor=pointer]:
+              - /url: /profiles/56861504
+            - text: .
+          - generic [ref=e876]:
+            - heading "Details from NextLabs, Inc.:" [level=3] [ref=e877]
+            - paragraph [ref=e878]: Applying requires a few documents. Attach them below and get one step closer to your next job!
+            - generic [ref=e879]:
+              - group "Attach your resume" [ref=e880]:
+                - heading "Attach your resume" [level=4] [ref=e882]
+                - status "alert positive" [ref=e883]:
+                  - generic [ref=e884]:
+                    - generic [ref=e885]:
+                      - img [ref=e887]
+                      - generic [ref=e890]:
+                        - heading "Anthony Soumphonphakdy Resume" [level=5] [ref=e891]
+                        - link "Preview document" [ref=e892] [cursor=pointer]:
+                          - /url: /docs/69418904
+                    - button "Close" [ref=e894] [cursor=pointer]:
+                      - img [ref=e896]
+              - group "Attach your transcript" [ref=e898]:
+                - heading "Attach your transcript" [level=4] [ref=e900]
+                - generic [ref=e903]:
+                  - generic [ref=e908]:
+                    - combobox "Search your transcripts" [ref=e909]
+                    - generic:
+                      - generic:
+                        - img
+                  - generic [ref=e910]: or
+                  - generic [ref=e912]:
+                    - generic [ref=e913]: Upload new
+                    - generic [ref=e914]:
+                      - button "Upload new" [ref=e915] [cursor=pointer]
+                      - generic:
+                        - generic: Upload new
+              - group "Attach other required documents" [ref=e916]:
+                - heading "Attach other required documents" [level=4] [ref=e918]
+                - generic [ref=e919]:
+                  - generic [ref=e921]: Instructions from employer:School or work project
+                  - generic [ref=e922]:
+                    - generic [ref=e927]:
+                      - combobox "Search your other documents" [ref=e928]
+                      - generic:
+                        - generic:
+                          - img
+                    - generic [ref=e929]: or
+                    - generic [ref=e931]:
+                      - generic [ref=e932]: Upload new
+                      - generic [ref=e933]:
+                        - button "Upload new" [ref=e934] [cursor=pointer]
+                        - generic:
+                          - generic: Upload new
+          - generic [ref=e935]:
+            - heading "Screening Questions" [level=4] [ref=e936]
+            - paragraph [ref=e937]: Your answers will help this employer sort applications and connect with the best-fit candidates.
+            - group "Do you have or are you pursuing a degree in Computer Science or Computer Engineering?" [ref=e938]:
+              - generic [ref=e939]: Do you have or are you pursuing a degree in Computer Science or Computer Engineering?
+              - radiogroup [ref=e940]:
+                - generic [ref=e941]:
+                  - generic [ref=e942] [cursor=pointer]: "Yes"
+                  - generic [ref=e943]:
+                    - radio "Yes" [ref=e944]
+                    - generic:
+                      - img
+                - generic [ref=e945]:
+                  - generic [ref=e946] [cursor=pointer]: "No"
+                  - generic [ref=e947]:
+                    - radio "No" [ref=e948]
+                    - generic:
+                      - img
+            - group "Do you speak English?" [ref=e949]:
+              - generic [ref=e950]: Do you speak English?
+              - radiogroup [ref=e951]:
+                - generic [ref=e952]:
+                  - generic [ref=e953] [cursor=pointer]: "Yes"
+                  - generic [ref=e954]:
+                    - radio "Yes" [ref=e955]
+                    - generic:
+                      - img
+                - generic [ref=e956]:
+                  - generic [ref=e957] [cursor=pointer]: "No"
+                  - generic [ref=e958]:
+                    - radio "No" [ref=e959]
+                    - generic:
+                      - img
+            - group "Are you available to work Pacific Time Zone, with flexibility ?" [ref=e960]:
+              - generic [ref=e961]: Are you available to work Pacific Time Zone, with flexibility ?
+              - radiogroup [ref=e962]:
+                - generic [ref=e963]:
+                  - generic [ref=e964] [cursor=pointer]: "Yes"
+                  - generic [ref=e965]:
+                    - radio "Yes" [ref=e966]
+                    - generic:
+                      - img
+                - generic [ref=e967]:
+                  - generic [ref=e968] [cursor=pointer]: "No"
+                  - generic [ref=e969]:
+                    - radio "No" [ref=e970]
+                    - generic:
+                      - img
+        - button "Submit Application" [ref=e972] [cursor=pointer]
+  - status [ref=e973]

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    h2 {
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .info {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #007bff;
+    }
+
+    .info strong {
+      color: #333;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .info ol {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .info li {
+      margin-bottom: 10px;
+    }
+
+    .info a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .info a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-link {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 12px;
+      text-align: center;
+      color: #666;
+    }
+
+    .footer-link a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .footer-link a:hover {
+      text-decoration: underline;
+    }
+
+    .status {
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 4px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .status.active {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status.inactive {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .go-btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.2s;
+    }
+
+    .go-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>🤝 Handshake Plus</h2>
+
+  <div id="university-selector" style="display: none; margin-top: 15px;">
+    <label for="university-input" style="font-size: 13px; font-weight: bold; display: block; margin-bottom: 5px;">Your
+      University:</label>
+    <input type="text" id="university-input" list="university-list" placeholder="e.g. Cornell University"
+      style="width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+    <datalist id="university-list"></datalist>
+  </div>
+
+  <button id="go-to-handshake-btn" class="go-btn" style="display: none;">Take me to Handshake Jobs</button>
+  <script src="universities.js"></script>
+  <script src="popup.js"></script>
+</body>
+
+</html>

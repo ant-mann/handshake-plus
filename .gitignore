@@ -1,0 +1,5 @@
+# Handshake Plus Extension
+*.zip
+dist/
+.worktrees/
+worktrees/

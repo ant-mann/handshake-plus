@@ -1,0 +1,1263 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#skip-to-content"
+    - generic [ref=e4]:
+      - navigation "Primary navigation" [ref=e5]:
+        - link "Handshake Homepage" [ref=e8] [cursor=pointer]:
+          - /url: /explore
+          - img [ref=e11]
+        - list [ref=e15]:
+          - listitem [ref=e16]:
+            - link "Explore" [ref=e18] [cursor=pointer]:
+              - /url: /explore
+              - img [ref=e21]
+              - generic [ref=e23]: Explore
+          - listitem [ref=e24]:
+            - link "Jobs" [ref=e26] [cursor=pointer]:
+              - /url: /job-search
+              - img [ref=e29]
+              - generic [ref=e31]: Jobs
+          - listitem [ref=e32]:
+            - link "Inbox" [ref=e34] [cursor=pointer]:
+              - /url: /inbox?ref=sidebar
+              - img [ref=e37]
+              - generic [ref=e39]: Inbox
+          - listitem [ref=e40]:
+            - separator [ref=e41]
+          - listitem [ref=e42]:
+            - link "Feed" [ref=e44] [cursor=pointer]:
+              - /url: /feed
+              - img [ref=e47]
+              - generic [ref=e49]: Feed
+          - listitem [ref=e50]:
+            - link "AI showcase" [ref=e52] [cursor=pointer]:
+              - /url: /ai-showcase
+              - img [ref=e55]
+              - generic [ref=e57]: AI showcase
+          - listitem [ref=e60]:
+            - link "Events" [ref=e62] [cursor=pointer]:
+              - /url: /stu/events
+              - img [ref=e65]
+              - generic [ref=e67]: Events
+          - listitem [ref=e68]:
+            - link "People" [ref=e70] [cursor=pointer]:
+              - /url: /people
+              - img [ref=e73]
+              - generic [ref=e75]: People
+          - listitem [ref=e76]:
+            - link "Employers" [ref=e78] [cursor=pointer]:
+              - /url: /employer-search
+              - img [ref=e81]
+              - generic [ref=e83]: Employers
+          - listitem [ref=e84]:
+            - link "Career center" [ref=e86] [cursor=pointer]:
+              - /url: /stu/schools/648
+              - img [ref=e89]
+              - generic [ref=e91]: Career center
+          - listitem [ref=e92]:
+            - separator [ref=e93]
+          - listitem [ref=e94]:
+            - link "AI work" [ref=e96] [cursor=pointer]:
+              - /url: https://ai.joinhandshake.com/fellow-home
+              - img [ref=e99]
+              - generic [ref=e101]: AI work
+        - generic [ref=e104]:
+          - button "21 profile views, in the past 90 days" [ref=e105] [cursor=pointer]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: AS
+              - paragraph [ref=e108]: 21 profile views
+              - paragraph [ref=e109]: in the past 90 days
+          - button "Get the app" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]:
+              - img [ref=e113]
+              - text: Get the app
+      - generic [ref=e115]:
+        - navigation "Top navigation" [ref=e117]:
+          - generic [ref=e119]:
+            - generic "Jobs" [ref=e121]
+            - navigation [ref=e122]:
+              - tablist "Top bar navigation tabs" [ref=e123]:
+                - tab "Search" [selected] [ref=e891] [cursor=pointer]:
+                  - generic [ref=e892]: Search
+                - tab "Saved" [ref=e893] [cursor=pointer]:
+                  - generic [ref=e894]: Saved
+          - generic [ref=e128]:
+            - list [ref=e129]:
+              - listitem [ref=e130]:
+                - link "Notifications" [ref=e131] [cursor=pointer]:
+                  - /url: /notifications?ref=navbar
+                  - img [ref=e132]
+            - button "Open profile options" [ref=e135] [cursor=pointer]:
+              - generic [ref=e136]: AS
+        - main [ref=e138]:
+          - generic [ref=e139]:
+            - form "Job search filters" [ref=e143]:
+              - generic [ref=e147]:
+                - img [ref=e150]
+                - combobox "Describe a job you want" [ref=e152]
+              - button "UW-Madison collections" [ref=e154] [cursor=pointer]:
+                - generic [ref=e155]: UW-Madison collections
+                - img [ref=e156]
+              - button "Location" [ref=e159] [cursor=pointer]:
+                - generic [ref=e160]: Location
+                - img [ref=e161]
+              - generic [ref=e165]:
+                - generic [ref=e167]:
+                  - img [ref=e169]
+                  - generic [ref=e171]: Full-time job
+                - checkbox "Full-time job" [ref=e172]
+              - status [ref=e173]
+              - generic [ref=e176]:
+                - generic [ref=e178]:
+                  - img [ref=e180]
+                  - generic [ref=e182]: Internship
+                - checkbox "Internship" [ref=e183]
+              - status [ref=e184]
+              - generic [ref=e187]:
+                - generic [ref=e189]:
+                  - img [ref=e191]
+                  - generic [ref=e193]: Part time
+                - checkbox "Part time" [ref=e194]
+              - status [ref=e195]
+              - button "Filters" [ref=e197] [cursor=pointer]:
+                - img [ref=e199]
+                - generic [ref=e201]: Filters
+            - generic [ref=e202]:
+              - region "Jobs List" [ref=e204]:
+                - generic [ref=e205]:
+                  - generic [ref=e207]: 10K+ jobs found
+                  - generic [ref=e210]:
+                    - combobox "relevance" [ref=e211] [cursor=pointer]:
+                      - status: Most relevant
+                      - img [ref=e212]
+                    - combobox "Most relevant":
+                      - option "relevance" [selected]
+                      - option "application_deadline_asc"
+                      - option "application_deadline_desc"
+                      - option "posted_date_desc"
+                      - option "posted_date_asc"
+                - generic [ref=e214]:
+                  - generic [ref=e215]:
+                    - generic [ref=e216]: Want to see more relevant jobs?
+                    - button "Update career interests" [ref=e218] [cursor=pointer]
+                  - button "Close" [ref=e220] [cursor=pointer]:
+                    - img [ref=e222]
+                - generic [ref=e224]:
+                  - generic [ref=e225]:
+                    - button "View Growth Engineer Intern" [ref=e226] [cursor=pointer]
+                    - img "Cosyra" [ref=e228]
+                    - region "View Growth Engineer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Cosyra
+                        - generic:
+                          - generic:
+                            - generic "View Growth Engineer Intern": Growth Engineer Intern
+                            - generic:
+                              - generic: $40-50/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e229] [cursor=pointer]:
+                            - img [ref=e231]
+                          - button "Hide" [ref=e233] [cursor=pointer]:
+                            - img [ref=e235]
+                  - status [ref=e237]
+                  - generic [ref=e238]:
+                    - button "View GIS Intern" [ref=e239] [cursor=pointer]
+                    - img "Polk-Burnett Electric Cooperative" [ref=e241]
+                    - region "View GIS Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Polk-Burnett Electric Cooperative
+                        - generic:
+                          - generic:
+                            - generic "View GIS Intern": GIS Intern
+                            - generic:
+                              - generic: $20-25/hr · Internship · May 31—Aug 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Promoted
+                              - generic: ∙
+                              - generic: Centuria, WI + 1
+                              - generic: ∙
+                              - generic: 1wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e242] [cursor=pointer]:
+                            - img [ref=e244]
+                          - button "Hide" [ref=e246] [cursor=pointer]:
+                            - img [ref=e248]
+                  - status [ref=e250]
+                  - generic [ref=e251]:
+                    - button "View AI Workflows Engineer" [ref=e252] [cursor=pointer]
+                    - img "Elkmont Insurance" [ref=e254]
+                    - region "View AI Workflows Engineer":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Elkmont Insurance
+                        - generic:
+                          - generic:
+                            - generic "View AI Workflows Engineer": AI Workflows Engineer
+                            - generic:
+                              - generic: $2-3K/mo · Part-time · May 29—May 29
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote or Clarendon Hills, IL + 1
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e255] [cursor=pointer]:
+                            - img [ref=e257]
+                          - button "Hide" [ref=e259] [cursor=pointer]:
+                            - img [ref=e261]
+                  - status [ref=e263]
+                  - generic [ref=e264]:
+                    - button "View AI Bot & Agent Intern" [ref=e265] [cursor=pointer]
+                    - img "Global Intercultural Center" [ref=e267]
+                    - region "View AI Bot & Agent Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Global Intercultural Center
+                        - generic:
+                          - generic:
+                            - generic "View AI Bot & Agent Intern": AI Bot & Agent Intern
+                            - generic:
+                              - generic: $14-15/hr · Internship · May 24—Aug 5
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e268] [cursor=pointer]:
+                            - img [ref=e270]
+                          - button "Hide" [ref=e272] [cursor=pointer]:
+                            - img [ref=e274]
+                  - status [ref=e276]
+                  - generic [ref=e277]:
+                    - button "View Grassroots Fundraiser" [ref=e278] [cursor=pointer]
+                    - img "Greylock Campaigns" [ref=e280]
+                    - region "View Grassroots Fundraiser":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Greylock Campaigns
+                        - generic:
+                          - generic:
+                            - generic "View Grassroots Fundraiser": Grassroots Fundraiser
+                            - generic:
+                              - generic: $22-30/hr · Full-time · May 10—Aug 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Promoted
+                              - generic: ∙
+                              - generic: Madison, WI
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e281] [cursor=pointer]:
+                            - img [ref=e283]
+                          - button "Hide" [ref=e285] [cursor=pointer]:
+                            - img [ref=e287]
+                  - status [ref=e289]
+                  - generic [ref=e290]:
+                    - button "View Data Engineer Intern" [ref=e291] [cursor=pointer]
+                    - img "Scale Marketing" [ref=e293]
+                    - region "View Data Engineer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Scale Marketing
+                        - generic:
+                          - generic:
+                            - generic "View Data Engineer Intern": Data Engineer Intern
+                            - generic:
+                              - generic: $20/hr · Internship · Jun 14—Aug 13
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Chicago, IL
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e294] [cursor=pointer]:
+                            - img [ref=e296]
+                          - button "Hide" [ref=e298] [cursor=pointer]:
+                            - img [ref=e300]
+                  - status [ref=e302]
+                  - generic [ref=e303]:
+                    - button "View Machine Learning Engineer Intern" [ref=e304] [cursor=pointer]
+                    - img "Atreyus Ai" [ref=e306]
+                    - region "View Machine Learning Engineer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Atreyus Ai
+                        - generic:
+                          - generic:
+                            - generic "View Machine Learning Engineer Intern": Machine Learning Engineer Intern
+                            - generic:
+                              - generic: $15/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e307] [cursor=pointer]:
+                            - img [ref=e309]
+                          - button "Hide" [ref=e311] [cursor=pointer]:
+                            - img [ref=e313]
+                  - status [ref=e315]
+                  - generic [ref=e316]:
+                    - button "View Event Security Specialist" [ref=e317] [cursor=pointer]
+                    - img "Providence Security Services" [ref=e319]
+                    - region "View Event Security Specialist":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Providence Security Services
+                        - generic:
+                          - generic:
+                            - generic "View Event Security Specialist": Event Security Specialist
+                            - generic:
+                              - generic: $20-30/hr · Part-time · Jun 16—Aug 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Promoted
+                              - generic: ∙
+                              - generic: Eau Claire, WI + 1
+                              - generic: ∙
+                              - generic: 1wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e320] [cursor=pointer]:
+                            - img [ref=e322]
+                          - button "Hide" [ref=e324] [cursor=pointer]:
+                            - img [ref=e326]
+                  - status [ref=e328]
+                  - generic [ref=e329]:
+                    - button "View IT Infrastructure Intern" [ref=e330] [cursor=pointer]
+                    - img "UW Credit Union" [ref=e332]
+                    - region "View IT Infrastructure Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: UW Credit Union
+                        - generic:
+                          - generic:
+                            - generic "View IT Infrastructure Intern": IT Infrastructure Intern
+                            - generic:
+                              - generic: $20.50/hr · Internship · May 31—Aug 27
+                          - generic:
+                            - generic:
+                              - generic: UW-Madison collection
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Madison, WI
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e333] [cursor=pointer]:
+                            - img [ref=e335]
+                          - button "Hide" [ref=e337] [cursor=pointer]:
+                            - img [ref=e339]
+                  - status [ref=e341]
+                  - generic [ref=e342]:
+                    - button "View Data Science and Analytics Intern" [ref=e343] [cursor=pointer]
+                    - img "Diodes, Inc." [ref=e345]
+                    - region "View Data Science and Analytics Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Diodes, Inc.
+                        - generic:
+                          - generic:
+                            - generic "View Data Science and Analytics Intern": Data Science and Analytics Intern
+                            - generic:
+                              - generic: $25/hr · Internship · May 31—Oct 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Plano, TX + 1
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e346] [cursor=pointer]:
+                            - img [ref=e348]
+                          - button "Hide" [ref=e350] [cursor=pointer]:
+                            - img [ref=e352]
+                  - status [ref=e354]
+                  - generic [ref=e355]:
+                    - button "View AI Ops Systems Specialist" [ref=e356] [cursor=pointer]
+                    - img "Global Intercultural Center" [ref=e358]
+                    - region "View AI Ops Systems Specialist":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Global Intercultural Center
+                        - generic:
+                          - generic:
+                            - generic "View AI Ops Systems Specialist": AI Ops Systems Specialist
+                            - generic:
+                              - generic: $14-15/hr · Internship · May 25—Aug 5
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e359] [cursor=pointer]:
+                            - img [ref=e361]
+                          - button "Hide" [ref=e363] [cursor=pointer]:
+                            - img [ref=e365]
+                  - status [ref=e367]
+                  - generic [ref=e368]:
+                    - button "View Marketing AI and Automation Builder" [ref=e369] [cursor=pointer]
+                    - img "Elevent" [ref=e371]
+                    - region "View Marketing AI and Automation Builder":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Elevent
+                        - generic:
+                          - generic:
+                            - generic "View Marketing AI and Automation Builder": Marketing AI and Automation Builder
+                            - generic:
+                              - generic: $15-20/hr · Internship · Jun 7—Aug 27
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e372] [cursor=pointer]:
+                            - img [ref=e374]
+                          - button "Hide" [ref=e376] [cursor=pointer]:
+                            - img [ref=e378]
+                  - status [ref=e380]
+                  - generic [ref=e381]:
+                    - button "View Python Engineer" [ref=e382] [cursor=pointer]
+                    - img "studio rtf" [ref=e384]
+                    - region "View Python Engineer":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: studio rtf
+                        - generic:
+                          - generic:
+                            - generic "View Python Engineer": Python Engineer
+                            - generic:
+                              - generic: $2-3K/mo · Full-time
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e385] [cursor=pointer]:
+                            - img [ref=e387]
+                          - button "Hide" [ref=e389] [cursor=pointer]:
+                            - img [ref=e391]
+                  - status [ref=e393]
+                  - generic [ref=e394]:
+                    - button "View Junior Software Engineer I" [ref=e395] [cursor=pointer]
+                    - img "GetDynasty" [ref=e397]
+                    - region "View Junior Software Engineer I":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: GetDynasty
+                        - generic:
+                          - generic:
+                            - generic "View Junior Software Engineer I": Junior Software Engineer I
+                            - generic:
+                              - generic: $100-120K/yr · Full-time
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: San Francisco, CA
+                              - generic: ∙
+                              - generic: 4d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e398] [cursor=pointer]:
+                            - img [ref=e400]
+                          - button "Hide" [ref=e402] [cursor=pointer]:
+                            - img [ref=e404]
+                  - status [ref=e406]
+                  - generic [ref=e407]:
+                    - button "View AI Marketing Intern" [ref=e408] [cursor=pointer]
+                    - img "HeyProactive.ai" [ref=e410]
+                    - region "View AI Marketing Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: HeyProactive.ai
+                        - generic:
+                          - generic:
+                            - generic "View AI Marketing Intern": AI Marketing Intern
+                            - generic:
+                              - generic: $1,500-2,500/mo · Internship · May 19—Aug 19
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e411] [cursor=pointer]:
+                            - img [ref=e413]
+                          - button "Hide" [ref=e415] [cursor=pointer]:
+                            - img [ref=e417]
+                  - status [ref=e419]
+                  - generic [ref=e420]:
+                    - button "View Software Engineering Intern (Fall 2026)" [ref=e421] [cursor=pointer]
+                    - img "Aven" [ref=e423]
+                    - region "View Software Engineering Intern (Fall 2026)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Aven
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineering Intern (Fall 2026)": Software Engineering Intern (Fall 2026)
+                            - generic:
+                              - generic: $80-90/hr · Internship · Aug 2—Dec 17
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Campbell, CA
+                              - generic: ∙
+                              - generic: 1mo ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e424] [cursor=pointer]:
+                            - img [ref=e426]
+                          - button "Hide" [ref=e428] [cursor=pointer]:
+                            - img [ref=e430]
+                  - status [ref=e432]
+                  - generic [ref=e433]:
+                    - button "View Software Engineer" [ref=e434] [cursor=pointer]
+                    - img "AIQ Markets" [ref=e436]
+                    - region "View Software Engineer":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: AIQ Markets
+                        - generic:
+                          - generic:
+                            - generic "View Software Engineer": Software Engineer
+                            - generic:
+                              - generic: $85K/yr · Full-time
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: New York, NY
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e437] [cursor=pointer]:
+                            - img [ref=e439]
+                          - button "Hide" [ref=e441] [cursor=pointer]:
+                            - img [ref=e443]
+                  - status [ref=e445]
+                  - generic [ref=e446]:
+                    - button "View AI Systems Architect" [ref=e447] [cursor=pointer]
+                    - img "Commune Media" [ref=e449]
+                    - region "View AI Systems Architect":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Commune Media
+                        - generic:
+                          - generic:
+                            - generic "View AI Systems Architect": AI Systems Architect
+                            - generic:
+                              - generic: $40-65/hr · Full-time · May 25—Sep 3
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e450] [cursor=pointer]:
+                            - img [ref=e452]
+                          - button "Hide" [ref=e454] [cursor=pointer]:
+                            - img [ref=e456]
+                  - status [ref=e458]
+                  - generic [ref=e459]:
+                    - button "View AI/ML Research Intern" [ref=e460] [cursor=pointer]
+                    - img [ref=e464]
+                    - region "View AI/ML Research Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Trifecta Consulting Group
+                        - generic:
+                          - generic:
+                            - generic "View AI/ML Research Intern": AI/ML Research Intern
+                            - generic:
+                              - generic: $20-30/hr · Internship · May 31—Aug 30
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote or Williamstown, MA + 1
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e466] [cursor=pointer]:
+                            - img [ref=e468]
+                          - button "Hide" [ref=e470] [cursor=pointer]:
+                            - img [ref=e472]
+                  - status [ref=e474]
+                  - generic [ref=e475]:
+                    - button "View AI Development Intern" [ref=e476] [cursor=pointer]
+                    - img "Smote" [ref=e478]
+                    - region "View AI Development Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Smote
+                        - generic:
+                          - generic:
+                            - generic "View AI Development Intern": AI Development Intern
+                            - generic:
+                              - generic: $1-2K/mo · Internship · May 14—Aug 14
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e479] [cursor=pointer]:
+                            - img [ref=e481]
+                          - button "Hide" [ref=e483] [cursor=pointer]:
+                            - img [ref=e485]
+                  - status [ref=e487]
+                  - generic [ref=e488]:
+                    - button "View AI Strategy Intern" [ref=e489] [cursor=pointer]
+                    - img "Beckons" [ref=e491]
+                    - region "View AI Strategy Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Beckons
+                        - generic:
+                          - generic:
+                            - generic "View AI Strategy Intern": AI Strategy Intern
+                            - generic:
+                              - generic: $20-30/hr · Internship · May 31—Aug 6
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Denver, CO
+                              - generic: ∙
+                              - generic: 4wk ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e492] [cursor=pointer]:
+                            - img [ref=e494]
+                          - button "Hide" [ref=e496] [cursor=pointer]:
+                            - img [ref=e498]
+                  - status [ref=e500]
+                  - generic [ref=e501]:
+                    - button "View Data Analyst Intern (Part-Time)" [ref=e502] [cursor=pointer]
+                    - img "Beagle Technology,Inc" [ref=e504]
+                    - region "View Data Analyst Intern (Part-Time)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Beagle Technology,Inc
+                        - generic:
+                          - generic:
+                            - generic "View Data Analyst Intern (Part-Time)": Data Analyst Intern (Part-Time)
+                            - generic:
+                              - generic: $20-30/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Dublin, CA
+                              - generic: ∙
+                              - generic: 3d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e505] [cursor=pointer]:
+                            - img [ref=e507]
+                          - button "Hide" [ref=e509] [cursor=pointer]:
+                            - img [ref=e511]
+                  - status [ref=e513]
+                  - generic [ref=e514]:
+                    - button "View Security Engineering Contractor (potential for FT)" [ref=e515] [cursor=pointer]
+                    - img "RxDiet" [ref=e517]
+                    - region "View Security Engineering Contractor (potential for FT)":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: RxDiet
+                        - generic:
+                          - generic:
+                            - generic "View Security Engineering Contractor (potential for FT)": Security Engineering Contractor (potential for FT)
+                            - generic:
+                              - generic: $25-30/hr · Full-time
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e518] [cursor=pointer]:
+                            - img [ref=e520]
+                          - button "Hide" [ref=e522] [cursor=pointer]:
+                            - img [ref=e524]
+                  - status [ref=e526]
+                  - generic [ref=e527]:
+                    - button "View AI Manufacturing Intern" [ref=e528] [cursor=pointer]
+                    - img "FyterTech Nonwovens" [ref=e530]
+                    - region "View AI Manufacturing Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: FyterTech Nonwovens
+                        - generic:
+                          - generic:
+                            - generic "View AI Manufacturing Intern": AI Manufacturing Intern
+                            - generic:
+                              - generic: $20-30/hr · Internship · May 24—Aug 27
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: De Pere, WI + 1
+                              - generic: ∙
+                              - generic: New
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e531] [cursor=pointer]:
+                            - img [ref=e533]
+                          - button "Hide" [ref=e535] [cursor=pointer]:
+                            - img [ref=e537]
+                  - status [ref=e539]
+                  - generic [ref=e540]:
+                    - button "View AI-Native Developer Intern" [ref=e541] [cursor=pointer]
+                    - img "Armada Recovery" [ref=e543]
+                    - region "View AI-Native Developer Intern":
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic: Armada Recovery
+                        - generic:
+                          - generic:
+                            - generic "View AI-Native Developer Intern": AI-Native Developer Intern
+                            - generic:
+                              - generic: $25-40/hr · Internship
+                      - generic:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic: Remote
+                              - generic: ∙
+                              - generic: 4d ago
+                    - generic:
+                      - generic:
+                        - group:
+                          - button "Save" [ref=e544] [cursor=pointer]:
+                            - img [ref=e546]
+                          - button "Hide" [ref=e548] [cursor=pointer]:
+                            - img [ref=e550]
+                  - status [ref=e552]
+                  - navigation "pagination" [ref=e554]:
+                    - button "first page" [disabled] [ref=e556]:
+                      - img
+                    - button "previous page" [disabled] [ref=e558]:
+                      - img
+                    - list [ref=e559]:
+                      - listitem [ref=e560]:
+                        - button "1" [ref=e561] [cursor=pointer]
+                      - listitem [ref=e562]:
+                        - button "2" [ref=e563] [cursor=pointer]
+                      - listitem [ref=e564]:
+                        - button "3" [ref=e565] [cursor=pointer]
+                      - listitem [ref=e566]:
+                        - generic:
+                          - img
+                      - listitem [ref=e567]:
+                        - button "400" [ref=e568] [cursor=pointer]
+                    - button "next page" [ref=e570] [cursor=pointer]:
+                      - img
+                    - button "last page" [ref=e572] [cursor=pointer]:
+                      - img
+              - generic [ref=e577]:
+                - generic [ref=e580]:
+                  - generic [ref=e581]:
+                    - link "Cosyra" [ref=e582] [cursor=pointer]:
+                      - /url: /e/1125725
+                      - img "Cosyra logo" [ref=e583]
+                    - generic [ref=e584]:
+                      - link "Cosyra" [ref=e585] [cursor=pointer]:
+                        - /url: /e/1125725
+                        - generic [ref=e586]: Cosyra
+                      - link "Internet & Software" [ref=e587] [cursor=pointer]:
+                        - /url: /e/1125725
+                        - generic [ref=e588]: Internet & Software
+                  - link "Growth Engineer Intern" [ref=e589] [cursor=pointer]:
+                    - /url: /jobs/11044939?searchId=d71622fa-3a94-48a6-b432-045bb390c883
+                    - heading "Growth Engineer Intern" [level=1] [ref=e590]
+                  - generic [ref=e591]:
+                    - text: Posted 2 days ago
+                    - generic [ref=e592]: ∙
+                    - text: Apply by June 12, 2026 at 10:59 PM
+                - generic [ref=e593]:
+                  - button "Save" [ref=e594] [cursor=pointer]:
+                    - img [ref=e596]
+                    - generic [ref=e598]: Save
+                  - button "Share" [ref=e599] [cursor=pointer]:
+                    - text: Share
+                    - img [ref=e601]
+                  - button "Apply" [ref=e603] [cursor=pointer]:
+                    - generic [ref=e604]: Apply
+                  - status [ref=e605]
+                  - button "Menu button" [ref=e606] [cursor=pointer]:
+                    - img [ref=e608]
+                - generic [ref=e610]:
+                  - heading "At a glance" [level=3] [ref=e612]
+                  - generic [ref=e613]:
+                    - img [ref=e614]
+                    - generic [ref=e617]: $40–50/hr
+                  - generic [ref=e618]:
+                    - img [ref=e619]
+                    - generic [ref=e621]:
+                      - generic [ref=e622]: Remote, based in United States
+                      - generic [ref=e623]: Work from home
+                  - generic [ref=e624]:
+                    - img [ref=e625]
+                    - generic [ref=e627]:
+                      - generic [ref=e628]: Internship
+                      - generic [ref=e629]: Full-time
+                  - generic [ref=e630]:
+                    - img [ref=e631]
+                    - generic [ref=e633]:
+                      - generic [ref=e634]: US work authorization required
+                      - generic [ref=e635]: Open to candidates with OPT/CPT
+                - generic [ref=e637]:
+                  - heading "Job description" [level=3] [ref=e639]
+                  - paragraph [ref=e642]: We’re a fast-moving startup building the future of mobile AI-powered development tools, and we’re looking for someone who genuinely lives in this world. You’ll help ship features using modern AI tooling while also creating technical content, demos, and social posts that showcase what we’re building to developers online.
+                - generic:
+                  - generic:
+                    - button "Save" [ref=e643] [cursor=pointer]:
+                      - img [ref=e645]
+                      - generic [ref=e647]: Save
+                    - button "Apply" [ref=e648] [cursor=pointer]:
+                      - generic [ref=e649]: Apply
+                - generic [ref=e650]:
+                  - heading "What this job offers" [level=3] [ref=e652]
+                  - list [ref=e653]:
+                    - listitem [ref=e654]: •$40–50/hr
+                    - listitem [ref=e655]: •Equity package
+                - generic [ref=e656]:
+                  - heading "About the employer" [level=3] [ref=e658]
+                  - generic [ref=e659]:
+                    - link "Cosyra Internet & Software" [ref=e661] [cursor=pointer]:
+                      - /url: /e/1125725
+                      - generic [ref=e664]:
+                        - heading "Cosyra" [level=4] [ref=e665]
+                        - paragraph [ref=e666]: Internet & Software
+                    - button "Follow Cosyra employer" [ref=e669] [cursor=pointer]:
+                      - generic [ref=e670]: Follow
+                  - generic [ref=e671]:
+                    - generic [ref=e672]:
+                      - img [ref=e673]
+                      - text: 1-10 employees
+                    - generic [ref=e675]:
+                      - img [ref=e676]
+                      - paragraph [ref=e678]: New York, NY
+                  - paragraph [ref=e679]: A mobile cloud terminal for running AI coding agents anywhere.
+                  - link "Learn more about Cosyra" [ref=e680] [cursor=pointer]:
+                    - /url: /e/1125725
+                - generic [ref=e681]:
+                  - heading "Similar Jobs" [level=3] [ref=e683]
+                  - generic [ref=e684]:
+                    - link "Software Engineer, MyMicrojourney, Internship" [ref=e687] [cursor=pointer]:
+                      - /url: /jobs/10752656
+                      - generic [ref=e688]:
+                        - generic:
+                          - generic:
+                            - img "MyMicrojourney"
+                            - generic:
+                              - generic: MyMicrojourney
+                              - generic: Internet & Software
+                            - 'button "Save this job: Software Engineer" [ref=e689]':
+                              - img [ref=e691]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Software Engineer" [level=3]
+                            - generic:
+                              - generic: Internship
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 3mo ago
+                    - link "User Growth/SEO Intern -fullstack, fAIshion Inc, Unpaid, Internship" [ref=e696] [cursor=pointer]:
+                      - /url: /jobs/10848934
+                      - generic [ref=e697]:
+                        - generic:
+                          - generic:
+                            - img "fAIshion Inc"
+                            - generic:
+                              - generic: fAIshion Inc
+                              - generic: Information Technology
+                            - 'button "Save this job: User Growth/SEO Intern -fullstack" [ref=e698]':
+                              - img [ref=e700]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "User Growth/SEO Intern -fullstack" [level=3]
+                            - generic:
+                              - generic:
+                                - text: Unpaid
+                                - generic: ∙
+                                - text: Internship
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 2mo ago
+                    - link "Agentic AI Engineering Intern at Deion, MyDataProduct, $1–3K/mo, Internship, Aug 31–May 3" [ref=e705] [cursor=pointer]:
+                      - /url: /jobs/10887655
+                      - generic [ref=e706]:
+                        - generic:
+                          - generic:
+                            - img "MyDataProduct"
+                            - generic:
+                              - generic: MyDataProduct
+                              - generic: Internet & Software
+                            - 'button "Save this job: Agentic AI Engineering Intern at Deion" [ref=e707]':
+                              - img [ref=e709]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Agentic AI Engineering Intern at Deion" [level=3]
+                            - generic:
+                              - generic:
+                                - text: $1–3K/mo
+                                - generic: ∙
+                                - text: Internship
+                                - generic: ∙
+                                - text: Aug 31–May 3
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 1mo ago
+                    - link "Growth Intern, Sama, Unpaid, Internship, Apr 30–Aug 31" [ref=e714] [cursor=pointer]:
+                      - /url: /jobs/10984090
+                      - generic [ref=e715]:
+                        - generic:
+                          - generic:
+                            - img "Sama"
+                            - generic:
+                              - generic: Sama
+                              - generic: Information Technology
+                            - 'button "Save this job: Growth Intern" [ref=e716]':
+                              - img [ref=e718]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "Growth Intern" [level=3]
+                            - generic:
+                              - generic:
+                                - text: Unpaid
+                                - generic: ∙
+                                - text: Internship
+                                - generic: ∙
+                                - text: Apr 30–Aug 31
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: San Francisco, California, United States
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 3wk ago
+                    - link "AI/ML Engineer Intern, iCustomer, Internship, May 24–Aug 27" [ref=e723] [cursor=pointer]:
+                      - /url: /jobs/10991573
+                      - generic [ref=e724]:
+                        - generic:
+                          - generic:
+                            - img "iCustomer"
+                            - generic:
+                              - generic: iCustomer
+                              - generic: Information Technology
+                            - 'button "Save this job: AI/ML Engineer Intern" [ref=e725]':
+                              - img [ref=e727]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "AI/ML Engineer Intern" [level=3]
+                            - generic:
+                              - generic:
+                                - text: Internship
+                                - generic: ∙
+                                - text: May 24–Aug 27
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 2wk ago
+                    - link "User Growth Intern, Mi Terro, Internship" [ref=e732] [cursor=pointer]:
+                      - /url: /jobs/11041444
+                      - generic [ref=e733]:
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - img
+                            - generic:
+                              - generic: Mi Terro
+                              - generic: Healthcare
+                            - 'button "Save this job: User Growth Intern" [ref=e734]':
+                              - img [ref=e736]
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - heading "User Growth Intern" [level=3]
+                            - generic:
+                              - generic: Internship
+                        - generic:
+                          - generic:
+                            - generic:
+                              - generic:
+                                - generic: Remote
+                                - generic: ∙
+                                - generic:
+                                  - paragraph: 3d ago
+                - generic [ref=e739]:
+                  - heading "Alumni in similar roles" [level=2] [ref=e740]
+                  - generic [ref=e741]:
+                    - generic [ref=e742]:
+                      - link "Mariya SIDDIQUI Course Grader" [ref=e745] [cursor=pointer]:
+                        - /url: /profiles/25335281?hscid=d96eab6b-7280-4bc2-a5a7-a10548db4ae5
+                        - generic [ref=e748]:
+                          - paragraph [ref=e749]: Mariya SIDDIQUI
+                          - paragraph [ref=e750]: Course Grader
+                      - button "Follow (Mariya SIDDIQUI Course Grader), not pressed" [ref=e752] [cursor=pointer]: Follow
+                    - generic [ref=e753]:
+                      - link "Joel Yoshiya Foster" [ref=e756] [cursor=pointer]:
+                        - /url: /profiles/12149024?hscid=d96eab6b-7280-4bc2-a5a7-a10548db4ae5
+                        - generic [ref=e759]:
+                          - paragraph [ref=e760]: Joel Yoshiya Foster
+                          - paragraph
+                      - button "Follow (Joel Yoshiya Foster), not pressed" [ref=e762] [cursor=pointer]: Follow
+                    - generic [ref=e763]:
+                      - link "Malcolm RAMIREZ" [ref=e766] [cursor=pointer]:
+                        - /url: /profiles/12145190?hscid=d96eab6b-7280-4bc2-a5a7-a10548db4ae5
+                        - generic [ref=e769]:
+                          - paragraph [ref=e770]: Malcolm RAMIREZ
+                          - paragraph
+                      - button "Follow (Malcolm RAMIREZ), not pressed" [ref=e772] [cursor=pointer]: Follow
+                    - generic [ref=e773]:
+                      - link "Kevin HUTCHINS" [ref=e776] [cursor=pointer]:
+                        - /url: /profiles/18731802?hscid=d96eab6b-7280-4bc2-a5a7-a10548db4ae5
+                        - generic [ref=e779]:
+                          - paragraph [ref=e780]: Kevin HUTCHINS
+                          - paragraph
+                      - button "Follow (Kevin HUTCHINS), not pressed" [ref=e782] [cursor=pointer]: Follow
+  - generic:
+    - generic:
+      - list
+  - dialog "Apply to Cosyra" [ref=e789]:
+    - generic [ref=e791]:
+      - generic [ref=e792]:
+        - heading "Apply to Cosyra" [level=2] [ref=e793]
+        - button "Cancel application" [ref=e795] [cursor=pointer]:
+          - img [ref=e797]
+      - generic [ref=e800]:
+        - generic [ref=e801]:
+          - generic [ref=e802]:
+            - heading "Details from Cosyra:" [level=3] [ref=e803]
+            - paragraph [ref=e804]: Applying requires a few documents. Attach them below and get one step closer to your next job!
+            - generic [ref=e805]:
+              - group "Attach your resume" [ref=e806]:
+                - heading "Attach your resume" [level=4] [ref=e808]
+                - status "alert positive" [ref=e809]:
+                  - generic [ref=e810]:
+                    - generic [ref=e811]:
+                      - img [ref=e813]
+                      - generic [ref=e816]:
+                        - heading "Anthony Soumphonphakdy Resume" [level=5] [ref=e817]
+                        - link "Preview document" [active] [ref=e818] [cursor=pointer]:
+                          - /url: /docs/69418904
+                    - button "Close" [ref=e820] [cursor=pointer]:
+                      - img [ref=e822]
+              - group "Attach your cover letter" [ref=e824]:
+                - heading "Attach your cover letter" [level=4] [ref=e826]
+                - generic [ref=e829]:
+                  - generic [ref=e834]:
+                    - combobox "Search your cover letters" [ref=e835]
+                    - generic:
+                      - generic:
+                        - img
+                  - generic [ref=e836]: or
+                  - generic [ref=e838]:
+                    - generic [ref=e839]: Upload new
+                    - generic [ref=e840]:
+                      - button "Upload new" [ref=e841] [cursor=pointer]
+                      - generic:
+                        - generic: Upload new
+              - group "Attach your transcript" [ref=e842]:
+                - heading "Attach your transcript" [level=4] [ref=e844]
+                - generic [ref=e847]:
+                  - generic [ref=e852]:
+                    - combobox "Search your transcripts" [ref=e853]
+                    - generic:
+                      - generic:
+                        - img
+                  - generic [ref=e854]: or
+                  - generic [ref=e856]:
+                    - generic [ref=e857]: Upload new
+                    - generic [ref=e858]:
+                      - button "Upload new" [ref=e859] [cursor=pointer]
+                      - generic:
+                        - generic: Upload new
+          - generic [ref=e860]:
+            - heading "Screening Questions" [level=4] [ref=e861]
+            - paragraph [ref=e862]: Your answers will help this employer sort applications and connect with the best-fit candidates.
+            - group "Do you speak English?" [ref=e863]:
+              - generic [ref=e864]: Do you speak English?
+              - radiogroup [ref=e865]:
+                - generic [ref=e866]:
+                  - generic [ref=e867] [cursor=pointer]: "Yes"
+                  - generic [ref=e868]:
+                    - radio "Yes" [ref=e869]
+                    - generic:
+                      - img
+                - generic [ref=e870]:
+                  - generic [ref=e871] [cursor=pointer]: "No"
+                  - generic [ref=e872]:
+                    - radio "No" [ref=e873]
+                    - generic:
+                      - img
+            - group "Are you located in or willing to relocate to NYC?" [ref=e874]:
+              - generic [ref=e875]: Are you located in or willing to relocate to NYC?
+              - radiogroup [ref=e876]:
+                - generic [ref=e877]:
+                  - generic [ref=e878] [cursor=pointer]: "Yes"
+                  - generic [ref=e879]:
+                    - radio "Yes" [ref=e880]
+                    - generic:
+                      - img
+                - generic [ref=e881]:
+                  - generic [ref=e882] [cursor=pointer]: "No"
+                  - generic [ref=e883]:
+                    - radio "No" [ref=e884]
+                    - generic:
+                      - img
+        - button "Submit Application" [ref=e886] [cursor=pointer]
+  - status [ref=e783]
