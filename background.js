@@ -1,5 +1,5 @@
 // Background service worker for Handshake Plus extension
-importScripts('screening-utils.js', 'required-document-utils.js', 'ai-tab-utils.js', 'ai-prompt-utils.js');
+importScripts('screening-utils.js', 'required-document-utils.js', 'ai-tab-utils.js', 'ai-prompt-utils.js', 'ai-job-fit-filter-utils.js');
 
 let isProcessing = false;
 let currentJobIndex = 0;
@@ -32,47 +32,6 @@ function persistAppliedCountForToday(count) {
   appliedCount = Math.max(0, Math.floor(count || 0));
   chrome.storage.local.set({ 'handshake-plus-applied-today': { date: getTodayStr(), count: appliedCount } });
 }
-
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'install') {
-    // 1. Properly launch into a new Tab (Windows get suppressed by Chrome's native security layer during Web Store installations)
-    chrome.tabs.create({ url: 'https://app.joinhandshake.com/job-search', active: true }, (newTab) => {
-      const newTabId = newTab ? newTab.id : null;
-      
-      // Wait explicitly for Handshake's SPA router to completely finish loading the DOM
-      const loadListener = (tabId, changeInfo, tab) => {
-        if (tabId === newTabId && changeInfo.status === 'complete') {
-          // Check if they were redirected to the /login gateway. 
-          // Only fire the final structural reload once they actually arrive precisely on the job-search dashboard!
-          if (tab.url && tab.url.includes('job-search')) {
-            setTimeout(() => chrome.tabs.reload(newTabId), 3500);
-            chrome.tabs.onUpdated.removeListener(loadListener);
-          }
-        }
-      };
-      
-      if (newTabId) {
-        chrome.tabs.onUpdated.addListener(loadListener);
-      }
-      
-      // 2. Refresh existing Handshake tabs (skipping the new tab)
-      chrome.tabs.query({ url: "*://*.joinhandshake.com/*" }, (tabs) => {
-        for (const tab of tabs) {
-          if (tab.id && tab.id !== newTabId) {
-            chrome.tabs.reload(tab.id);
-          }
-        }
-      });
-    });
-  } else {
-    // If it's just an update, refresh everything
-    chrome.tabs.query({ url: "*://*.joinhandshake.com/*" }, (tabs) => {
-      for (const tab of tabs) {
-        if (tab.id) chrome.tabs.reload(tab.id);
-      }
-    });
-  }
-});
 
 // Listen for tab updates to detect when page finishes loading (fixes throttling issues with inactive tabs)
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -261,6 +220,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         } catch (fallbackError) {
           sendResponse({ success: false, error: error.message });
         }
+      }
+    })();
+    return true;
+  }
+
+  if (message.action === 'filterJobsByFit') {
+    (async () => {
+      try {
+        sendAiStatus(`🤖 Filtering ${message.jobs?.length || 0} jobs by fit...`);
+        const decisions = await filterJobsByFit({
+          jobs: message.jobs || [],
+          resumeText: message.resumeText || '',
+          filterInstructions: message.filterInstructions || '',
+          provider: message.provider || 'gemini'
+        });
+        sendAiStatus('Applying to jobs...');
+        sendResponse({ success: true, decisions });
+      } catch (error) {
+        sendAiStatus('Applying to jobs...');
+        const jobIds = (message.jobs || []).map(job => job.jobId).filter(Boolean);
+        const decisions = HandshakePlusJobFitFilter.parseJobFitDecisions('', jobIds);
+        sendResponse({ success: false, error: error.message, decisions });
       }
     })();
     return true;
@@ -747,10 +728,10 @@ function keepAiTabResident(tabId) {
   }
 }
 
-async function fetchViaClaudeAsMessageResponse(promptBundle, aggressive = false) {
+async function fetchViaClaudeAsMessageResponse(promptBundle, aggressive = false, applyCustomInstructions = true) {
   // Claude tab only.
   console.log('[Handshake Plus] fetchViaClaudeAsMessageResponse called, attempting claude.ai tab...');
-  const text = await fetchViaClaudeTab(promptBundle, aggressive);
+  const text = await fetchViaClaudeTab(promptBundle, aggressive, applyCustomInstructions);
   if (text === null) throw new Error('[Handshake Plus] No claude.ai tab found. Open claude.ai and log in, then try again.');
   console.log('[Handshake Plus] fetchViaClaudeTab succeeded, response length:', text.length);
   return { content: [{ type: 'text', text }] };
@@ -758,8 +739,10 @@ async function fetchViaClaudeAsMessageResponse(promptBundle, aggressive = false)
 
 // Sends the prompt to a claude.ai tab (existing ready one, or opens a fresh one).
 // Returns the response text, or null if something went wrong.
-async function fetchViaClaudeTab(promptBundle, aggressive = false) {
-  const preparedPromptBundle = await applyStoredCustomAiInstructions(promptBundle, aggressive);
+async function fetchViaClaudeTab(promptBundle, aggressive = false, applyCustomInstructions = true) {
+  const preparedPromptBundle = applyCustomInstructions
+    ? await applyStoredCustomAiInstructions(promptBundle, aggressive)
+    : promptBundle;
   const instructions = preparedPromptBundle.instructions ? preparedPromptBundle.instructions + '\n\n---\n\n' : '';
   const userContent = preparedPromptBundle.messages?.[preparedPromptBundle.messages.length - 1]?.content || '';
   const prompt = instructions + userContent;
@@ -968,8 +951,10 @@ async function getReadyGeminiTabId() {
   throw new Error('Gemini tab content script is not available. Reload the Handshake Plus extension at chrome://extensions, then refresh or reopen gemini.google.com.');
 }
 
-async function fetchViaGeminiTab(promptBundle, aggressive = false) {
-  const preparedPromptBundle = await applyStoredCustomAiInstructions(promptBundle, aggressive);
+async function fetchViaGeminiTab(promptBundle, aggressive = false, applyCustomInstructions = true) {
+  const preparedPromptBundle = applyCustomInstructions
+    ? await applyStoredCustomAiInstructions(promptBundle, aggressive)
+    : promptBundle;
   const instructions = preparedPromptBundle.instructions ? preparedPromptBundle.instructions + '\n\n---\n\n' : '';
   const userContent = preparedPromptBundle.messages?.[preparedPromptBundle.messages.length - 1]?.content || '';
   const prompt = instructions + userContent;
@@ -1140,6 +1125,60 @@ function normalizeSponsorshipFact(value) {
   if (text === 'no' || text === 'false' || text.includes('no sponsorship') || text.includes('not need sponsorship') || text.includes('do not need sponsorship') || text.includes('does not require sponsorship') || text.includes('will not require sponsorship')) return 'no';
   if (text === 'yes' || text === 'true' || text.includes('requires sponsorship') || text.includes('require sponsorship') || text.includes('need sponsorship')) return 'yes';
   return '';
+}
+
+async function filterJobsByFit({ jobs, resumeText, filterInstructions, provider = 'gemini' }) {
+  const cleanJobs = (jobs || [])
+    .map(job => ({
+      jobId: toCleanString(job.jobId),
+      company: toCleanString(job.company),
+      title: toCleanString(job.title),
+      details: toCleanString(job.details),
+      jobType: toCleanString(job.jobType),
+      location: toCleanString(job.location),
+      rawText: toCleanString(job.rawText).slice(0, 700),
+    }))
+    .filter(job => job.jobId);
+
+  const jobIds = cleanJobs.map(job => job.jobId);
+  if (cleanJobs.length === 0) return {};
+
+  const instructionPrompt = `You are a strict job-fit classifier for an auto-apply browser extension.
+Evaluate whether each job card is worth applying to for the candidate.
+
+Rules:
+- Use the resume context and the user's AI filter instructions only.
+- Card data is incomplete; judge from the visible card fields without inventing unseen requirements.
+- Return apply=true only when the visible job clearly makes sense for this candidate.
+- If uncertain, too unrelated, too senior, wrong function, wrong employment type, or missing enough fit signal, return apply=false.
+- Reasons are required only for skipped jobs and must be 6 words or fewer.
+- Output ONLY one fenced JSON code block.
+
+Schema:
+\`\`\`json
+{
+  "decisions": [
+    { "jobId": "string", "apply": true },
+    { "jobId": "string", "apply": false, "reason": "short reason" }
+  ]
+}
+\`\`\``;
+
+  const promptBundle = {
+    instructions: instructionPrompt,
+    messages: [
+      {
+        role: 'user',
+        content: `Resume context:\n${resumeText}\n\nUser AI filter instructions:\n${filterInstructions || '(none)'}\n\nVisible job cards:\n${JSON.stringify(cleanJobs, null, 2)}`
+      }
+    ]
+  };
+
+  const rawText = provider === 'gemini'
+    ? await fetchViaGeminiTab(promptBundle, false, false)
+    : (await fetchViaClaudeAsMessageResponse(promptBundle, false, false))?.content?.[0]?.text;
+
+  return HandshakePlusJobFitFilter.parseJobFitDecisions(rawText, jobIds);
 }
 
 // Generate a cover letter using Claude (via claude.ai tab) or Gemini (via gemini.google.com tab).

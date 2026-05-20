@@ -8,81 +8,6 @@ class HandshakePlusPanel {
     this.isApplying = false;
     this.previousPanelHeight = null;
     this.autoExpandedForApplying = false;
-    this.maxSelectedJobRoles = 5;
-    this.maxJobRoleLength = 75;
-    this.maxRoleChipDisplayLength = 20;
-    this.selectedJobRoles = [];
-    this.jobRoles = [
-      // Healthcare & Medicine
-      "Registered Nurse", "Physician / Doctor", "Surgeon", "Dentist", "Pharmacist",
-      "Physical Therapist", "Occupational Therapist", "Medical Assistant", "Dental Hygienist",
-      "Radiologic Technologist", "Respiratory Therapist", "Nurse Practitioner",
-      "Physician Assistant", "Home Health Aide", "Veterinarian", "Optometrist",
-      "Paramedic / EMT", "Clinical Lab Technician", "Psychiatric Technician", "Surgical Technologist",
-      // Technology & IT
-      "Software Engineer", "Web Developer", "Data Scientist", "Cybersecurity Analyst",
-      "IT Support Specialist", "Network Engineer", "Cloud Architect", "DevOps Engineer",
-      "Database Administrator", "UX/UI Designer", "Machine Learning Engineer",
-      "Product Manager", "Systems Analyst", "Mobile App Developer", "IT Project Manager",
-      "QA / Test Engineer", "Blockchain Developer", "AI Engineer", "Full Stack Developer", 
-      "Backend Developer", "Frontend Developer", "Technical Writer", "Project Engineer", 
-      "Product Engineer", "Operations Manager Engineer", "Quality Engineer", "Cloud Engineer", 
-      "Data Engineer", "Business Analyst", "Project Manager", "Systems Engineer", "Technical Support Engineer",
-      // Business & Finance
-      "Accountant", "Financial Analyst", "Bookkeeper", "Auditor", "Budget Analyst",
-      "Tax Preparer", "Insurance Agent", "Loan Officer", "Financial Advisor", "Actuary",
-      "Bank Teller", "Investment Banker", "Risk Analyst", "Compliance Officer",
-      "Payroll Specialist", "Credit Analyst", "Mortgage Broker", "Business Analyst",
-      "Chief Financial Officer", "Controller",
-      // Sales & Marketing
-      "Sales Representative", "Marketing Manager", "Digital Marketing Specialist", "Brand Manager",
-      "Social Media Manager", "SEO Specialist", "Content Marketer", "Account Executive",
-      "Real Estate Agent", "Advertising Manager", "Public Relations Specialist",
-      "Market Research Analyst", "E-commerce Manager", "Email Marketing Specialist",
-      "Media Buyer", "Copywriter", "Inside Sales Rep", "Business Development Manager",
-      "Customer Success Manager", "Retail Sales Associate",
-      // Education
-      "Elementary School Teacher", "High School Teacher", "Special Education Teacher",
-      "College Professor", "School Principal", "School Counselor", "Librarian",
-      "Instructional Designer", "Tutor", "Early Childhood Educator", "ESL Teacher",
-      "Curriculum Developer", "School Administrator", "Teaching Assistant", "Corporate Trainer",
-      // Trades & Construction
-      "Electrician", "Plumber", "Carpenter", "HVAC Technician", "Welder",
-      "Construction Manager", "Civil Engineer", "Architect", "Structural Engineer",
-      "Mason / Bricklayer", "Roofer", "Pipefitter", "Ironworker", "Tile Setter",
-      "Painter", "Flooring Installer", "Heavy Equipment Operator", "Surveyor",
-      "Drywall Installer", "Glazier",
-      // Transportation & Logistics
-      "Truck Driver", "Delivery Driver", "Warehouse Worker", "Logistics Coordinator",
-      "Supply Chain Manager", "Forklift Operator", "Airline Pilot", "Air Traffic Controller",
-      "Ship Captain", "Dispatcher", "Bus Driver", "Train Conductor", "Freight Broker",
-      "Customs Broker", "Fleet Manager",
-      // Legal & Government
-      "Lawyer / Attorney", "Paralegal", "Judge", "Court Reporter", "Police Officer",
-      "Firefighter", "Correctional Officer", "Border Patrol Agent", "Social Worker",
-      "Urban Planner", "Government Administrator", "Military Officer", "Immigration Officer",
-      "Tax Inspector", "Postal Worker",
-      // Hospitality & Food Service
-      "Chef / Cook", "Restaurant Manager", "Bartender", "Server / Waiter", "Hotel Manager",
-      "Housekeeper", "Barista", "Event Planner", "Catering Manager", "Front Desk Clerk",
-      "Tour Guide", "Flight Attendant", "Casino Dealer", "Food Service Worker", "Sous Chef",
-      // Creative & Media
-      "Graphic Designer", "Photographer", "Videographer / Filmmaker", "Journalist / Reporter",
-      "Editor", "Animator", "Interior Designer", "Fashion Designer", "Game Designer",
-      "Podcast Producer", "Voiceover Artist", "Art Director", "Musician / Composer",
-      "Actor", "Illustrator",
-      // Human Resources & Admin
-      "HR Manager", "HR Generalist", "Recruiter / Talent Acquisition", "Training & Development Specialist",
-      "Executive Assistant", "Administrative Assistant", "Office Manager", "Data Entry Clerk",
-      "Receptionist", "Operations Manager",
-      // Science & Engineering
-      "Mechanical Engineer", "Electrical Engineer", "Chemical Engineer", "Environmental Scientist",
-      "Geologist", "Aerospace Engineer", "Biomedical Engineer", "Industrial Engineer",
-      "Materials Scientist", "Physicist", "Lab Researcher",
-      // Personal Services & Other
-      "Personal Trainer", "Cosmetologist / Hair Stylist", "Childcare Worker",
-      "Landscaper / Groundskeeper", "Security Guard"
-    ];
     this.createPanel();
   }
 
@@ -142,14 +67,16 @@ class HandshakePlusPanel {
               <span>Hide jobs after applying</span>
             </label>
             <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Remove successfully applied jobs from the visible list</div>
-            <div class="hsp-field" style="margin-bottom: 0;">
-              <span class="hsp-field-label">What job role are you looking for?</span>
-              <div class="hsp-dropdown-wrap">
-                <input type="text" id="job-role-search" class="hsp-input" placeholder="Type role and press Enter (max 5)" maxlength="75" autocomplete="off">
-                <div id="job-role-dropdown" class="hsp-dropdown"></div>
-              </div>
-            </div>
-            <div id="selected-job-role" class="hsp-chips"></div>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-ai-job-fit">
+              <span>Enable AI job-fit filter</span>
+            </label>
+            <div class="hsp-caption" style="margin-left: 24px; margin-bottom: 10px;">Evaluate each visible page of jobs against your resume before applying</div>
+            <label class="hsp-field" style="margin-bottom: 0;">
+              <span class="hsp-field-label">AI filter instructions</span>
+              <textarea id="handshake-plus-ai-job-fit-instructions" class="hsp-input hsp-textarea" placeholder="Optional: describe how strict or flexible the filter should be, e.g. prefer software roles, include adjacent data roles, skip sales or unpaid jobs" maxlength="1500"></textarea>
+            </label>
+            <div class="hsp-caption" id="hsp-ai-job-fit-counter">0 / 1500 characters</div>
           </div>
           <div class="hsp-note">Submits your most recently uploaded transcript and/or resume on Handshake</div>
 
@@ -1065,6 +992,30 @@ class HandshakePlusPanel {
       });
     }
 
+    const aiJobFitCb = this.panel.querySelector('#handshake-plus-ai-job-fit');
+    if (aiJobFitCb) {
+      const savedAiJobFit = localStorage.getItem('handshake-plus-ai-job-fit-enabled');
+      aiJobFitCb.checked = savedAiJobFit === 'true';
+      aiJobFitCb.addEventListener('change', () => {
+        localStorage.setItem('handshake-plus-ai-job-fit-enabled', aiJobFitCb.checked ? 'true' : 'false');
+      });
+    }
+
+    const aiJobFitInstructionsInput = this.panel.querySelector('#handshake-plus-ai-job-fit-instructions');
+    if (aiJobFitInstructionsInput) {
+      const counterEl = this.panel.querySelector('#hsp-ai-job-fit-counter');
+      const updateCounter = () => {
+        if (counterEl) {
+          counterEl.textContent = `${aiJobFitInstructionsInput.value.length} / 1500 characters`;
+        }
+      };
+      aiJobFitInstructionsInput.addEventListener('input', () => {
+        chrome.storage.local.set({ handshakePlusAiJobFitInstructions: aiJobFitInstructionsInput.value.trim() });
+        updateCounter();
+      });
+      updateCounter();
+    }
+
     // Filter checkboxes - save state on change
     const filterCheckboxes = this.panel.querySelectorAll('.filter-checkbox');
     filterCheckboxes.forEach(checkbox => {
@@ -1072,10 +1023,6 @@ class HandshakePlusPanel {
         this.saveFilterStates();
       });
     });
-
-    // Job role search input
-    const jobRoleSearchInput = this.panel.querySelector('#job-role-search');
-    const jobRoleDropdown = this.panel.querySelector('#job-role-dropdown');
 
     // Contact Info Inputs - save state on change
     const contactFullName = this.panel.querySelector('#contact-full-name');
@@ -1104,71 +1051,6 @@ class HandshakePlusPanel {
         input.addEventListener('change', () => this.saveScreeningFacts());
       }
     });
-
-    if (jobRoleSearchInput && jobRoleDropdown) {
-      // Handle input changes to show filtered results
-      jobRoleSearchInput.addEventListener('input', (e) => {
-        const sanitizedValue = this.sanitizeRoleInput(e.target.value);
-        if (sanitizedValue !== e.target.value) {
-          e.target.value = sanitizedValue;
-        }
-        this.handleJobRoleSearch(sanitizedValue);
-      });
-
-      // Block non-alphanumeric/non-space key entry while allowing navigation/edit keys.
-      jobRoleSearchInput.addEventListener('keydown', (e) => {
-        const allowedControlKeys = new Set([
-          'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
-          'Home', 'End', 'Tab', 'Enter', 'Escape'
-        ]);
-
-        if (e.ctrlKey || e.metaKey || e.altKey || allowedControlKeys.has(e.key)) {
-          return;
-        }
-
-        if (!(e.key === ' ' || /^[a-zA-Z0-9]$/.test(e.key))) {
-          e.preventDefault();
-        }
-      });
-
-      // Add a role on Enter. If suggestions exist, take the top suggestion.
-      jobRoleSearchInput.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter') {
-          return;
-        }
-
-        e.preventDefault();
-        const rawValue = this.sanitizeRoleInput(jobRoleSearchInput.value).trim();
-        if (!rawValue) {
-          return;
-        }
-
-        const suggestions = Array.from(jobRoleDropdown.querySelectorAll('.job-role-dropdown-item[data-job]'));
-        const exactMatch = suggestions.find(item => {
-          const job = item.getAttribute('data-job') || '';
-          return job.toLowerCase() === rawValue.toLowerCase();
-        });
-        const roleToAdd = exactMatch ? (exactMatch.getAttribute('data-job') || rawValue) : rawValue;
-
-        if (roleToAdd) {
-          this.selectJobRole(roleToAdd);
-        }
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.job-role-dropdown-container')) {
-          jobRoleDropdown.classList.remove('show');
-        }
-      });
-
-      // Show dropdown when input is focused
-      jobRoleSearchInput.addEventListener('focus', () => {
-        if (jobRoleSearchInput.value.trim()) {
-          this.handleJobRoleSearch(jobRoleSearchInput.value);
-        }
-      });
-    }
 
     // Cover letter & Manual Review checkboxes - save state to localStorage
     const coverLetterCb = this.panel.querySelector('#handshake-plus-cover-letter');
@@ -1573,11 +1455,15 @@ class HandshakePlusPanel {
       const claudeUrlInput = this.panel.querySelector('#handshake-plus-claude-url');
       const geminiUrlInput = this.panel.querySelector('#handshake-plus-gemini-url');
       const customAiInstructionsInput = this.panel.querySelector('#handshake-plus-custom-ai-instructions');
+      const aiJobFitCb = this.panel.querySelector('#handshake-plus-ai-job-fit');
+      const aiJobFitInstructionsInput = this.panel.querySelector('#handshake-plus-ai-job-fit-instructions');
       if (coverLetterCb) coverLetterCb.disabled = true;
       if (manualReviewCb) manualReviewCb.disabled = true;
       if (claudeUrlInput) claudeUrlInput.disabled = true;
       if (geminiUrlInput) geminiUrlInput.disabled = true;
       if (customAiInstructionsInput) customAiInstructionsInput.disabled = true;
+      if (aiJobFitCb) aiJobFitCb.disabled = true;
+      if (aiJobFitInstructionsInput) aiJobFitInstructionsInput.disabled = true;
     } else {
       startBtn.style.display = 'block';
       stopBtn.style.display = 'none';
@@ -1603,11 +1489,15 @@ class HandshakePlusPanel {
       const claudeUrlInput = this.panel.querySelector('#handshake-plus-claude-url');
       const geminiUrlInput = this.panel.querySelector('#handshake-plus-gemini-url');
       const customAiInstructionsInput = this.panel.querySelector('#handshake-plus-custom-ai-instructions');
+      const aiJobFitCb = this.panel.querySelector('#handshake-plus-ai-job-fit');
+      const aiJobFitInstructionsInput = this.panel.querySelector('#handshake-plus-ai-job-fit-instructions');
       if (coverLetterCb) coverLetterCb.disabled = false;
       if (manualReviewCb) manualReviewCb.disabled = false;
       if (claudeUrlInput) claudeUrlInput.disabled = false;
       if (geminiUrlInput) geminiUrlInput.disabled = false;
       if (customAiInstructionsInput) customAiInstructionsInput.disabled = false;
+      if (aiJobFitCb) aiJobFitCb.disabled = false;
+      if (aiJobFitInstructionsInput) aiJobFitInstructionsInput.disabled = false;
     }
   }
 
@@ -1658,263 +1548,8 @@ class HandshakePlusPanel {
     });
   }
 
-  handleJobRoleSearch(searchTerm) {
-    const dropdown = this.panel.querySelector('#job-role-dropdown');
-
-    if (!searchTerm.trim()) {
-      dropdown.classList.remove('show');
-      dropdown.innerHTML = '';
-      return;
-    }
-
-    // Find top 3 matches using fuzzy matching
-    const matches = this.findTopMatches(searchTerm, this.jobRoles, 3);
-
-    if (matches.length === 0) {
-      dropdown.innerHTML = '<div class="job-role-dropdown-item" style="color: #6c757d;">No matches found</div>';
-      dropdown.classList.add('show');
-      return;
-    }
-
-    // Populate dropdown with matches
-    dropdown.innerHTML = matches
-      .map(job => `<div class="job-role-dropdown-item" data-job="${job}">${job}</div>`)
-      .join('');
-
-    // Add click handlers to dropdown items
-    dropdown.querySelectorAll('.job-role-dropdown-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const jobRole = item.getAttribute('data-job');
-        if (jobRole) {
-          this.selectJobRole(jobRole);
-        }
-      });
-    });
-
-    dropdown.classList.add('show');
-  }
-
-  findTopMatches(searchTerm, jobList, limit) {
-    const lowerSearch = searchTerm.toLowerCase();
-
-    // Score each job based on similarity
-    const scored = jobList.map(job => {
-      const lowerJob = job.toLowerCase();
-      let score = 0;
-
-      // Exact match gets highest score
-      if (lowerJob === lowerSearch) {
-        score = 1000;
-      }
-      // Starts with search term
-      else if (lowerJob.startsWith(lowerSearch)) {
-        score = 500;
-      }
-      // Contains search term
-      else if (lowerJob.includes(lowerSearch)) {
-        score = 250;
-      }
-      // Word boundary match (search term starts a word in the job title)
-      else {
-        const words = lowerJob.split(/[\s\/]+/);
-        for (const word of words) {
-          if (word.startsWith(lowerSearch)) {
-            score = 300;
-            break;
-          }
-        }
-      }
-
-      // Additional scoring: character-by-character matching
-      if (score === 0) {
-        let searchIndex = 0;
-        for (let i = 0; i < lowerJob.length && searchIndex < lowerSearch.length; i++) {
-          if (lowerJob[i] === lowerSearch[searchIndex]) {
-            searchIndex++;
-            score += 5;
-          }
-        }
-        // Boost score if all characters matched
-        if (searchIndex === lowerSearch.length) {
-          score += 50;
-        }
-      }
-
-      return { job, score };
-    });
-
-    // Filter out jobs with no score and sort by score descending
-    return scored
-      .filter(item => item.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit)
-      .map(item => item.job);
-  }
-
-  selectJobRole(jobRole) {
-    const normalizedRole = this.normalizeRoleSpacing(jobRole);
-    if (!normalizedRole) {
-      return;
-    }
-
-    if (!/[a-zA-Z]/.test(normalizedRole)) {
-      const dropdown = this.panel.querySelector('#job-role-dropdown');
-      if (dropdown) {
-        dropdown.innerHTML = '<div class="job-role-dropdown-item" style="color: #c82333;">Role must include at least one letter.</div>';
-        dropdown.classList.add('show');
-      }
-      return;
-    }
-
-    if (normalizedRole.length > this.maxJobRoleLength) {
-      const dropdown = this.panel.querySelector('#job-role-dropdown');
-      if (dropdown) {
-        dropdown.innerHTML = `<div class="job-role-dropdown-item" style="color: #c82333;">Role is too long. Max ${this.maxJobRoleLength} characters.</div>`;
-        dropdown.classList.add('show');
-      }
-      return;
-    }
-
-    // Prevent duplicates (case-insensitive)
-    const hasRole = this.selectedJobRoles.some(role =>
-      this.normalizeRoleSpacing(role).toLowerCase() === normalizedRole.toLowerCase()
-    );
-    if (hasRole) {
-      this.clearJobRoleInputAndDropdown();
-      return;
-    }
-
-    if (this.selectedJobRoles.length >= this.maxSelectedJobRoles) {
-      const dropdown = this.panel.querySelector('#job-role-dropdown');
-      if (dropdown) {
-        dropdown.innerHTML = `<div class="job-role-dropdown-item" style="color: #c82333;">Max ${this.maxSelectedJobRoles} roles reached. Remove one to add another.</div>`;
-        dropdown.classList.add('show');
-      }
-      return;
-    }
-
-    this.selectedJobRoles.push(normalizedRole);
-
-    this.clearJobRoleInputAndDropdown();
-    this.renderSelectedJobRoles();
-    this.saveJobRolePreferences();
-  }
-
-  clearJobRoleInputAndDropdown() {
-    // Update search input
-    const searchInput = this.panel.querySelector('#job-role-search');
-    if (searchInput) {
-      searchInput.value = '';
-    }
-
-    // Hide dropdown
-    const dropdown = this.panel.querySelector('#job-role-dropdown');
-    if (dropdown) {
-      dropdown.classList.remove('show');
-      dropdown.innerHTML = '';
-    }
-  }
-
-  renderSelectedJobRoles() {
-    const selectedDisplay = this.panel.querySelector('#selected-job-role');
-    if (!selectedDisplay) {
-      return;
-    }
-
-    if (this.selectedJobRoles.length === 0) {
-      selectedDisplay.classList.remove('show');
-      selectedDisplay.innerHTML = '';
-      return;
-    }
-
-    const chips = this.selectedJobRoles
-      .map((role, index) => {
-        const displayRole = this.truncateRoleForDisplay(role);
-        return `
-        <span class="hsp-chip">
-          <span title="${this.escapeHtml(role)}"><strong>${this.escapeHtml(displayRole)}</strong></span>
-          <button class="hsp-chip-remove" data-role-index="${index}" title="Remove role">×</button>
-        </span>
-      `;
-      })
-      .join('');
-
-    selectedDisplay.innerHTML = `${chips}<button class="hsp-clear-all" title="Clear all selected roles">Clear all</button>`;
-    selectedDisplay.classList.add('show');
-
-    selectedDisplay.querySelectorAll('.hsp-chip-remove').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const index = parseInt(btn.getAttribute('data-role-index'), 10);
-        if (!Number.isNaN(index)) {
-          this.removeJobRole(index);
-        }
-      });
-    });
-
-    const clearAllBtn = selectedDisplay.querySelector('.hsp-clear-all');
-    if (clearAllBtn) {
-      clearAllBtn.addEventListener('click', () => {
-        this.clearJobRoleSelection();
-      });
-    }
-  }
-
-  removeJobRole(index) {
-    if (index < 0 || index >= this.selectedJobRoles.length) {
-      return;
-    }
-
-    this.selectedJobRoles.splice(index, 1);
-    this.renderSelectedJobRoles();
-    this.saveJobRolePreferences();
-  }
-
-  clearJobRoleSelection() {
-    this.selectedJobRoles = [];
-
-    // Clear search input
-    const searchInput = this.panel.querySelector('#job-role-search');
-    if (searchInput) {
-      searchInput.value = '';
-    }
-
-    // Hide selected display
-    const selectedDisplay = this.panel.querySelector('#selected-job-role');
-    if (selectedDisplay) {
-      selectedDisplay.classList.remove('show');
-      selectedDisplay.innerHTML = '';
-    }
-
-    // Save to storage
-    this.saveJobRolePreferences();
-  }
-
-  truncateRoleForDisplay(role) {
-    const text = (role || '').trim();
-    if (text.length <= this.maxRoleChipDisplayLength) {
-      return text;
-    }
-    return `${text.slice(0, this.maxRoleChipDisplayLength)}...`;
-  }
-
-  sanitizeRoleInput(value) {
-    return (value || '').replace(/[^a-zA-Z0-9 ]/g, '');
-  }
-
-  normalizeRoleSpacing(value) {
-    return (value || '').replace(/\s+/g, ' ').trim();
-  }
-
-  saveJobRolePreferences() {
-    chrome.storage.local.set({
-      selectedJobRoles: this.selectedJobRoles,
-      // Keep backward compatibility for existing reads.
-      selectedJobRole: this.selectedJobRoles[0] || null
-    });
-  }
-
   loadFilterStates() {
-    chrome.storage.local.get(['filterStates', 'selectedJobRole', 'selectedJobRoles', 'resumeFileName', 'resumeText', 'resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation', 'handshakePlusScreeningFacts', 'handshakePlusClaudeUrl', 'handshakePlusGeminiUrl', 'handshakePlusCustomAiInstructions', 'handshake-plus-default-font'], (result) => {
+    chrome.storage.local.get(['filterStates', 'resumeFileName', 'resumeText', 'resumeSummary', 'contactFullName', 'contactEmail', 'contactPhone', 'contactLocation', 'handshakePlusScreeningFacts', 'handshakePlusClaudeUrl', 'handshakePlusGeminiUrl', 'handshakePlusCustomAiInstructions', 'handshakePlusAiJobFitInstructions', 'handshake-plus-default-font'], (result) => {
       const degreeCheckbox = this.panel.querySelector('#filter-degree');
       const majorCheckbox = this.panel.querySelector('#filter-major');
       const gradDateCheckbox = this.panel.querySelector('#filter-grad-date');
@@ -1991,19 +1626,14 @@ class HandshakePlusPanel {
         if (noUSWorkCheckbox) noUSWorkCheckbox.checked = false;
       }
 
-      // Load selected job roles (supports both old and new storage format)
-      if (Array.isArray(result.selectedJobRoles) && result.selectedJobRoles.length > 0) {
-        this.selectedJobRoles = result.selectedJobRoles
-          .map(role => (role || '').trim())
-          .filter(role => role)
-          .slice(0, this.maxSelectedJobRoles);
-      } else if (result.selectedJobRole) {
-        this.selectedJobRoles = [result.selectedJobRole.trim()].filter(role => role);
-      } else {
-        this.selectedJobRoles = [];
+      const aiJobFitInstructionsInput = this.panel.querySelector('#handshake-plus-ai-job-fit-instructions');
+      if (aiJobFitInstructionsInput && result.handshakePlusAiJobFitInstructions) {
+        aiJobFitInstructionsInput.value = result.handshakePlusAiJobFitInstructions;
+        const counterEl = this.panel.querySelector('#hsp-ai-job-fit-counter');
+        if (counterEl) {
+          counterEl.textContent = `${aiJobFitInstructionsInput.value.length} / 1500 characters`;
+        }
       }
-
-      this.renderSelectedJobRoles();
 
       if (result.resumeFileName && result.resumeText) {
         const fileNameEl = this.panel.querySelector('#resume-file-name');
@@ -2065,23 +1695,6 @@ class HandshakePlusPanel {
       remoteWork: [],
       workAuthorization: []
     };
-  }
-
-  getSelectedJobRole() {
-    return this.selectedJobRoles[0] || null;
-  }
-
-  getSelectedJobRoles() {
-    return [...this.selectedJobRoles];
-  }
-
-  escapeHtml(text) {
-    return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
   }
 
   async handleResumeUpload(file) {
