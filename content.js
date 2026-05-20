@@ -380,7 +380,7 @@ function createPanel() {
       } catch (e) {}
     }
 
-    startApplyingFromPanel();
+    startApplyingFromPanel().catch(() => {});
   };
 
   panel.onStop = () => {
