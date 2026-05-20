@@ -12,7 +12,7 @@
       "service_worker": "background.js"
    },
    "content_scripts": [ {
-      "js": [ "pdf.min.js", "dom-utils.js", "application-count-utils.js", "job-description-utils.js", "local-job-matcher.js", "screening-utils.js", "required-document-utils.js", "panel.js", "content.js" ],
+      "js": [ "pdf.min.js", "dom-utils.js", "application-count-utils.js", "job-description-utils.js", "ai-job-fit-filter-utils.js", "screening-utils.js", "required-document-utils.js", "panel.js", "content.js" ],
       "matches": [ "https://*.joinhandshake.com/*" ]
    }, {
       "js": [ "claude-response-utils.js", "claude.js" ],

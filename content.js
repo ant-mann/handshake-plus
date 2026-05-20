@@ -380,16 +380,7 @@ function createPanel() {
       } catch (e) {}
     }
 
-    shouldStop = false;
-    sessionStorage.removeItem('handshake-plus-should-stop'); // Clear stop flag
-    try {
-      chrome.runtime.sendMessage({ action: 'startApplying' });
-    } catch (e) {
-      // Extension context invalidated, ignore
-    }
-    if (panel) {
-      panel.setApplying(true);
-    }
+    startApplyingFromPanel();
   };
 
   panel.onStop = () => {
@@ -449,6 +440,29 @@ async function refreshTodayApplicationCount() {
   } catch (e) {}
 }
 
+async function startApplyingFromPanel() {
+  if (localStorage.getItem('handshake-plus-ai-job-fit-enabled') === 'true') {
+    const storage = await chrome.storage.local.get(['resumeText', 'resumeSummary']);
+    if (!getResumePromptText(storage)) {
+      if (panel) {
+        panel.updateStatus('Upload a resume before using AI job-fit filtering.', false);
+      }
+      return;
+    }
+  }
+
+  shouldStop = false;
+  sessionStorage.removeItem('handshake-plus-should-stop');
+  try {
+    chrome.runtime.sendMessage({ action: 'startApplying' });
+  } catch (e) {
+    // Extension context invalidated, ignore
+  }
+  if (panel) {
+    panel.setApplying(true);
+  }
+}
+
 function initializePanelForCountCheck(statusMessage) {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => createPanelForCountCheck(statusMessage));
@@ -474,16 +488,7 @@ function createPanelForCountCheck(statusMessage) {
   panel.updateStatus(statusMessage, true);
 
   panel.onStart = () => {
-    shouldStop = false;
-    sessionStorage.removeItem('handshake-plus-should-stop'); // Clear stop flag
-    try {
-      chrome.runtime.sendMessage({ action: 'startApplying' });
-    } catch (e) {
-      // Extension context invalidated, ignore
-    }
-    if (panel) {
-      panel.setApplying(true);
-    }
+    startApplyingFromPanel();
   };
 
   panel.onStop = () => {
@@ -611,6 +616,8 @@ async function processPage(pageNum, startJobIndex) {
     }
   }
 
+  await applyAiJobFitFilterToPage(jobCards);
+
   if (jobCards.length === 0) {
     // All jobs on this page were promoted (or filtered), move to next page
     try {
@@ -680,6 +687,23 @@ async function processPage(pageNum, startJobIndex) {
 
     const jobCard = jobCards[i];
 
+    if (isAiJobFitHidden(jobCard)) {
+      try {
+        const reason = jobCard.getAttribute('data-handshake-plus-ai-fit-reason') || 'AI job fit';
+        const response = await chrome.runtime.sendMessage({
+          action: 'jobProcessed',
+          status: `Skipped (AI job fit${reason ? ': ' + reason : ''})`,
+          nextJobIndex: i + 1
+        });
+        if (response && response.shouldStop) {
+          shouldStop = true;
+          clearInterval(keepaliveInterval);
+          return;
+        }
+      } catch (e) {}
+      continue;
+    }
+
 
     // Scroll to the job card
     jobCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -735,24 +759,6 @@ async function processPage(pageNum, startJobIndex) {
         applyStatus = 'Application failed';
         didClickApply = false;
       } else {
-        // NOW check job title match — details are guaranteed fresh (h1, company, summary all rendered)
-        const jobTitleMatch = await checkJobTitleMatch();
-        if (jobTitleMatch === false) {
-          try {
-            const response = await chrome.runtime.sendMessage({
-              action: 'jobProcessed',
-              status: 'Skipped (not matching preference)',
-              nextJobIndex: i + 1
-            });
-            if (response && response.shouldStop) {
-              shouldStop = true;
-              clearInterval(keepaliveInterval);
-              return;
-            }
-          } catch (e) {}
-          continue;
-        }
-
         // Check if "Applied on" exists BEFORE clicking (to detect already-applied jobs)
         const appliedOnBeforeClick = Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'))
           .find(el => el.textContent.trim().startsWith('Applied on'));
@@ -1245,6 +1251,123 @@ function findAllJobCards() {
   return jobCards;
 }
 
+function getJobIdFromCard(jobCard) {
+  const href = jobCard?.getAttribute('href') || '';
+  const match = href.match(/\/(?:job-search|jobs)\/(\d+)/) || href.match(/\/(\d+)/);
+  return match ? match[1] : '';
+}
+
+function cleanCardText(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function getJobCardContainer(jobCard) {
+  if (!jobCard) return null;
+  let el = jobCard;
+  while (el && el !== document.body) {
+    const cardCount = el.querySelectorAll
+      ? el.querySelectorAll('a[href*="/job-search/"]').length
+      : 0;
+    const text = cleanCardText(el.innerText || el.textContent || '');
+    if (cardCount === 1 && text) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return jobCard;
+}
+
+function getJobCardLines(jobCard) {
+  const cardContainer = getJobCardContainer(jobCard) || jobCard;
+  return (cardContainer?.innerText || cardContainer?.textContent || '')
+    .split(/\n+/)
+    .map(cleanCardText)
+    .filter(Boolean);
+}
+
+function extractJobCardMetadata(jobCard) {
+  const jobId = getJobIdFromCard(jobCard);
+  const cardContainer = getJobCardContainer(jobCard) || jobCard;
+  const lines = getJobCardLines(jobCard);
+  const rawText = cleanCardText(lines.join(' | '));
+  const titleFromButton = cleanCardText(
+    cardContainer.querySelector('button[aria-label^="View "]')?.getAttribute('aria-label')?.replace(/^View\s+/i, '')
+  );
+  const titleFromHeading = cleanCardText(cardContainer.querySelector('h1, h2, h3, [aria-label^="View "]')?.textContent);
+  const title = titleFromButton || titleFromHeading || lines.find(line => !line.match(/^(save|hide)$/i)) || '';
+  const company = cleanCardText(cardContainer.querySelector('img[alt]')?.getAttribute('alt')) || lines[0] || '';
+  const detailLine = lines.find(line => /\b(internship|full[- ]time|part[- ]time|paid|unpaid|\$\d)/i.test(line)) || '';
+  const locationLine = lines.find(line => /\b(remote|united states|,\s*[A-Z]{2}\b|\+\s*\d+|\d+[dwkmo]+\s+ago)\b/i.test(line)) || '';
+  const jobTypeMatches = rawText.match(/\b(Internship|Full-time job|Full-time|Part time|Part-time|Contract|Temporary)\b/gi) || [];
+
+  return {
+    jobId,
+    company,
+    title,
+    details: detailLine,
+    jobType: Array.from(new Set(jobTypeMatches.map(cleanCardText))).join(', '),
+    location: locationLine,
+    rawText: rawText.slice(0, 700)
+  };
+}
+
+function hideAiSkippedJobCard(jobCard, reason) {
+  if (!jobCard) return;
+  const cardContainer = getJobCardContainer(jobCard) || jobCard;
+  const cleanReason = cleanCardText(reason).slice(0, 60);
+  jobCard.setAttribute('data-handshake-plus-ai-hidden', 'true');
+  jobCard.setAttribute('data-handshake-plus-ai-fit-reason', cleanReason);
+  cardContainer.setAttribute('data-handshake-plus-ai-hidden', 'true');
+  cardContainer.setAttribute('data-handshake-plus-ai-fit-reason', cleanReason);
+  cardContainer.style.display = 'none';
+}
+
+function isAiJobFitHidden(jobCard) {
+  return jobCard?.getAttribute('data-handshake-plus-ai-hidden') === 'true' ||
+    jobCard?.closest('[data-handshake-plus-ai-hidden="true"]') !== null;
+}
+
+async function applyAiJobFitFilterToPage(jobCards) {
+  if (localStorage.getItem('handshake-plus-ai-job-fit-enabled') !== 'true') return;
+  if (!Array.isArray(jobCards) || jobCards.length === 0) return;
+
+  const jobs = jobCards
+    .map(extractJobCardMetadata)
+    .filter(job => job.jobId);
+
+  if (jobs.length === 0) return;
+
+  const storage = await chrome.storage.local.get(['resumeText', 'resumeSummary', 'handshakePlusAiJobFitInstructions']);
+  const resumeText = getResumePromptText(storage);
+  if (!resumeText) {
+    if (panel) panel.updateStatus('Upload a resume before using AI job-fit filtering.', false);
+    return;
+  }
+
+  try {
+    const response = await chrome.runtime.sendMessage({
+      action: 'filterJobsByFit',
+      jobs,
+      resumeText,
+      filterInstructions: storage.handshakePlusAiJobFitInstructions || '',
+      provider: localStorage.getItem('handshake-plus-ai-provider') || 'gemini'
+    });
+
+    const decisions = response?.decisions || {};
+    for (const card of jobCards) {
+      const jobId = getJobIdFromCard(card);
+      const decision = decisions[jobId];
+      if (!decision || decision.apply !== true) {
+        hideAiSkippedJobCard(card, decision?.reason || 'No explicit AI approval');
+      }
+    }
+  } catch (error) {
+    for (const card of jobCards) {
+      hideAiSkippedJobCard(card, 'AI filter failed');
+    }
+  }
+}
+
 function isPromotedJob(jobCard) {
   const promotedLabels = document.querySelectorAll('span, div');
   return Array.from(promotedLabels).some(function(label) {
@@ -1289,170 +1412,6 @@ function hideJobCardAfterSuccessfulApply(jobCard) {
   const cardContainer = jobCard.closest('li, article, [role="listitem"], [data-testid*="job"], div') || jobCard;
   cardContainer.setAttribute('data-handshake-plus-hidden-after-apply', 'true');
   cardContainer.style.display = 'none';
-}
-
-const GLOBAL_HANDSHAKE_ROLES = new Set([
-  // Healthcare & Medicine
-  "Registered Nurse", "Physician / Doctor", "Surgeon", "Dentist", "Pharmacist",
-  "Physical Therapist", "Occupational Therapist", "Medical Assistant", "Dental Hygienist",
-  "Radiologic Technologist", "Respiratory Therapist", "Nurse Practitioner",
-  "Physician Assistant", "Home Health Aide", "Veterinarian", "Optometrist",
-  "Paramedic / EMT", "Clinical Lab Technician", "Psychiatric Technician", "Surgical Technologist",
-  // Technology & IT
-  "Software Engineer", "Web Developer", "Data Scientist", "Cybersecurity Analyst",
-  "IT Support Specialist", "Network Engineer", "Cloud Architect", "DevOps Engineer",
-  "Database Administrator", "UX/UI Designer", "Machine Learning Engineer",
-  "Product Manager", "Systems Analyst", "Mobile App Developer", "IT Project Manager",
-  "QA / Test Engineer", "Blockchain Developer", "AI Engineer", "Full Stack Developer",
-  "Backend Developer", "Frontend Developer", "Technical Writer", "Project Engineer",
-  "Product Engineer", "Operations Manager Engineer", "Quality Engineer", "Cloud Engineer",
-  "Data Engineer", "Business Analyst", "Project Manager", "Systems Engineer", "Technical Support Engineer",
-  // Business & Finance
-  "Accountant", "Financial Analyst", "Bookkeeper", "Auditor", "Budget Analyst",
-  "Tax Preparer", "Insurance Agent", "Loan Officer", "Financial Advisor", "Actuary",
-  "Bank Teller", "Investment Banker", "Risk Analyst", "Compliance Officer",
-  "Payroll Specialist", "Credit Analyst", "Mortgage Broker", "Business Analyst",
-  "Chief Financial Officer", "Controller",
-  // Sales & Marketing
-  "Sales Representative", "Marketing Manager", "Digital Marketing Specialist", "Brand Manager",
-  "Social Media Manager", "SEO Specialist", "Content Marketer", "Account Executive",
-  "Real Estate Agent", "Advertising Manager", "Public Relations Specialist",
-  "Market Research Analyst", "E-commerce Manager", "Email Marketing Specialist",
-  "Media Buyer", "Copywriter", "Inside Sales Rep", "Business Development Manager",
-  "Customer Success Manager", "Retail Sales Associate",
-  // Education
-  "Elementary School Teacher", "High School Teacher", "Special Education Teacher",
-  "College Professor", "School Principal", "School Counselor", "Librarian",
-  "Instructional Designer", "Tutor", "Early Childhood Educator", "ESL Teacher",
-  "Curriculum Developer", "School Administrator", "Teaching Assistant", "Corporate Trainer",
-  // Trades & Construction
-  "Electrician", "Plumber", "Carpenter", "HVAC Technician", "Welder",
-  "Construction Manager", "Civil Engineer", "Architect", "Structural Engineer",
-  "Mason / Bricklayer", "Roofer", "Pipefitter", "Ironworker", "Tile Setter",
-  "Painter", "Flooring Installer", "Heavy Equipment Operator", "Surveyor",
-  "Drywall Installer", "Glazier",
-  // Transportation & Logistics
-  "Truck Driver", "Delivery Driver", "Warehouse Worker", "Logistics Coordinator",
-  "Supply Chain Manager", "Forklift Operator", "Airline Pilot", "Air Traffic Controller",
-  "Ship Captain", "Dispatcher", "Bus Driver", "Train Conductor", "Freight Broker",
-  "Customs Broker", "Fleet Manager",
-  // Legal & Government
-  "Lawyer / Attorney", "Paralegal", "Judge", "Court Reporter", "Police Officer",
-  "Firefighter", "Correctional Officer", "Border Patrol Agent", "Social Worker",
-  "Urban Planner", "Government Administrator", "Military Officer", "Immigration Officer",
-  "Tax Inspector", "Postal Worker",
-  // Hospitality & Food Service
-  "Chef / Cook", "Restaurant Manager", "Bartender", "Server / Waiter", "Hotel Manager",
-  "Housekeeper", "Barista", "Event Planner", "Catering Manager", "Front Desk Clerk",
-  "Tour Guide", "Flight Attendant", "Casino Dealer", "Food Service Worker", "Sous Chef",
-  // Creative & Media
-  "Graphic Designer", "Photographer", "Videographer / Filmmaker", "Journalist / Reporter",
-  "Editor", "Animator", "Interior Designer", "Fashion Designer", "Game Designer",
-  "Podcast Producer", "Voiceover Artist", "Art Director", "Musician / Composer",
-  "Actor", "Illustrator",
-  // Human Resources & Admin
-  "HR Manager", "HR Generalist", "Recruiter / Talent Acquisition", "Training & Development Specialist",
-  "Executive Assistant", "Administrative Assistant", "Office Manager", "Data Entry Clerk",
-  "Receptionist", "Operations Manager",
-  // Science & Engineering
-  "Mechanical Engineer", "Electrical Engineer", "Chemical Engineer", "Environmental Scientist",
-  "Geologist", "Aerospace Engineer", "Biomedical Engineer", "Industrial Engineer",
-  "Materials Scientist", "Physicist", "Lab Researcher",
-  // Personal Services & Other
-  "Personal Trainer", "Cosmetologist / Hair Stylist", "Childcare Worker",
-  "Landscaper / Groundskeeper", "Security Guard"
-].map(r => r.toLowerCase()));
-
-async function checkJobTitleMatch() {
-  try {
-    // Get user's selected job roles from storage (supports old single-role key)
-    const result = await chrome.storage.local.get(['selectedJobRoles', 'selectedJobRole']);
-    const selectedRoles = Array.isArray(result.selectedJobRoles) && result.selectedJobRoles.length > 0
-      ? result.selectedJobRoles
-      : (result.selectedJobRole ? [result.selectedJobRole] : []);
-
-    // If no job roles selected, allow all jobs
-    if (selectedRoles.length === 0) {
-      // console.log('Content: No job preference set, applying to all jobs');
-      return true;
-    }
-
-    // Extract job title from the page
-    // Look for h1 elements (job titles are typically in h1)
-    const h1Elements = document.querySelectorAll('h1');
-    let jobTitle = null;
-
-    // Find the job title h1 - it should be one of the first h1s on the page
-    // Exclude h1s that are part of the navigation or panel
-    for (const h1 of h1Elements) {
-      const text = h1.textContent.trim();
-      // Skip empty or very short titles, and skip our panel title
-      if (text && text.length > 3 && !text.includes('Handshake Plus') && !text.includes('Applied on')) {
-        jobTitle = text;
-        break;
-      }
-    }
-
-    if (!jobTitle) {
-      // console.log('Content: Could not extract job title, allowing job by default');
-      return true;
-    }
-
-    // NEW: Strict Sub-Role Gating Logic
-    // If the scanned job title EXACTLY matches one of Handshake's official global generic job roles
-    // BUT the user DID NOT explicitly select that role in the UI dropdown, skip immediately to prevent false-positive similarity matches!
-    const normalizedJobTitle = jobTitle.toLowerCase().trim();
-    if (GLOBAL_HANDSHAKE_ROLES.has(normalizedJobTitle)) {
-      const isExplicitlySelected = selectedRoles.some(role => role.toLowerCase().trim() === normalizedJobTitle);
-      if (!isExplicitlySelected) {
-        // console.log(`❌ STRICT SKIP | Job title "${jobTitle}" is an exact Handshake standard role that was NOT selected by the user. Bypassing AI similarity logic.`);
-        // console.log('═══════════════════════════════════════════════════════');
-        return false;
-      } else {
-        // console.log(`✅ STRICT MATCH | Job title "${jobTitle}" exactly matches user selection. Bypassing AI similarity logic.`);
-        // console.log('═══════════════════════════════════════════════════════');
-        return true;
-      }
-    }
-
-    // // console.log('═══════════════════════════════════════════════════════');
-    // console.log(`📋 Job Title: "${jobTitle}"`);
-    // console.log(`🎯 User Preferences (${selectedRoles.length}): ${selectedRoles.join(' | ')}`);
-
-    // Use local title similarity to compare against all selected roles
-    if (!window.LocalJobMatcher) {
-      // console.error('Content: LocalJobMatcher not found');
-      return true; // Fail open
-    }
-
-    const matcher = new window.LocalJobMatcher();
-
-    const comparison = await matcher.compareJobTitleToRoles(
-      jobTitle,
-      selectedRoles,
-      0.5 // Semantic similarity threshold (50%)
-    );
-
-    const similarityPercent = comparison.similarity != null
-      ? (comparison.similarity * 100).toFixed(1)
-      : 'N/A';
-
-    if (comparison.match) {
-      const matchedRole = comparison.bestMatchRole || 'Unknown role';
-      // console.log(`✅ MATCH | Best similarity: ${similarityPercent}% with "${matchedRole}" (threshold: 50%)`);
-      // console.log('═══════════════════════════════════════════════════════');
-      return true;
-    } else {
-      const bestRole = comparison.bestMatchRole || 'Unknown role';
-    //   console.log(`❌ SKIP  | Best similarity: ${similarityPercent}% with "${bestRole}" (threshold: 50%)`);
-    //   console.log('═══════════════════════════════════════════════════════');
-      return false;
-    }
-  } catch (error) {
-    // console.error('Content: Error checking job title match:', error);
-    // Fail open - if comparison fails, allow the job
-    return true;
-  }
 }
 
 async function waitForApplyButtonWithRetries(timeoutMs = 5000) {

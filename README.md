@@ -97,7 +97,7 @@ The injected floating panel has three tabs, each organized into bordered "wells"
 ### Apply
 - **Status well** — Shows current state with a pulsing green dot during active automation
 - **Actions** — Start/Stop applying with `button-secondary` styling
-- **Job Filters** — Hide promoted listings toggle (default ON), job role search with `filter-pill` chips
+- **Job Filters** — Hide promoted listings toggle (default ON), hide-after-apply toggle, and optional AI job-fit filter
 - **Progress** — Today's application count with large metric display
 - **AI Cover Letter** — Enable/disable with conditional provider selector
 
@@ -116,7 +116,7 @@ The injected floating panel has three tabs, each organized into bordered "wells"
 
 ## AI Integration
 
-The extension performs **four AI-assisted tasks**, all routed through the user's browser tab:
+The extension performs **five AI-assisted tasks**, all routed through the user's browser tab:
 
 | # | Task | Prompt Source | Output |
 |---|------|---------------|--------|
@@ -124,10 +124,13 @@ The extension performs **four AI-assisted tasks**, all routed through the user's
 | 2 | Cover letter generation | `background.js:generateCoverLetter` | RTF-formatted text |
 | 3 | Required document generation | `required-document-utils.js:buildRequiredDocumentPrompt` | RTF-formatted text |
 | 4 | Screening question answering | `screening-utils.js:buildScreeningAnswerPrompt` | Fenced JSON with confidence |
+| 5 | Page-level job-fit filtering | `background.js:filterJobsByFit` | Fenced JSON decisions |
 
 **Structured output:** Resume parsing and screening prompts ask for fenced `json` code blocks. Parsers extract the first JSON block and tolerate raw JSON or extra provider text.
 
-**Custom instructions:** User-defined text from the Settings tab is injected into the instruction section of every AI prompt bundle via `ai-prompt-utils.js:applyCustomAiInstructions`.
+**AI job-fit filtering:** When enabled, visible job cards are evaluated once per page against the stored resume context and dedicated AI filter instructions. Only explicit `apply: true` decisions proceed; all other or malformed decisions are locally hidden and skipped.
+
+**Custom instructions:** User-defined text from the Settings tab is injected into most AI prompt bundles via `ai-prompt-utils.js:applyCustomAiInstructions`. The job-fit filter uses its own dedicated instructions field.
 
 **Aggressive mode:** When enabled, removes truthfulness constraints from required documents and screening questions, fills gaps with inferred details, and always returns `confidence: "high"`.
 
@@ -185,9 +188,9 @@ These are production-hardened against Handshake's actual rendering behavior.
 | `screening-utils.js` | Screening prompt builder, response parser, rule-based fallback |
 | `required-document-utils.js` | Required document prompt and extraction helpers |
 | `ai-prompt-utils.js` | Custom AI instruction injection into every prompt bundle |
+| `ai-job-fit-filter-utils.js` | Conservative parser/normalizer for page-level AI job-fit decisions |
 | `ai-tab-utils.js` | AI provider URL normalization and tab management |
 | `job-description-utils.js` | Job description cleanup and collapsed-section expansion |
-| `local-job-matcher.js` | Local job-title matching without external network calls |
 | `application-count-utils.js` | Daily application count tracking |
 | `dom-utils.js` | DOM helpers: element detection, modal extraction |
 | `pdf.min.js`, `pdf.worker.min.js` | Bundled PDF.js for resume text extraction |
