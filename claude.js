@@ -49,7 +49,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 async function handlePrompt(prompt) {
-  const composer = findElement(COMPOSER_SELECTORS);
+  const composer = (globalThis.HandshakePlusSelectors && HandshakePlusSelectors.claude && HandshakePlusSelectors.claude.composer(document))
+    || findElement(COMPOSER_SELECTORS);
   if (!composer) {
     console.error('[Handshake Plus claude.js] Claude composer not found', describeContenteditableElements());
     try { HandshakePlusSelectors.flagWarning('claude-composer'); } catch (e) {}
