@@ -70,7 +70,8 @@ async function handlePrompt(prompt) {
     console.warn('[Handshake Plus claude.js] Composer appears empty after fill attempt; send may fail.');
   }
 
-  const sendBtn = findElement(SEND_BUTTON_SELECTORS);
+  const sendBtn = (globalThis.HandshakePlusSelectors && HandshakePlusSelectors.claude && HandshakePlusSelectors.claude.sendButton(document))
+    || findElement(SEND_BUTTON_SELECTORS);
   if (!sendBtn) {
     console.error('[Handshake Plus claude.js] Claude send button not found', describeButtons());
     try { HandshakePlusSelectors.flagWarning('claude-send-button'); } catch (e) {}
