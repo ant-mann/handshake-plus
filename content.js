@@ -441,14 +441,17 @@ async function refreshTodayApplicationCount() {
 }
 
 async function startApplyingFromPanel() {
-  if (localStorage.getItem('handshake-plus-ai-job-fit-enabled') === 'true') {
-    const storage = await chrome.storage.local.get(['resumeText', 'resumeSummary']);
-    if (!getResumePromptText(storage)) {
-      if (panel) {
-        panel.updateStatus('Upload a resume before using AI job-fit filtering.', false);
-      }
-      return;
-    }
+  // Pre-start validation: don't auto-apply with missing essentials.
+  const validation = await chrome.storage.local.get(['resumeText', 'resumeSummary', 'contactEmail']);
+  if (!getResumePromptText(validation)) {
+    if (panel) panel.updateStatus('Add a resume in the Profile tab before applying.', false);
+    HandshakePlusLog.warn('start', 'blocked: no resume');
+    return;
+  }
+  if (!(validation.contactEmail || '').trim()) {
+    if (panel) panel.updateStatus('Add your contact email in the Profile tab before applying.', false);
+    HandshakePlusLog.warn('start', 'blocked: no contact email');
+    return;
   }
 
   shouldStop = false;
@@ -745,6 +748,7 @@ async function processPage(pageNum, startJobIndex) {
 
     // Track whether we actually clicked Apply in THIS iteration
     let didClickApply = false;
+    let applyFailReason = '';
 
     // If can apply, click Apply button and close modal
     if (applyStatus === 'Can apply') {
@@ -767,15 +771,18 @@ async function processPage(pageNum, startJobIndex) {
           applyStatus = 'Already applied';
         } else {
           // Job not yet applied, proceed to click Apply
-          const modalAppeared = await clickApplyAndCloseModal();
+          const applyResult = await clickApplyAndCloseModal();
 
           // REQUIREMENT: Modal must appear and successfully close for us to count this as a valid submission attempt
-          if (!modalAppeared) {
-            applyStatus = 'Application failed';
+          if (!applyResult || !applyResult.ok) {
+            applyFailReason = (applyResult && applyResult.reason) || '';
+            applyStatus = applyFailReason.startsWith('dry-run')
+              ? 'Would apply (dry run)'
+              : 'Application failed';
           } else {
             didClickApply = true; // Mark that we actually clicked Apply AND modal appeared
 
-            // Since the application modal successfully processed and cleanly dismissed itself, we 
+            // Since the application modal successfully processed and cleanly dismissed itself, we
             // confidently record an application completion without aggressively polling the shifting DOM.
             applyStatus = 'Successfully applied';
           }
@@ -799,11 +806,19 @@ async function processPage(pageNum, startJobIndex) {
       return;
     }
 
+    // Surface the per-job outcome (and skip reason) in the panel.
+    if (panel) {
+      const label = applyFailReason ? `${applyStatus} — ${applyFailReason}` : applyStatus;
+      panel.updateStatus(label, applyStatus === 'Successfully applied');
+    }
+    HandshakePlusLog.log('job', applyStatus, applyFailReason ? '— ' + applyFailReason : '');
+
     // Tell background this job is processed and wait for response
     try {
       const response = await chrome.runtime.sendMessage({
         action: 'jobProcessed',
         status: applyStatus,
+        reason: applyFailReason,
         nextJobIndex: i + 1
       });
 
@@ -814,7 +829,16 @@ async function processPage(pageNum, startJobIndex) {
         return;
       }
     } catch (e) {
-      // Extension context invalidated, ignore
+      HandshakePlusLog.error('job', 'jobProcessed message failed', e);
+    }
+
+    // Randomized human-like pause after an actual submission (reliability + anti-bot).
+    if (applyStatus === 'Successfully applied') {
+      const jitter = getInterApplyDelayMs();
+      if (jitter > 0) {
+        HandshakePlusLog.log('job', 'inter-apply delay', jitter, 'ms');
+        await sleep(jitter);
+      }
     }
 
     await sleep(500);
@@ -1510,52 +1534,15 @@ function hasCustomQuestions(modal) {
 }
 
 async function clickApplyAndCloseModal() {
+  const dryRun = localStorage.getItem('handshake-plus-dry-run') === 'true';
   try {
-    // Find the Apply button - prioritize actual button elements over links
-    const allButtons = document.querySelectorAll('button, a[role="button"]');
-
-    let applyButton = null;
-    let buttonCandidates = [];
-
-    for (const button of allButtons) {
-      const text = button.textContent.trim();
-      const ariaLabel = button.getAttribute('aria-label') || '';
-
-      if (text === 'Apply' || ariaLabel === 'Apply') {
-        if (!text.toLowerCase().includes('external') && !ariaLabel.toLowerCase().includes('external')) {
-          // If it's a link, check if it has an href that might redirect externally
-          if (button.tagName === 'A') {
-            const href = button.getAttribute('href');
-            // Skip links with external URLs (http/https/app store URLs)
-            if (href && (href.startsWith('http') || href.includes('apple.com') || href.includes('play.google'))) {
-              continue;
-            }
-          }
-
-          buttonCandidates.push({
-            element: button,
-            isButton: button.tagName === 'BUTTON',
-            text: text,
-            ariaLabel: ariaLabel
-          });
-        }
-      }
-    }
-
-    // Prefer actual button elements over links
-    buttonCandidates.sort((a, b) => {
-      if (a.isButton && !b.isButton) return -1;
-      if (!a.isButton && b.isButton) return 1;
-      return 0;
-    });
-
-    if (buttonCandidates.length > 0) {
-      applyButton = buttonCandidates[0].element;
-    }
+    // Find the Apply button (centralized resolver: real BUTTON labelled exactly
+    // "Apply", never "Apply externally" or an external/app-store link).
+    const applyButton = HandshakePlusSelectors.findApplyButton(document);
 
     if (!applyButton) {
-      // console.log('Content: No valid Apply button found');
-      return false;
+      HandshakePlusLog.log('apply', 'no valid Apply button found');
+      return { ok: false, reason: 'apply button not found' };
     }
 
     // Click Apply
@@ -1570,83 +1557,28 @@ async function clickApplyAndCloseModal() {
 
     simulateRealClick(applyButton);
 
-    // Wait for modal to appear with retries
+    // Wait for the application modal to appear (centralized resolver handles the
+    // aria-label / aria-labelledby / heading fallbacks).
     let modal = null;
-    const maxAttempts = 20;
-
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      // Find ALL dialogs on the page
-      const allDialogs = document.querySelectorAll('[role="dialog"]');
-
-      // Log all dialogs to see what we're dealing with
-      // allDialogs.forEach((dialog, index) => {
-      //   const id = dialog.getAttribute('id');
-      //   const ariaLabel = dialog.getAttribute('aria-label');
-      //   const dataDialog = dialog.getAttribute('data-dialog');
-      //   // console.log(`Content: Dialog ${index + 1}: id="${id}", aria-label="${ariaLabel}", data-dialog="${dataDialog}"`);
-      // });
-
-      // Find the application modal - title is "Apply to <company>". Handshake moved
-      // this from the dialog's aria-label to an aria-labelledby heading, so resolve
-      // the accessible name from either source.
-      for (const dialog of allDialogs) {
-        const dataDialog = dialog.getAttribute('data-dialog');
-
-        let ariaLabel = dialog.getAttribute('aria-label') || '';
-        if (!ariaLabel.startsWith('Apply to')) {
-          const labelledById = dialog.getAttribute('aria-labelledby');
-          const labelEl = labelledById ? document.getElementById(labelledById) : null;
-          if (labelEl) ariaLabel = labelEl.textContent.trim();
-        }
-
-        // Check if this is an application modal (title starts with "Apply to")
-        if (ariaLabel.startsWith('Apply to') && dataDialog === 'true') {
-          // console.log(`Content: Found application modal with aria-label: "${ariaLabel}"`);
-
-          // Check if modal is visible
-          const computedStyle = window.getComputedStyle(dialog);
-          const isVisible = dialog.offsetParent !== null ||
-            (computedStyle.display !== 'none' &&
-              computedStyle.visibility !== 'hidden' &&
-              computedStyle.opacity !== '0');
-
-          if (isVisible) {
-            modal = dialog;
-            // console.log(`Content: Modal ID: ${modal.getAttribute('id')}`);
-            // console.log(`Content: Modal aria-label: ${ariaLabel}`);
-            // console.log(`Content: Modal data-dialog: ${dataDialog}`);
-            // console.log(`Content: ✓ Modal is visible on attempt ${attempt}`);
-            // console.log(`Content: ====================================`);
-            break;
-          } else {
-            // console.log(`Content: Application modal found but not visible yet (display: ${computedStyle.display}, visibility: ${computedStyle.visibility}, opacity: ${computedStyle.opacity})`);
-          }
-        }
-      }
-
-      if (modal) {
-        break; // Found visible application modal
-      }
-
-      if (attempt < maxAttempts) {
-        await sleep(500);
-      }
+    for (let attempt = 1; attempt <= 20; attempt++) {
+      modal = HandshakePlusSelectors.findApplyModal(document);
+      if (modal) break;
+      await sleep(500);
     }
 
     if (!modal) {
-      // console.log('Content: No modal found after all attempts');
-      return false;
+      // Apply button existed but no modal appeared — Handshake UI likely changed.
+      HandshakePlusLog.warn('apply', 'modal never appeared after clicking Apply');
+      HandshakePlusSelectors.flagWarning('handshake-apply-modal');
+      return { ok: false, reason: 'modal not found' };
     }
 
     if (hasCustomQuestions(modal)) {
-      // console.warn('Content: Job requires custom questions or unhandled documents! Aborting to save time.');
-      const closeBtn = Array.from(modal.querySelectorAll('button')).find(btn => {
-        const label = (btn.getAttribute('aria-label') || '').toLowerCase();
-        return label.includes('close') || label.includes('dismiss');
-      });
+      HandshakePlusLog.log('apply', 'skipping: custom questions / unhandled documents');
+      const closeBtn = HandshakePlusSelectors.findCloseButton(modal);
       if (closeBtn) simulateRealClick(closeBtn);
       await sleep(500);
-      return false; // Skip the application
+      return { ok: false, reason: 'custom questions / unhandled docs' };
     }
 
     // Analyze modal input fields
@@ -1676,10 +1608,10 @@ async function clickApplyAndCloseModal() {
       coverLetterStatus = await fillCoverLetterField(modal);
 
       if (coverLetterStatus === "FAILED" || coverLetterStatus === "CANCELLED") {
-        const closeBtn = modal.querySelector('button[aria-label="Close"]') || modal.querySelector('[data-hook="modal-close-button"]') || Array.from(modal.querySelectorAll('button')).find(b => b.textContent.includes('Cancel'));
+        const closeBtn = HandshakePlusSelectors.findCloseButton(modal);
         if (closeBtn) simulateRealClick(closeBtn);
         await sleep(1000);
-        return false;
+        return { ok: false, reason: 'cover letter ' + coverLetterStatus.toLowerCase() };
       }
 
       // Manual review approved — upload the cover letter on the current modal
@@ -1713,56 +1645,65 @@ async function clickApplyAndCloseModal() {
     if (isCoverLetterAutofillEnabled()) {
       const requiredDocumentStatus = await fillRequiredDocumentFields(modal);
       if (requiredDocumentStatus === "FAILED" || requiredDocumentStatus === "CANCELLED") {
-        const closeBtn = modal.querySelector('button[aria-label="Close"]') || modal.querySelector('[data-hook="modal-close-button"]') || Array.from(modal.querySelectorAll('button')).find(b => b.textContent.includes('Cancel'));
+        const closeBtn = HandshakePlusSelectors.findCloseButton(modal);
         if (closeBtn) simulateRealClick(closeBtn);
         await sleep(1000);
-        return false;
+        return { ok: false, reason: 'required document ' + requiredDocumentStatus.toLowerCase() };
       }
     }
 
     const screeningStatus = await handleScreeningQuestions(modal);
     if (screeningStatus === "CANCELLED" || screeningStatus === "FAILED") {
       await closeModalManually(modal);
-      return false;
+      return { ok: false, reason: 'screening ' + screeningStatus.toLowerCase() };
     }
 
     // Guard: ensure modal is still open before attempting submit
     if (!document.body.contains(modal) || modal.offsetWidth === 0) {
-      return false;
+      return { ok: false, reason: 'modal closed before submit' };
     }
 
-    // Find and click Submit button
-    const submitButton = findSubmitButton(modal);
-
-    if (submitButton) {
-      submitButton.click();
-      simulateRealClick(submitButton);
-
-      // Poll for modal closure (up to 5s)
-      let modalGone = false;
-      for (let t = 0; t < 10; t++) {
-        await sleep(500);
-        if (!document.body.contains(modal) || modal.offsetWidth === 0) {
-          modalGone = true;
-          break;
-        }
-      }
-
-      if (modalGone) {
-        return true;
-      } else {
-        // Modal still open — validation failure or submit had no effect
-        await closeModalManually(modal);
-        return false;
-      }
-    } else {
-      // If no submit button, just close the modal
+    // Dry-run: everything was filled, but never actually submit.
+    if (dryRun) {
+      HandshakePlusLog.log('apply', 'dry-run — closing without submitting');
       await closeModalManually(modal);
-      return false;
+      return { ok: false, reason: 'dry-run (not submitted)' };
     }
+
+    // Find and click Submit button (centralized resolver).
+    const submitButton = HandshakePlusSelectors.findSubmitButton(modal);
+
+    if (!submitButton) {
+      HandshakePlusLog.warn('apply', 'submit button not found in modal');
+      await closeModalManually(modal);
+      return { ok: false, reason: 'submit button not found' };
+    }
+
+    submitButton.click();
+    simulateRealClick(submitButton);
+
+    // Poll for modal closure (up to 5s)
+    let modalGone = false;
+    for (let t = 0; t < 10; t++) {
+      await sleep(500);
+      if (!document.body.contains(modal) || modal.offsetWidth === 0) {
+        modalGone = true;
+        break;
+      }
+    }
+
+    if (modalGone) {
+      HandshakePlusSelectors.clearWarning(); // a clean submit means selectors are healthy
+      return { ok: true, reason: '' };
+    }
+
+    // Modal still open — validation failure or submit had no effect
+    HandshakePlusLog.warn('apply', 'submit had no effect; modal stayed open');
+    await closeModalManually(modal);
+    return { ok: false, reason: 'submit had no effect' };
   } catch (error) {
-    // console.error('Content: Error clicking apply:', error);
-    return false;
+    HandshakePlusLog.error('apply', error);
+    return { ok: false, reason: 'error: ' + ((error && error.message) || String(error)) };
   }
 }
 
@@ -2887,29 +2828,6 @@ function getResumePromptText(storage) {
   return storage?.resumeSummary || storage?.resumeText || '';
 }
 
-function findSubmitButton(modal) {
-  // Look for Submit button in modal
-  const allButtons = modal.querySelectorAll('button, input[type="submit"]');
-
-  for (const button of allButtons) {
-    const text = button.textContent.trim();
-    const textLower = text.toLowerCase();
-    const ariaLabel = (button.getAttribute('aria-label') || '').toLowerCase();
-
-
-    // Check for submit-like text (prioritize exact matches)
-    if (text === 'Submit Application' ||
-      textLower === 'submit application' ||
-      textLower.includes('submit') ||
-      ariaLabel.includes('submit') ||
-      button.type === 'submit') {
-      return button;
-    }
-  }
-
-  return null;
-}
-
 function checkIfModalStillOpen() {
   // Check if any modal is still visible on the page
   const modalSelectors = [
@@ -3014,6 +2932,18 @@ function simulateRealClick(element) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Randomized delay (ms) inserted after a successful submission. Configurable via
+// localStorage handshake-plus-delay-min / -max (seconds). Default 4–9s. Set both
+// to 0 to disable.
+function getInterApplyDelayMs() {
+  const toNum = (v, d) => { const n = Number(v); return Number.isFinite(n) && n >= 0 ? n : d; };
+  let minS = toNum(localStorage.getItem('handshake-plus-delay-min'), 4);
+  let maxS = toNum(localStorage.getItem('handshake-plus-delay-max'), 9);
+  if (maxS < minS) maxS = minS;
+  if (minS === 0 && maxS === 0) return 0;
+  return Math.round((minS + Math.random() * (maxS - minS)) * 1000);
 }
 
 function arraysEqual(arr1, arr2) {

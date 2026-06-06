@@ -28,6 +28,10 @@ class HandshakePlusPanel {
         <button class="hsp-tab" data-tab="settings">Settings</button>
       </div>
       <div class="hsp-body">
+        <div id="handshake-plus-warning-banner" style="display:none; margin:8px; padding:10px 12px; background:#3a1d1d; border:1px solid #a33; border-radius:8px; color:#ffd7d7; font-size:13px; line-height:1.4;">
+          <span id="handshake-plus-warning-text"></span>
+          <button id="handshake-plus-warning-dismiss" style="float:right; background:none; border:none; color:#ffd7d7; cursor:pointer; font-size:15px; line-height:1;">×</button>
+        </div>
         <div class="hsp-tab-content active" id="apply-content">
           <div class="hsp-well">
             <div class="hsp-status" id="handshake-plus-status"><span class="hsp-status-dot"></span><span class="hsp-status-text">Ready to apply</span></div>
@@ -180,6 +184,29 @@ class HandshakePlusPanel {
             <div class="hsp-caption">When enabled, AI will always answer screening questions with the most hirable option and produce complete required documents without placeholder brackets. Intended to maximize interview chances.</div>
           </div>
           <div class="hsp-well">
+            <div class="hsp-well-title">Safety &amp; Limits</div>
+            <label class="hsp-field">
+              <span class="hsp-field-label">Daily application cap (0 = no limit)</span>
+              <input type="number" min="0" id="handshake-plus-daily-cap" class="hsp-input" placeholder="0">
+            </label>
+            <label class="hsp-field">
+              <span class="hsp-field-label">Delay between applies (seconds)</span>
+              <span style="display:flex; gap:8px;">
+                <input type="number" min="0" id="handshake-plus-delay-min" class="hsp-input" placeholder="min (4)">
+                <input type="number" min="0" id="handshake-plus-delay-max" class="hsp-input" placeholder="max (9)">
+              </span>
+            </label>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-dry-run">
+              <span>Dry run — open &amp; fill, but never submit</span>
+            </label>
+            <label class="hsp-checkbox-row">
+              <input type="checkbox" id="handshake-plus-debug">
+              <span>Debug logging (verbose console output)</span>
+            </label>
+            <div class="hsp-caption">Cap stops the run at N applications/day. A randomized delay between submissions is more human-like. Dry run tests the flow without submitting.</div>
+          </div>
+          <div class="hsp-well">
             <div class="hsp-well-title">Document Font</div>
             <label class="hsp-field" style="margin-bottom: 0;">
               <span class="hsp-field-label">Default font for cover letters &amp; documents</span>
@@ -219,6 +246,47 @@ class HandshakePlusPanel {
 
     // Make resizable
     this.makeResizable();
+
+    // Surface selector health warnings (e.g. Handshake/Claude/Gemini UI changed).
+    this.setupSelectorWarning();
+  }
+
+  setupSelectorWarning() {
+    const WARN_KEY = 'handshake-plus-selector-warning';
+    const banner = this.panel.querySelector('#handshake-plus-warning-banner');
+    const textEl = this.panel.querySelector('#handshake-plus-warning-text');
+    const dismiss = this.panel.querySelector('#handshake-plus-warning-dismiss');
+    if (!banner || !textEl) return;
+
+    const surfaceLabel = (s) => {
+      if (!s) return 'A site';
+      if (s.startsWith('handshake')) return 'Handshake';
+      if (s.startsWith('claude')) return 'Claude';
+      if (s.startsWith('gemini')) return 'Gemini';
+      return s;
+    };
+    const render = (rec) => {
+      if (rec && rec.surface) {
+        textEl.textContent = `⚠️ ${surfaceLabel(rec.surface)}'s page may have changed (couldn't find "${rec.surface}"). The extension might be out of date — try reloading it, or report the issue.`;
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+    };
+
+    try {
+      chrome.storage.local.get(WARN_KEY, (r) => render(r[WARN_KEY]));
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' && changes[WARN_KEY]) render(changes[WARN_KEY].newValue);
+      });
+    } catch (e) {}
+
+    if (dismiss) {
+      dismiss.addEventListener('click', () => {
+        banner.style.display = 'none';
+        try { chrome.storage.local.remove(WARN_KEY); } catch (e) {}
+      });
+    }
   }
 
   addStyles() {
@@ -1118,6 +1186,54 @@ class HandshakePlusPanel {
         }
         aggressiveModeCb.addEventListener('change', () => {
           localStorage.setItem('handshake-plus-aggressive-mode', aggressiveModeCb.checked);
+        });
+      }
+
+      // Safety & Limits
+      // Daily cap lives in chrome.storage.local so the background worker can read it.
+      const dailyCapInput = this.panel.querySelector('#handshake-plus-daily-cap');
+      if (dailyCapInput) {
+        chrome.storage.local.get('handshake-plus-daily-cap', (r) => {
+          const v = r['handshake-plus-daily-cap'];
+          if (v !== undefined && v !== null) dailyCapInput.value = v;
+        });
+        dailyCapInput.addEventListener('change', () => {
+          const n = Math.max(0, Math.floor(Number(dailyCapInput.value) || 0));
+          dailyCapInput.value = n || '';
+          chrome.storage.local.set({ 'handshake-plus-daily-cap': n });
+        });
+      }
+
+      const delayMinInput = this.panel.querySelector('#handshake-plus-delay-min');
+      const delayMaxInput = this.panel.querySelector('#handshake-plus-delay-max');
+      [['handshake-plus-delay-min', delayMinInput], ['handshake-plus-delay-max', delayMaxInput]].forEach(([key, input]) => {
+        if (!input) return;
+        const saved = localStorage.getItem(key);
+        if (saved !== null) input.value = saved;
+        input.addEventListener('change', () => {
+          const n = Math.max(0, Math.floor(Number(input.value) || 0));
+          input.value = String(n);
+          localStorage.setItem(key, String(n));
+        });
+      });
+
+      const dryRunCb = this.panel.querySelector('#handshake-plus-dry-run');
+      if (dryRunCb) {
+        dryRunCb.checked = localStorage.getItem('handshake-plus-dry-run') === 'true';
+        dryRunCb.addEventListener('change', () => {
+          localStorage.setItem('handshake-plus-dry-run', dryRunCb.checked ? 'true' : 'false');
+        });
+      }
+
+      // Debug flag is read by page context (localStorage) and the worker (chrome.storage) — set both.
+      const debugCb = this.panel.querySelector('#handshake-plus-debug');
+      if (debugCb) {
+        debugCb.checked = localStorage.getItem('handshake-plus-debug') === 'true';
+        debugCb.addEventListener('change', () => {
+          const on = debugCb.checked;
+          localStorage.setItem('handshake-plus-debug', on ? 'true' : 'false');
+          chrome.storage.local.set({ 'handshake-plus-debug': on });
+          try { if (window.HandshakePlusLog) window.HandshakePlusLog.setEnabled(on); } catch (e) {}
         });
       }
 

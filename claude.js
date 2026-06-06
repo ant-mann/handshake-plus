@@ -52,6 +52,7 @@ async function handlePrompt(prompt) {
   const composer = findElement(COMPOSER_SELECTORS);
   if (!composer) {
     console.error('[Handshake Plus claude.js] Claude composer not found', describeContenteditableElements());
+    try { HandshakePlusSelectors.flagWarning('claude-composer'); } catch (e) {}
     throw new Error('Claude composer not found');
   }
 
@@ -72,6 +73,7 @@ async function handlePrompt(prompt) {
   const sendBtn = findElement(SEND_BUTTON_SELECTORS);
   if (!sendBtn) {
     console.error('[Handshake Plus claude.js] Claude send button not found', describeButtons());
+    try { HandshakePlusSelectors.flagWarning('claude-send-button'); } catch (e) {}
     throw new Error('Claude send button not found');
   }
 

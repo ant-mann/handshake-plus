@@ -1,5 +1,23 @@
 // Background service worker for Handshake Plus extension
-importScripts('screening-utils.js', 'required-document-utils.js', 'ai-tab-utils.js', 'ai-prompt-utils.js', 'ai-job-fit-filter-utils.js');
+importScripts('debug-utils.js', 'screening-utils.js', 'required-document-utils.js', 'ai-tab-utils.js', 'ai-prompt-utils.js', 'ai-job-fit-filter-utils.js');
+
+// Service worker has no localStorage — mirror settings from chrome.storage.
+let dailyCap = 0; // 0 = no cap
+(function syncSettings() {
+  const applyDebug = (v) => { try { HandshakePlusLog.setEnabled(v === true); } catch (e) {} };
+  const applyCap = (v) => { const n = Math.floor(Number(v)); dailyCap = Number.isFinite(n) && n > 0 ? n : 0; };
+  try {
+    chrome.storage.local.get(['handshake-plus-debug', 'handshake-plus-daily-cap'], (r) => {
+      applyDebug(r['handshake-plus-debug']);
+      applyCap(r['handshake-plus-daily-cap']);
+    });
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area !== 'local') return;
+      if (changes['handshake-plus-debug']) applyDebug(changes['handshake-plus-debug'].newValue === true);
+      if (changes['handshake-plus-daily-cap']) applyCap(changes['handshake-plus-daily-cap'].newValue);
+    });
+  } catch (e) {}
+})();
 
 let isProcessing = false;
 let currentJobIndex = 0;
@@ -632,7 +650,16 @@ function handleJobProcessed(message) {
     persistAppliedCountForToday(appliedCount);
   }
 
+  HandshakePlusLog.log('job', message.status, message.reason ? '— ' + message.reason : '');
+
   currentJobIndex = message.nextJobIndex;
+
+  // Enforce a user-set daily cap (0 = unlimited).
+  if (dailyCap > 0 && appliedCount >= dailyCap) {
+    HandshakePlusLog.log('cap', 'daily cap reached', appliedCount, '/', dailyCap, '— stopping');
+    stopProcessing();
+    return true; // tell content script to stop
+  }
 
   // Update popup with stats
   chrome.runtime.sendMessage({

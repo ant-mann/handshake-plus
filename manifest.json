@@ -12,13 +12,13 @@
       "service_worker": "background.js"
    },
    "content_scripts": [ {
-      "js": [ "pdf.min.js", "dom-utils.js", "application-count-utils.js", "job-description-utils.js", "ai-job-fit-filter-utils.js", "screening-utils.js", "required-document-utils.js", "panel.js", "content.js" ],
+      "js": [ "pdf.min.js", "debug-utils.js", "dom-utils.js", "application-count-utils.js", "job-description-utils.js", "ai-job-fit-filter-utils.js", "screening-utils.js", "required-document-utils.js", "selectors.js", "panel.js", "content.js" ],
       "matches": [ "https://*.joinhandshake.com/*" ]
    }, {
-      "js": [ "claude-response-utils.js", "claude.js" ],
+      "js": [ "debug-utils.js", "selectors.js", "claude-response-utils.js", "claude.js" ],
       "matches": [ "https://claude.ai/*" ]
    }, {
-      "js": [ "gemini.js" ],
+      "js": [ "debug-utils.js", "selectors.js", "gemini.js" ],
       "matches": [ "https://gemini.google.com/*" ]
    } ],
    "description": "Automatically apply to jobs on Handshake (even while you work on another window)",

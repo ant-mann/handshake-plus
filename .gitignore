@@ -23,3 +23,6 @@ CLAUDE.md
 !icons/*.png
 *.yml
 !*.yaml
+
+# Playwright CLI scratch output
+.playwright-cli/
