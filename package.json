@@ -4,6 +4,6 @@
   "private": true,
   "description": "Dev tooling only — the extension itself has no build step. Used to run unit tests on the pure helper modules.",
   "scripts": {
-    "test": "node --test 'test-*.js'"
+    "test": "node --test \"test-*.js\""
   }
 }
