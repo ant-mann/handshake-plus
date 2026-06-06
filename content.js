@@ -742,9 +742,13 @@ async function processPage(pageNum, startJobIndex) {
 
     // Wait for the new right pane and Apply button with generous retries. Handshake's
     // React detail pane can lag behind URL changes, especially on slow network/hydration.
-    const detailsLoadedPromise = waitForJobDetailsToLoad(JOB_DETAILS_TIMEOUT_MS, previousSummaryText);
+    // Kick off details loading in parallel, but DON'T block on it yet. Only the
+    // "Can apply" path actually reads the details pane — external ("Cannot apply")
+    // and already-applied jobs would otherwise stall here for up to
+    // JOB_DETAILS_TIMEOUT_MS waiting on a pane they never use.
+    const detailsLoadedPromise = waitForJobDetailsToLoad(JOB_DETAILS_TIMEOUT_MS, previousSummaryText).catch(() => false);
     let applyStatus = await waitForApplyButtonWithRetries(APPLY_BUTTON_TIMEOUT_MS);
-    let detailsLoaded = await detailsLoadedPromise;
+    let detailsLoaded = false;
 
     // Track whether we actually clicked Apply in THIS iteration
     let didClickApply = false;
@@ -753,6 +757,7 @@ async function processPage(pageNum, startJobIndex) {
     // If can apply, click Apply button and close modal
     if (applyStatus === 'Can apply') {
       // WAIT FOR SPA TO RENDER JOB DETAILS BEFORE SPAWNING MODAL
+      detailsLoaded = await detailsLoadedPromise;
       if (!detailsLoaded) {
         detailsLoaded = await waitForJobDetailsToLoad(JOB_DETAILS_TIMEOUT_MS, previousSummaryText);
       }
