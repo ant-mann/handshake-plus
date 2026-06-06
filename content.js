@@ -1586,12 +1586,20 @@ async function clickApplyAndCloseModal() {
       //   // console.log(`Content: Dialog ${index + 1}: id="${id}", aria-label="${ariaLabel}", data-dialog="${dataDialog}"`);
       // });
 
-      // Find the application modal - must have "Apply to" in aria-label
+      // Find the application modal - title is "Apply to <company>". Handshake moved
+      // this from the dialog's aria-label to an aria-labelledby heading, so resolve
+      // the accessible name from either source.
       for (const dialog of allDialogs) {
-        const ariaLabel = dialog.getAttribute('aria-label') || '';
         const dataDialog = dialog.getAttribute('data-dialog');
 
-        // Check if this is an application modal (aria-label starts with "Apply to")
+        let ariaLabel = dialog.getAttribute('aria-label') || '';
+        if (!ariaLabel.startsWith('Apply to')) {
+          const labelledById = dialog.getAttribute('aria-labelledby');
+          const labelEl = labelledById ? document.getElementById(labelledById) : null;
+          if (labelEl) ariaLabel = labelEl.textContent.trim();
+        }
+
+        // Check if this is an application modal (title starts with "Apply to")
         if (ariaLabel.startsWith('Apply to') && dataDialog === 'true') {
           // console.log(`Content: Found application modal with aria-label: "${ariaLabel}"`);
 
