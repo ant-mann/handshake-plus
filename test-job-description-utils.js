@@ -3,6 +3,7 @@ const jobDescriptions = require('./job-description-utils.js');
 
 function fakeControl(text, attrs) {
   return {
+    tagName: (attrs && attrs.tagName) || 'BUTTON',
     textContent: text,
     innerText: text,
     getAttribute(name) {
@@ -38,6 +39,27 @@ assert.strictEqual(
 assert.strictEqual(
   jobDescriptions.isLikelyDescriptionExpandControl(fakeControl('Show more', { 'aria-expanded': 'true' })),
   false
+);
+// Event card "View more" link must NOT be treated as a description expander
+// (navigating anchor — clicking it opens a new tab).
+assert.strictEqual(
+  jobDescriptions.isLikelyDescriptionExpandControl(
+    fakeControl('View more', { tagName: 'A', href: '/events?employers=22003', target: '_blank' })
+  ),
+  false
+);
+assert.strictEqual(
+  jobDescriptions.isLikelyDescriptionExpandControl(
+    fakeControl('See more', { tagName: 'A', href: '/events?employers=22003' })
+  ),
+  false
+);
+// A real expander anchor without a navigating href is still allowed.
+assert.strictEqual(
+  jobDescriptions.isLikelyDescriptionExpandControl(
+    fakeControl('Show more', { tagName: 'A', href: '#' })
+  ),
+  true
 );
 assert.strictEqual(
   jobDescriptions.cleanJobDescriptionText('Job description\n\nFirst paragraph.\n\n...\n\nMore'),

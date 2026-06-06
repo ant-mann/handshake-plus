@@ -35,8 +35,12 @@ async function handlePrompt(prompt) {
 
   const messagesBefore = document.querySelectorAll('model-response').length;
 
-  const inputArea = document.querySelector('.ql-editor');
-  if (!inputArea) throw new Error('Gemini input area (.ql-editor) not found — is gemini.google.com loaded?');
+  const inputArea = (globalThis.HandshakePlusSelectors && HandshakePlusSelectors.gemini && HandshakePlusSelectors.gemini.editor(document))
+    || document.querySelector('.ql-editor');
+  if (!inputArea) {
+    try { HandshakePlusSelectors.flagWarning('gemini-editor'); } catch (e) {}
+    throw new Error('Gemini input area (.ql-editor) not found — is gemini.google.com loaded?');
+  }
 
   // Fill composer using paragraph nodes (matches Gemini's Quill editor format)
   inputArea.focus();
@@ -54,8 +58,12 @@ async function handlePrompt(prompt) {
 
   await new Promise(r => setTimeout(r, 300));
 
-  const sendBtn = document.querySelector('.send-button');
-  if (!sendBtn) throw new Error('Gemini send button (.send-button) not found');
+  const sendBtn = (globalThis.HandshakePlusSelectors && HandshakePlusSelectors.gemini && HandshakePlusSelectors.gemini.sendButton(document))
+    || document.querySelector('.send-button');
+  if (!sendBtn) {
+    try { HandshakePlusSelectors.flagWarning('gemini-send-button'); } catch (e) {}
+    throw new Error('Gemini send button (.send-button) not found');
+  }
   sendBtn.click();
   chrome.runtime.sendMessage({ type: 'handshakePlusAiProgress', provider: 'gemini', phase: 'sent' });
 

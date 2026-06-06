@@ -8,9 +8,24 @@
     ].join(' ').replace(/\s+/g, ' ').trim();
   }
 
+  // A real "show more" expander is an in-place toggle (a button, or an anchor with
+  // no real href). Handshake also renders event cards near the job summary with a
+  // "View more" link that navigates (target="_blank" / href to /events) — that text
+  // matches the expand heuristic but must NOT be clicked, or it opens a new tab.
+  function isNavigationLink(control) {
+    if (!control || !control.getAttribute) return false;
+    if (String(control.getAttribute('target') || '').toLowerCase() === '_blank') return true;
+    if (String(control.tagName || '').toUpperCase() === 'A') {
+      const href = String(control.getAttribute('href') || '').trim();
+      if (href && href !== '#' && !/^javascript:/i.test(href)) return true;
+    }
+    return false;
+  }
+
   function isLikelyDescriptionExpandControl(control) {
     const expanded = control && control.getAttribute && control.getAttribute('aria-expanded');
     if (String(expanded).toLowerCase() === 'true') return false;
+    if (isNavigationLink(control)) return false;
 
     const text = getControlText(control).toLowerCase();
     if (!text) return false;
