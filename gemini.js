@@ -35,7 +35,8 @@ async function handlePrompt(prompt) {
 
   const messagesBefore = document.querySelectorAll('model-response').length;
 
-  const inputArea = document.querySelector('.ql-editor');
+  const inputArea = (globalThis.HandshakePlusSelectors && HandshakePlusSelectors.gemini && HandshakePlusSelectors.gemini.editor(document))
+    || document.querySelector('.ql-editor');
   if (!inputArea) {
     try { HandshakePlusSelectors.flagWarning('gemini-editor'); } catch (e) {}
     throw new Error('Gemini input area (.ql-editor) not found — is gemini.google.com loaded?');
