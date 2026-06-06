@@ -252,7 +252,7 @@ class HandshakePlusPanel {
   }
 
   setupSelectorWarning() {
-    const WARN_KEY = 'handshake-plus-selector-warning';
+    const WARN_KEY = (globalThis.HandshakePlusSelectors && globalThis.HandshakePlusSelectors.WARNING_KEY) || 'handshake-plus-selector-warning';
     const banner = this.panel.querySelector('#handshake-plus-warning-banner');
     const textEl = this.panel.querySelector('#handshake-plus-warning-text');
     const dismiss = this.panel.querySelector('#handshake-plus-warning-dismiss');
