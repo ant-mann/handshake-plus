@@ -30,7 +30,7 @@ class HandshakePlusPanel {
       <div class="hsp-body">
         <div id="handshake-plus-warning-banner" style="display:none; margin:8px; padding:10px 12px; background:#3a1d1d; border:1px solid #a33; border-radius:8px; color:#ffd7d7; font-size:13px; line-height:1.4;">
           <span id="handshake-plus-warning-text"></span>
-          <button id="handshake-plus-warning-dismiss" style="float:right; background:none; border:none; color:#ffd7d7; cursor:pointer; font-size:15px; line-height:1;">×</button>
+          <button id="handshake-plus-warning-dismiss" type="button" aria-label="Dismiss warning" style="float:right; background:none; border:none; color:#ffd7d7; cursor:pointer; font-size:15px; line-height:1;">×</button>
         </div>
         <div class="hsp-tab-content active" id="apply-content">
           <div class="hsp-well">
